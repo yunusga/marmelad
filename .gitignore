@@ -6,3 +6,5 @@ node_modules
 *.patch
 dist
 test
+assets/svg/sprite.svg
+assets/svg/sprite.symbol.html
