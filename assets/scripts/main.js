@@ -42,3 +42,10 @@ function GetIEVersion() {
   else
     return 0; //It is not IE
 }
+
+/**
+ * определение существования элемента на странице
+ */
+$.exists = function(selector) {
+   return ($(selector).length > 0);
+}
