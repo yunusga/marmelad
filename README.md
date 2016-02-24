@@ -5,7 +5,7 @@
 ## Для разработчиков
 - Клонируем репозиторий в папку ваших проектов (в любое удобное место)
 - Переходим в папку marmelad и выполняем последовательно ```npm i . -g``` -> ```npm link```
-- или просто скопипастить эту строчку ```git clone https://yunusga@bitbucket.org/yunusga/marmelad.git && git pull --all && cd marmelad && npm i . -g && npm link```
+- или просто скопипастить эту строчку ```git clone https://yunusga@bitbucket.org/yunusga/marmelad.git && cd marmelad && git pull --all && npm i . -g && npm link```
 
 ## Поддержка и исправления
 - все изменения и фичи отправляйте только в ветку develop
