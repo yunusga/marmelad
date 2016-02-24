@@ -7,6 +7,9 @@
 - Переходим в папку marmelad и выполняем последовательно ```npm i . -g``` -> ```npm link```
 - или просто скопипастить эту строчку ```git clone https://yunusga@bitbucket.org/yunusga/marmelad.git && git pull --all && cd marmelad && npm i . -g && npm link```
 
+## Поддержка и исправления
+- все изменения и фичи отправляйте только в ветку develop
+
 ## Инициализация проекта
 - создаем папку проекта и в ней выполняем ```marmelad```
 
