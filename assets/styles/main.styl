@@ -1,0 +1,161 @@
+@import '_mixins'
+@import '_normalize'
+
+/* placeholders */
+::-webkit-input-placeholder
+  color : #000
+:-moz-placeholder
+  color : #000
+/* FF 4-18 */
+::-moz-placeholder
+  color : #000
+/* FF 19+ */
+:-ms-input-placeholder
+  color : #000
+
+/* placeholders focus */
+/* IE 10+ */
+input:focus::-webkit-input-placeholder
+  color : transparent
+input:focus:-moz-placeholder
+  color : transparent
+/* FF 4-18 */
+input:focus::-moz-placeholder
+  color : transparent
+/* FF 19+ */
+input:focus:-ms-input-placeholder
+  color : transparent
+/* IE 10+ */
+:focus::-webkit-input-placeholder
+  color : transparent
+:focus::-moz-placeholder
+  color : transparent
+:focus:-moz-placeholder
+  color : transparent
+:focus:-ms-input-placeholder
+  color : transparent
+
+/* selection colors */
+/* WebKit/Blink Browsers */
+::selection
+  background : $brandColor
+  color : #fff
+/* Gecko Browsers */
+::-moz-selection
+  background : $brandColor
+  color : #fff
+
+*
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
+
+h1, h2, h3, h4, h5, h6
+    color       : $headerColor
+    font-weight : 700
+    font-style  : normal
+
+h1
+  margin-top : 0
+  font-size  : $headerSize
+
+h2
+  font-size : round($fontSize*1.5)
+
+h3
+  font-size : round($fontSize*1.17)
+
+h4
+  font-size : round($fontSize*1)
+
+h5
+  font-size : round($fontSize*0.83)
+
+h6
+  font-size : round($fontSize*0.67)
+
+h5, h6
+  font-weight : bold
+
+a
+  color           : $linkColor
+  text-decoration : underline
+
+  &:hover
+    text-decoration : none
+
+  &:active,
+  &:focus
+    outline : none
+
+  img
+    border : none
+
+
+/* body */
+body
+  font-size : 16px
+  line-height : 1.2
+
+/* blockquote */
+blockquote
+  font-style : italic
+  background : rgba($brandColor, .1)
+  border-left : 10px solid $brandColor
+  margin : 20px
+  padding : 15px
+
+  p
+    display : inline
+    margin : 0
+
+/* tables */
+table
+  margin 20px 0
+
+  caption
+    font-style italic
+
+  thead,
+  th
+    font-weight : $table[headTextWeight]
+
+  caption,
+  th,
+  td
+    padding 10px 20px
+    text-align left
+
+  &.table0
+    th,
+    td
+      border : none
+
+  &.table1
+    th,
+    td
+      border : 1px solid rgba($table[borderColor], .5)
+
+  &.table2,
+  &.table3
+
+    thead,
+    th
+      background-color : $table[headerBackgroundColor]
+      color : $table[headerTextColor]
+
+  &.table3
+    tr:nth-child({$table[stripeType]})
+      background-color : $table[stripeColor]
+
+.main-svg-sprite
+  display none
+
+.svg-icon
+  width 24px
+  height 24px
+  fill #000
+
+  &__link
+    vertical-align top
+    fill inherit
+    width inherit
+    height inherit
