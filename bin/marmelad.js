@@ -349,6 +349,7 @@ gulp.task('server', function () {
         server: {
             baseDir: config.base.dist
         },
+        plugins: ['bs-latency'],
         port: 5200,
         open: false,
         directory: true,
