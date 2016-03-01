@@ -440,6 +440,7 @@ gulp.task('initialize', function (done) {
     runSequence(
         'writeConfiguration',
         'copyAssets',
+        'copyEditorconfig',
         'startup',
         done
     );
@@ -450,6 +451,7 @@ function init() {
     fs.exists('marmelad.json', function (exist) {
 
         if (exist) {
+            config = require(process.cwd() + '/marmelad.json');
             gulp.start('startup');
         } else {
             gulp.start('initialize');
