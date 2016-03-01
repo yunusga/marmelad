@@ -312,6 +312,25 @@ gulp.task('images', function (done) {
 });
 
 /**
+ * перекладываем прочие файлы
+ */
+gulp.task('files', function (done) {
+
+    let stream = gulp.src(config.paths.files.src + '/**/*')
+        .pipe($.plumber({errorHandler: onError}))
+        .pipe(gulp.dest(config.paths.files.dest));
+
+    stream.on('end', function () {
+        browserSync.reload();
+        done();
+    });
+
+    stream.on('error', function (err) {
+        done(err);
+    });
+});
+
+/**
  * очищаем папку сборки перед сборкой Ж)
  */
 gulp.task('clean', function () {
@@ -340,6 +359,9 @@ gulp.task('watch', function () {
 
     /* КАРТИНКИ ДЛЯ САЙТА*/
     gulp.watch(config.paths.images.src + '/**', ['images']);
+
+    /* ФАЙЛЫ ДЛЯ САЙТА*/
+    gulp.watch(config.paths.files.src + '/**', ['files']);
 
 });
 
@@ -371,6 +393,7 @@ gulp.task('startup', function (cb) {
         'scripts:plugins',
         'scripts:main',
         'images',
+        'files',
         'watch',
         cb);
 });

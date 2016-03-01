@@ -52,6 +52,10 @@ let paths = {
         src  : base.assets + '/images',
         dest : base.dist + '/' + base.storage + '/img'
     },
+    files  : {
+        src  : base.assets + '/files',
+        dest : base.dist + '/' + base.storage + '/files'
+    },
     scripts: {
         vendor: base.assets + base.scripts + '/vendor',
         main: base.assets + base.scripts
