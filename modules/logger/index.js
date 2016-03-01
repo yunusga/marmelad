@@ -1,8 +1,10 @@
 'use strict';
 
-var gutil      = require('gulp-util');
-var prettyTime = require('pretty-hrtime');
-var chalk      = require('chalk');
+const gutil      = require('gulp-util');
+const prettyTime = require('pretty-hrtime');
+const chalk      = require('chalk');
+
+let failed       = false;
 
 // Wire up logging events
 module.exports = function (gulpInst) {
