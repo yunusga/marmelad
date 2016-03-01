@@ -402,6 +402,14 @@ gulp.task('copyAssets', function () {
 });
 
 /**
+ * копирование .editorconfig
+ */
+gulp.task('copyEditorconfig', function () {
+    return gulp.src(__dirname.replace('bin', '') + '.editorconfig')
+        .pipe(gulp.dest(process.cwd()));
+});
+
+/**
  * инициализация нового проекта
  */
 gulp.task('initialize', function (done) {
