@@ -340,28 +340,28 @@ gulp.task('clean', function () {
 gulp.task('watch', function () {
 
     /* СТИЛИ */
-    gulp.watch([config.paths.plugins + '/**/*.css'], ['styles:plugins']);
-    gulp.watch([config.paths.styles + '/**/*.{styl,css}', config.paths.blocks + '/**/*.{styl,css}'], ['styles:main']);
+    $.watch([config.paths.plugins + '/**/*.css'], ['styles:plugins']);
+    $.watch([config.paths.styles + '/**/*.{styl,css}', config.paths.blocks + '/**/*.{styl,css}'], ['styles:main']);
 
     /* СКРИПТЫ */
-    gulp.watch([config.paths.scripts.vendor + '/**/*.js'], ['scripts:vendor']);
-    gulp.watch([config.paths.plugins + '/**/*.js'], ['scripts:plugins']);
-    gulp.watch([config.paths.scripts.main + '/*.js', config.paths.blocks + '/**/*.js'], ['scripts:main']);
+    $.watch([config.paths.scripts.vendor + '/**/*.js'], ['scripts:vendor']);
+    $.watch([config.paths.plugins + '/**/*.js'], ['scripts:plugins']);
+    $.watch([config.paths.scripts.main + '/*.js', config.paths.blocks + '/**/*.js'], ['scripts:main']);
 
     /* ШАБЛОНЫ */
-    gulp.watch([config.paths.pages + '/**/*.{hbs,handlebars}', config.paths.blocks + '/**/*.{hbs,handlebars}'], ['handlebars']);
+    $.watch([config.paths.pages + '/**/*.{hbs,handlebars}', config.paths.blocks + '/**/*.{hbs,handlebars}'], ['handlebars']);
 
     /* SVG-ИКОНКИ */
-    gulp.watch([config.paths.svg + '/icons/*.svg'], ['refresh-svg']);
+    $.watch([config.paths.svg + '/icons/*.svg'], ['refresh-svg']);
 
     /* ДАННЫЕ ДЛЯ ШАБЛОНОВ */
-    gulp.watch([config.paths.assets + '/data.json'], ['refresh-data']);
+    $.watch([config.paths.assets + '/data.json'], ['refresh-data']);
 
     /* КАРТИНКИ ДЛЯ САЙТА*/
-    gulp.watch(config.paths.images.src + '/**', ['images']);
+    $.watch(config.paths.images.src + '/**', ['images']);
 
     /* ФАЙЛЫ ДЛЯ САЙТА*/
-    gulp.watch(config.paths.files.src + '/**', ['files']);
+    $.watch(config.paths.files.src + '/**', ['files']);
 
 });
 
