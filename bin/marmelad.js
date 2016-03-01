@@ -20,6 +20,8 @@ const browserSync  = require('browser-sync').create();
  */
 let config = require('../modules/config');
 
+config.app.browserSync.server.baseDir = config.base.dist;
+
 /**
  * данные для шаблонов
  */
@@ -367,17 +369,7 @@ gulp.task('watch', function () {
 
 gulp.task('server', function () {
 
-    browserSync.init({
-        server: {
-            baseDir: config.base.dist
-        },
-        plugins: ['bs-latency'],
-        port: 5200,
-        open: false,
-        directory: true,
-        ghostMode: false,
-        notify: true
-    });
+    browserSync.init(config.app.browserSync);
 
 });
 
