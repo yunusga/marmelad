@@ -342,28 +342,57 @@ gulp.task('clean', function () {
 gulp.task('watch', function () {
 
     /* СТИЛИ */
-    $.watch([config.paths.plugins + '/**/*.css'], ['styles:plugins']);
-    $.watch([config.paths.styles + '/**/*.{styl,css}', config.paths.blocks + '/**/*.{styl,css}'], ['styles:main']);
+    $.watch(config.paths.plugins + '/**/*.css', $.batch(function (events, done) {
+        gulp.start('styles:plugins', done);
+    }));
+    $.watch(config.paths.styles + '/**/*.{styl,css}', $.batch(function (events, done) {
+        gulp.start('styles:main', done);
+    }));
+    $.watch(config.paths.blocks + '/**/*.{styl,css}', $.batch(function (events, done) {
+        gulp.start('styles:main', done);
+    }));
 
     /* СКРИПТЫ */
-    $.watch([config.paths.scripts.vendor + '/**/*.js'], ['scripts:vendor']);
-    $.watch([config.paths.plugins + '/**/*.js'], ['scripts:plugins']);
-    $.watch([config.paths.scripts.main + '/*.js', config.paths.blocks + '/**/*.js'], ['scripts:main']);
+    $.watch(config.paths.scripts.vendor + '/**/*.js', $.batch(function (events, done) {
+        gulp.start('scripts:vendor', done);
+    }));
+    $.watch(config.paths.plugins + '/**/*.js', $.batch(function (events, done) {
+        gulp.start('scripts:plugins', done);
+    }));
+    $.watch(config.paths.scripts.main + '/*.js', $.batch(function (events, done) {
+        gulp.start('scripts:main', done);
+    }));
+    $.watch(config.paths.blocks + '/**/*.js', $.batch(function (events, done) {
+        gulp.start('scripts:main', done);
+    }));
 
     /* ШАБЛОНЫ */
-    $.watch([config.paths.pages + '/**/*.{hbs,handlebars}', config.paths.blocks + '/**/*.{hbs,handlebars}'], ['handlebars']);
+    $.watch(config.paths.pages + '/**/*.{hbs,handlebars}', $.batch(function (events, done) {
+        gulp.start('handlebars', done);
+    }));
+    $.watch(config.paths.blocks + '/**/*.{hbs,handlebars}', $.batch(function (events, done) {
+        gulp.start('handlebars', done);
+    }));
 
     /* SVG-ИКОНКИ */
-    $.watch([config.paths.svg + '/icons/*.svg'], ['refresh-svg']);
+    $.watch(config.paths.svg + '/icons/*.svg', $.batch(function (events, done) {
+        gulp.start('refresh-svg', done);
+    }));
 
     /* ДАННЫЕ ДЛЯ ШАБЛОНОВ */
-    $.watch([config.paths.assets + '/data.json'], ['refresh-data']);
+    $.watch(config.paths.assets + '/data.json', $.batch(function (events, done) {
+        gulp.start('refresh-data', done);
+    }));
 
     /* КАРТИНКИ ДЛЯ САЙТА*/
-    $.watch(config.paths.images.src + '/**', ['images']);
+    $.watch(config.paths.images.src + '/**', $.batch(function (events, done) {
+        gulp.start('images', done);
+    }));
 
     /* ФАЙЛЫ ДЛЯ САЙТА*/
-    $.watch(config.paths.files.src + '/**', ['files']);
+    $.watch(config.paths.files.src + '/**', $.batch(function (events, done) {
+        gulp.start('files', done);
+    }));
 
 });
 
