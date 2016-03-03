@@ -72,6 +72,8 @@ function iconizeHtml(src, options) {
     if (html.indexOf(sprite) == -1) {
         sprite = sprite.replace(/\n/g,'');
         sprite = sprite.replace(/<defs[\s\S]*?\/defs><path[\s\S]*?\s+?d=/g, '<path d=');
+        sprite = sprite.replace(/<style[\s\S]*?\/style><path[\s\S]*?\s+?d=/g, '<path d=');
+        sprite = sprite.replace(/\sfill[\s\S]*?(['"])[\s\S]*?\1/g, '');
         sprite = sprite.replace(/(['"])[\s\S]*?\1/, function(match) { return match + ' class="main-svg-sprite"' });
         html = html.replace(/<body.*?>/, function(match) { return match + '\n' + sprite });
     }
