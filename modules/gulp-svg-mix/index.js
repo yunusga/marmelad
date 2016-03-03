@@ -18,7 +18,7 @@ function icon(name, options) {
     classes     = classes.trim();
 
     var icon = '<svg class="svg-icon__link"><use xlink:href="#' + name + '" /></svg>';
-    var html =  '<div class="' + classes + '">' + wrapSpinner(icon, classes) + '</div>';
+    var html =  '<' + options.tag + ' class="' + classes + '">' + wrapSpinner(icon, classes) + '</' + options.tag + '>';
 
     return html;
 }
