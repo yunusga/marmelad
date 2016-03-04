@@ -63,6 +63,10 @@ let paths = {
         src  : base.assets + '/images',
         dest : base.dist + base.storage + '/img'
     },
+    font  : {
+        src  : base.assets + '/font',
+        dest : base.dist + base.storage + '/font'
+    },
     files  : {
         src  : base.assets + '/files',
         dest : base.dist + base.storage + '/files'

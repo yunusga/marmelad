@@ -314,6 +314,25 @@ gulp.task('images', function (done) {
 });
 
 /**
+ * перекладываем шрифты
+ */
+gulp.task('font', function (done) {
+
+    let stream = gulp.src(config.paths.font.src + '/**/*')
+        .pipe($.plumber({errorHandler: onError}))
+        .pipe(gulp.dest(config.paths.font.dest));
+
+    stream.on('end', function () {
+        browserSync.reload();
+        done();
+    });
+
+    stream.on('error', function (err) {
+        done(err);
+    });
+});
+
+/**
  * перекладываем прочие файлы
  */
 gulp.task('files', function (done) {
@@ -389,6 +408,11 @@ gulp.task('watch', function () {
         gulp.start('images', done);
     }));
 
+    /* ШРИФТЫ ДЛЯ САЙТА*/
+    $.watch(config.paths.font.src + '/**', $.batch(function (events, done) {
+        gulp.start('font', done);
+    }));
+
     /* ФАЙЛЫ ДЛЯ САЙТА*/
     $.watch(config.paths.files.src + '/**', $.batch(function (events, done) {
         gulp.start('files', done);
@@ -414,6 +438,7 @@ gulp.task('startup', function (cb) {
         'scripts:plugins',
         'scripts:main',
         'images',
+        'font',
         'files',
         'watch',
         cb);
