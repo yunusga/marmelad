@@ -59,9 +59,7 @@
     "open": "0.0.5",
     "pipe-error-stop": "0.0.11",
     "pretty-hrtime": "^1.0.2",
-    "run-sequence": "^1.1.5"
-  },
-  "dependencies": {
+    "run-sequence": "^1.1.5",
     "bs-latency": "1.0.0",
     "gulp-autoprefixer": "3.1.0",
     "gulp-watch": "^4.3.5"
