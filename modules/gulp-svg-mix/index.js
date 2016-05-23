@@ -15,7 +15,10 @@ function icon(name, options) {
     var options = options || {};
     var size    = options.size ? ' svg-icon--' + options.size : '';
     var classes = 'svg-icon svg-icon--' + name + size + ' ' + (options.class || '');
+
     classes     = classes.trim();
+
+    options.tag = (options.tag == 'undefined') ? 'div' : options.tag;
 
     var icon = '<svg class="svg-icon__link"><use xlink:href="#' + name + '" /></svg>';
     var html =  '<' + options.tag + ' class="' + classes + '">' + wrapSpinner(icon, classes) + '</' + options.tag + '>';
