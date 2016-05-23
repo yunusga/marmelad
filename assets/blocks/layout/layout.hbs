@@ -27,12 +27,16 @@
             <main class="app-content">
                 {{#block 'content'}}{{/block}}
             </main>
+            {{#if leftbar}}
             <nav class="app-leftbar">
                 {{#block 'leftbar'}}{{/block}}
             </nav>
+            {{/if}}
+            {{#if rightbar}}
             <aside class="app-rightbar">
                 {{#block 'rightbar'}}{{/block}}
             </aside>
+            {{/if}}
         </div>
 
         <footer block="app-footer">
