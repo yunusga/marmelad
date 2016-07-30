@@ -5,7 +5,6 @@ let app = {
         server: {
             baseDir: ''
         },
-        plugins: ['bs-latency'],
         port: 5200,
         open: false,
         directory: true,

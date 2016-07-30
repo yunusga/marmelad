@@ -30,7 +30,6 @@
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.11.1",
-    "bs-latency": "1.0.0",
     "chalk": "^1.1.1",
     "del": "^2.2.0",
     "gulp": "^3.9.1",
