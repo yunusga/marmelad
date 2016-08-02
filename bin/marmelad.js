@@ -122,7 +122,7 @@ gulp.task('handlebars', (done) => {
         .on('error', $.notify.onError({title: 'Handlebars'}))
         .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
         .pipe($.beml(config.app.beml))
-        .pipe($.if(fs.exists(config.paths.svg + '/sprite.svg'), svgMix({path: config.paths.svg + '/sprite.svg'})))
+        .pipe(svgMix({path: config.paths.svg + '/sprite.svg'}))
         .pipe($.prettify({indent_size: 4}))
         .pipe($.rename({extname: '.html'}))
         .pipe(gulp.dest(config.paths.dist));
