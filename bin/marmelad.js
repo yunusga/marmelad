@@ -14,6 +14,7 @@ const hbsLayouts    = require('handlebars-layouts');
 const notifier      = require('node-notifier');
 const svgMix        = require('../modules/gulp-svg-mix');
 const browserSync   = require('browser-sync').create();
+const pkg           = require('../package.json');
 
 /**
  * конфиг по умолчанию
@@ -21,6 +22,9 @@ const browserSync   = require('browser-sync').create();
 let config = require('../modules/config');
 
 config.app.browserSync.server.baseDir = config.base.dist;
+config.version = pkg.version;
+config.name    = pkg.name;
+config.description = pkg.description;
 
 /**
  * данные для шаблонов
@@ -114,7 +118,7 @@ gulp.task('handlebars', function(done) {
         ])
         .pipe($.plumber({errorHandler: onError}))
         .pipe(
-            $.compileHandlebars(db, {
+            $.compileHandlebars({ app : config.app, db}, {
                 ignorePartials: false,
                 batch: getPartialsPaths(config.paths.blocks)
             })
@@ -502,6 +506,9 @@ let init = () => {
 
         if (exist) {
             config = require(process.cwd() + '/marmelad.json');
+            config.app.version     = pkg.version;
+            config.app.name        = pkg.name;
+            config.app.description = pkg.description;
             gulp.start('startup');
         } else {
             gulp.start('initialize');
