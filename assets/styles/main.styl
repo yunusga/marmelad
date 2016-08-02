@@ -173,13 +173,29 @@ table
 
     thead,
     th
-        font-weight table_data[header_text_weight]
+        font-weight : table_data[header_text_weight]
 
     caption,
     th,
     td
         padding 10px 20px
         text-align left
+
+    &.table0
+        th,
+        td
+            border none
+
+    &.table1
+        th,
+        td
+            border 1px solid rgba(table_data[border_color], .5)
+
+    &.table2
+        thead,
+        th
+            background-color : table_data[header_background_color]
+            color : table_data[header_text_color]
 
 /* ==========================================================================
    SVG -иконки
