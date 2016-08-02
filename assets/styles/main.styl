@@ -1,164 +1,205 @@
-/* placeholders */
+/* ==========================================================================
+ * цвет выделения текста
+   ========================================================================== */
+::selection
+    background : theme_color
+    color : #fff
+::-moz-selection
+    background : theme_color
+    color : #fff
+
+/* ==========================================================================
+   цвет плейсхолдеров
+   ========================================================================== */
 ::-webkit-input-placeholder
-  color : #000
+    color : placeholder_color
 :-moz-placeholder
-  color : #000
+    color : placeholder_color
 /* FF 4-18 */
 ::-moz-placeholder
-  color : #000
+    color : placeholder_color
 /* FF 19+ */
 :-ms-input-placeholder
-  color : #000
+    color : placeholder_color
 
 /* placeholders focus */
 /* IE 10+ */
 input:focus::-webkit-input-placeholder
-  color : transparent
+    color : placeholder_color_focus
 input:focus:-moz-placeholder
-  color : transparent
+    color : placeholder_color_focus
 /* FF 4-18 */
 input:focus::-moz-placeholder
-  color : transparent
+    color : placeholder_color_focus
 /* FF 19+ */
 input:focus:-ms-input-placeholder
-  color : transparent
+    color : placeholder_color_focus
 /* IE 10+ */
 :focus::-webkit-input-placeholder
-  color : transparent
+    color : placeholder_color_focus
 :focus::-moz-placeholder
-  color : transparent
+    color : placeholder_color_focus
 :focus:-moz-placeholder
-  color : transparent
+    color : placeholder_color_focus
 :focus:-ms-input-placeholder
-  color : transparent
-
-/* selection colors */
-/* WebKit/Blink Browsers */
-::selection
-  background : $brandColor
-  color : #fff
-/* Gecko Browsers */
-::-moz-selection
-  background : $brandColor
-  color : #fff
+    color : placeholder_color_focus
 
 *
-  -webkit-tap-highlight-color: rgba(0,0,0,0)
+    // [fix.JS] некорректного расчета длины внутри flexbox контейнеров
+    min-width: 0
+    min-height: 0
 
-h1, h2, h3, h4, h5, h6
-    color       : $headerColor
-    font-weight : 700
-    font-style  : normal
+    // цвет тапа для вебкитов
+    -webkit-tap-highlight-color: rgba(0,0,0,0)
 
+    // сброс верхнего отступа для первых элементов
+    + .app-headline,
+    + h1,
+    + h2,
+    + h3,
+    + h4,
+    + h5,
+    + h6,
+    + table,
+    + address,
+    + blockquote,
+    + dl,
+    + fieldset,
+    + figure,
+    + ol,
+    + p,
+    + pre,
+    + ul
+        margin-top contents_margins
+
+.app-headline,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+table,
+address,
+blockquote,
+dl,
+fieldset,
+figure,
+ol,
+p,
+pre,
+ul
+    margin 0 0 contents_margins 0
+
+/* ==========================================================================
+   Заголовки
+   ========================================================================== */
+.app-headline,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+    font-weight headlines_font_weight
+    color headlines_color
+
+.app-headline,
 h1
-  margin-top : 0
-  font-size  : $headerSize
+    font-size  : 28px
+    line-height 28px
 
 h2
-  font-size : round($fontSize*1.5)
+    font-size 26px
+    line-height 26px
 
 h3
-  font-size : round($fontSize*1.17)
+    font-size 24px
+    line-height 24px
 
 h4
-  font-size : round($fontSize*1)
+    font-size 22px
+    line-height 22px
 
 h5
-  font-size : round($fontSize*0.83)
+    font-size 20px
+    line-height 20px
 
 h6
-  font-size : round($fontSize*0.67)
+    font-size 18px
+    line-height 18px
 
-h5, h6
-  font-weight : bold
-
-a
-  color           : $linkColor
-  text-decoration : underline
-
-  &:hover
-    text-decoration : none
-
-  &:active,
-  &:focus
-    outline : none
-
-  img
-    border : none
-
-
-/* body */
-body
-  font-size : 16px
-  line-height : 1.2
-
-/* blockquote */
+/* ==========================================================================
+   Цитата
+   ========================================================================== */
 blockquote
-  font-style : italic
-  background : rgba($brandColor, .1)
-  border-left : 10px solid $brandColor
-  margin : 20px
-  padding : 15px
-
-  p
-    display : inline
-    margin : 0
-
-/* tables */
-table
-  margin 20px 0
-
-  caption
     font-style italic
+    background rgba(theme_color, .1)
+    border-left 10px solid theme_color
+    margin contents_margins
+    padding 15px
 
-  thead,
-  th
-    font-weight : $table[headTextWeight]
+    p
+        display inline
+        margin 0
 
-  caption,
-  th,
-  td
-    padding 10px 20px
-    text-align left
+/* ==========================================================================
+   ссылки
+   ========================================================================== */
+a
+    color           : link_color
+    text-decoration : underline
 
-  &.table0
-    th,
-    td
-      border : none
+    &:visited
+        color link_color_visited
 
-  &.table1
-    th,
-    td
-      border : 1px solid rgba($table[borderColor], .5)
+    &:hover
+        color link_color_hover
 
-  &.table2,
-  &.table3
+    &:active,
+    &:focus
+        outline : none
+
+    img
+        border : none
+
+/* ==========================================================================
+   таблицы
+   ========================================================================== */
+table
+
+    caption
+        font-style italic
 
     thead,
     th
-      background-color : $table[headerBackgroundColor]
-      color : $table[headerTextColor]
+        font-weight table_data[header_text_weight]
 
-  &.table3
-    tr:nth-child({$table[stripeType]})
-      background-color : $table[stripeColor]
-
-.main-svg-sprite
-  display none
-
-.svg-icon
-  width 24px
-  height 24px
-  fill #000
-
-  &__link
-    vertical-align top
-    fill inherit
-    width inherit
-    height inherit
+    caption,
+    th,
+    td
+        padding 10px 20px
+        text-align left
 
 /* ==========================================================================
-   Helper classes
+   SVG -иконки
+   ========================================================================== */
+.main-svg-sprite
+    display none
+
+.svg-icon
+    width 24px
+    height 24px
+    fill #333
+
+    &__link
+        vertical-align top
+        fill inherit
+        width inherit
+        height inherit
+
+/* ==========================================================================
+   хелперы
    ========================================================================== */
 .hidden
     display: none !important
