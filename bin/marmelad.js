@@ -32,7 +32,7 @@ let db = {
 /**
  * обработчик ошибок для plumber
  */
-let onError = (err) => {
+let onError = function(err) {
 
     $.util.log(err.message);
 
