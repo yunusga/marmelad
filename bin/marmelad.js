@@ -143,7 +143,7 @@ gulp.task('handlebars', function(done) {
  */
 gulp.task('svg-sprite', () => {
 
-    gulp.src(config.paths.svg + '/icons/*.svg')
+    return gulp.src(config.paths.svg + '/icons/*.svg')
         .pipe(
             $.svgSprite({
                 mode: {
@@ -433,7 +433,8 @@ gulp.task('startup', (cb) => {
         'clean',
         'server',
         'get-data',
-        'refresh-svg',
+        'svg-sprite',
+        'handlebars',
         'styles:plugins',
         'styles:main',
         'scripts:vendor',
