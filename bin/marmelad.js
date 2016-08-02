@@ -106,7 +106,7 @@ let getPartialsPaths = (dest) => {
  * сборка шаблонов handlebars
  * https://www.npmjs.com/package/gulp-compile-handlebars
  */
-gulp.task('handlebars', (done) => {
+gulp.task('handlebars', function(done) {
 
     let stream = gulp.src([
             config.paths.pages + '/**/*.{hbs,handlebars}',
@@ -127,12 +127,12 @@ gulp.task('handlebars', (done) => {
         .pipe($.rename({extname: '.html'}))
         .pipe(gulp.dest(config.paths.dist));
 
-    stream.on('end', () => {
+    stream.on('end', function() {
         browserSync.reload();
         done();
     });
 
-    stream.on('error', (err) => {
+    stream.on('error', function(err) {
         done(err);
     });
 });
