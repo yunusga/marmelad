@@ -248,7 +248,7 @@ gulp.task('styles:main', () => {
  */
 gulp.task('scripts:vendor', () => {
 
-    gulp.src([config.paths.scripts.vendor + '/**/*.js'])
+    return gulp.src([config.paths.scripts.vendor + '/**/*.js'])
         .pipe($.plumber({errorHandler: onError}))
         .pipe(gulp.dest(config.paths.storage + config.base.scripts + '/vendor'));
 });
@@ -268,6 +268,7 @@ gulp.task('scripts:plugins', () => {
  * СКРИПТЫ ОСНОВНЫЕ
  */
 gulp.task('scripts:main', (done) => {
+
     let stream = gulp.src([
             config.paths.scripts.main + '/*.js',
             config.paths.blocks + '/**/*.js',
