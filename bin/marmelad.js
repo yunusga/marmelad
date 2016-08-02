@@ -118,7 +118,7 @@ gulp.task('handlebars', function(done) {
         ])
         .pipe($.plumber({errorHandler: onError}))
         .pipe(
-            $.compileHandlebars({ app : config.app, db}, {
+            $.compileHandlebars(db, {
                 ignorePartials: false,
                 batch: getPartialsPaths(config.paths.blocks)
             })
