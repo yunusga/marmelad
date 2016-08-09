@@ -236,13 +236,14 @@ gulp.task('styles:main', () => {
             config.paths.blocks + '/**/*.styl'
         ])
         .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('main.styl'))
+        .pipe($.concat('app.styl'))
         .pipe(
             $.stylus({
                 'include css': true
             })
         )
         .pipe($.autoprefixer(config.app.autoprefixer))
+        .pipe($.groupCssMediaQueries())
         .pipe(gulp.dest(config.paths.storage + config.base.styles))
         .pipe(browserSync.stream());
 });
