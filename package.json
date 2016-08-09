@@ -41,6 +41,7 @@
     "gulp-csscomb": "3.0.7",
     "gulp-csso": "1.1.0",
     "gulp-data": "1.2.1",
+    "gulp-group-css-media-queries": "1.1.0",
     "gulp-if": "2.0.1",
     "gulp-js-prettify": "0.1.0",
     "gulp-load-plugins": "1.2.4",
