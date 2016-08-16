@@ -53,6 +53,10 @@ let onError = function(err) {
  * https://www.npmjs.com/package/handlebars-layouts
  */
 $.compileHandlebars.Handlebars.registerHelper(hbsLayouts($.compileHandlebars.Handlebars));
+
+$.compileHandlebars.Handlebars.registerHelper('raw-helper', function(options) {
+    return options.fn();
+});
 /**
  * хелпер сравнения, аля if
  */
