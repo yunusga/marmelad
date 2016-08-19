@@ -272,6 +272,24 @@ gulp.task('scripts:plugins', () => {
 });
 
 /**
+ * СКРИПТЫ ПРОЧИЕ
+ */
+gulp.task('scripts:others', function() {
+
+    return gulp.src([config.paths.scripts.main + '/others/*.js'])
+        .pipe($.plumber({errorHandler: onError}))
+        .pipe(
+            $.jsPrettify({
+                indent_size: 4,
+                indent_char: " ",
+                eol: "\n",
+                collapseWhitespace: true
+            })
+        )
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
+});
+
+/**
  * СКРИПТЫ ОСНОВНЫЕ
  */
 gulp.task('scripts:main', (done) => {
@@ -391,6 +409,9 @@ gulp.task('watch', () => {
     $.watch(config.paths.scripts.main + '/*.js', $.batch((events, done) => {
         gulp.start('scripts:main', done);
     }));
+    $.watch(config.paths.scripts.main + '/others/*.js', $.batch((events, done) => {
+        gulp.start('scripts:others', done);
+    }));
     $.watch(config.paths.blocks + '/**/*.js', $.batch((events, done) => {
         gulp.start('scripts:main', done);
     }));
@@ -447,6 +468,7 @@ gulp.task('startup', (cb) => {
         'styles:main',
         'scripts:vendor',
         'scripts:plugins',
+        'scripts:others',
         'scripts:main',
         'images',
         'font',
