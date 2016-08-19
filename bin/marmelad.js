@@ -233,9 +233,7 @@ gulp.task('styles:plugins', () => {
  */
 gulp.task('styles:main', () => {
     return gulp.src([
-            config.paths.styles + '/libs/_variables.styl',
-            config.paths.styles + '/libs/_mixins.styl',
-            config.paths.styles + '/libs/_normalize.styl',
+            config.paths.styles + '/libs/**/*.styl',
             config.paths.styles + '/*.styl',
             config.paths.blocks + '/**/*.styl'
         ])
