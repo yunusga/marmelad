@@ -57,6 +57,18 @@ $.compileHandlebars.Handlebars.registerHelper(hbsLayouts($.compileHandlebars.Han
 $.compileHandlebars.Handlebars.registerHelper('raw-helper', function(options) {
     return options.fn();
 });
+
+$.compileHandlebars.Handlebars.registerHelper('times', function(n, block) {
+
+    var accum = '';
+
+    for (var i = 0; i < n; ++i) {
+        accum += block.fn(i);
+    }
+
+    return accum;
+});
+
 /**
  * хелпер сравнения, аля if
  */
