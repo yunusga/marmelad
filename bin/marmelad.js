@@ -55,7 +55,7 @@ let onError = function(err) {
 $.compileHandlebars.Handlebars.registerHelper(hbsLayouts($.compileHandlebars.Handlebars));
 
 $.compileHandlebars.Handlebars.registerHelper('raw-helper', function(options) {
-    return options.fn();
+    return options.fn(this);
 });
 
 $.compileHandlebars.Handlebars.registerHelper('times', function(n, block) {
