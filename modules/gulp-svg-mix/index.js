@@ -15,10 +15,13 @@ function icon(name, options) {
     var options = options || {};
     var size    = options.size ? ' svg-icon--' + options.size : '';
     var classes = 'svg-icon svg-icon--' + name + size + ' ' + (options.class || '');
+
     classes     = classes.trim();
 
+    options.tag = (typeof options.tag == 'undefined') ? 'div' : options.tag;
+
     var icon = '<svg class="svg-icon__link"><use xlink:href="#' + name + '" /></svg>';
-    var html =  '<div class="' + classes + '">' + wrapSpinner(icon, classes) + '</div>';
+    var html =  '<' + options.tag + ' class="' + classes + '">' + wrapSpinner(icon, classes) + '</' + options.tag + '>';
 
     return html;
 }
@@ -71,6 +74,9 @@ function iconizeHtml(src, options) {
 
     if (html.indexOf(sprite) == -1) {
         sprite = sprite.replace(/\n/g,'');
+        sprite = sprite.replace(/<defs[\s\S]*?\/defs><path[\s\S]*?\s+?d=/g, '<path d=');
+        sprite = sprite.replace(/<style[\s\S]*?\/style><path[\s\S]*?\s+?d=/g, '<path d=');
+        sprite = sprite.replace(/\sfill[\s\S]*?(['"])[\s\S]*?\1/g, '');
         sprite = sprite.replace(/(['"])[\s\S]*?\1/, function(match) { return match + ' class="main-svg-sprite"' });
         html = html.replace(/<body.*?>/, function(match) { return match + '\n' + sprite });
     }

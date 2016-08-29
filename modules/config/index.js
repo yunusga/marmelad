@@ -1,6 +1,16 @@
 'use strict';
 
 let app = {
+    browserSync : {
+        server: {
+            baseDir: ''
+        },
+        port: 5200,
+        open: false,
+        directory: true,
+        ghostMode: false,
+        notify: true
+    },
     beml: {
         elemPrefix: '__',
         modPrefix: '--',
@@ -50,7 +60,15 @@ let paths = {
     styles: base.assets + base.styles,
     images  : {
         src  : base.assets + '/images',
-        dest : base.dist + '/' + base.storage + '/img'
+        dest : base.dist + base.storage + '/img'
+    },
+    font  : {
+        src  : base.assets + '/font',
+        dest : base.dist + base.storage + '/font'
+    },
+    files  : {
+        src  : base.assets + '/files',
+        dest : base.dist + base.storage + '/files'
     },
     scripts: {
         vendor: base.assets + base.scripts + '/vendor',

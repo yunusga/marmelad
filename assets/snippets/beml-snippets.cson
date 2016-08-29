@@ -1,0 +1,11 @@
+'.text.html, .text.html.handlebars, .text.html.hbs':
+
+    'BEML block HTML or Handlebars':
+        'prefix': 'block'
+        'body': """
+        <${1:div} block="${2:block}" mod="${3:mod}">${4:content}</${1:div}><!-- /${2:block} -->
+        """
+
+    'BEML elem HTML or Handlebars':
+        'prefix': 'elem'
+        'body': '<${1:div} elem="${2:elem}" mod="${3:mod}">${4:content}</${1:div}><!-- /${2:elem} -->'
