@@ -17,6 +17,7 @@
         var plugin = this;
 
         plugin.settings = {}
+        plugin.elem = $(element);
 
         var $element = $(element);
 
@@ -58,16 +59,15 @@
                 .removeClass(plugin.settings.classes.closed)
                 .addClass(plugin.settings.classes.opened);
 
-            plugin.settings.onOpened.call(element);
+            plugin.settings.onOpened.call(plugin.elem);
         };
 
         plugin.close = function(element) {
-
             $element
                 .addClass(plugin.settings.classes.closed)
                 .removeClass(plugin.settings.classes.opened);
 
-            plugin.settings.onClosed.call(element);
+            plugin.settings.onClosed.call(plugin.elem);
         };
 
         plugin.destroy = function() {
