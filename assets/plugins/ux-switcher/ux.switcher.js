@@ -87,7 +87,7 @@
             if (undefined == $(this).data(pluginName)) {
                 var plugin = new $.uxSwitcher(this, options);
                 $(this).data(pluginName, plugin);
-           }
+            }
 
         });
 
