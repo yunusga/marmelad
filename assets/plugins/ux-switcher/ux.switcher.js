@@ -33,9 +33,9 @@
                 event.stopPropagation();
 
                 if ($element.hasClass(plugin.settings.classes.opened)) {
-                    plugin.close();
+                    plugin.close(this);
                 } else {
-                    plugin.open();
+                    plugin.open(this);
                 }
             });
 
@@ -53,21 +53,21 @@
             $(document).off('.' + pluginName);
         };
 
-        plugin.open = function() {
+        plugin.open = function(element) {
             $element
                 .removeClass(plugin.settings.classes.closed)
                 .addClass(plugin.settings.classes.opened);
 
-            plugin.settings.onOpened.call($element);
+            plugin.settings.onOpened.call(element);
         };
 
-        plugin.close = function() {
+        plugin.close = function(element) {
 
             $element
                 .addClass(plugin.settings.classes.closed)
                 .removeClass(plugin.settings.classes.opened);
 
-            plugin.settings.onClosed.call($element);
+            plugin.settings.onClosed.call(element);
         };
 
         plugin.destroy = function() {
