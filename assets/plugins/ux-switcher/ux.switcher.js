@@ -6,8 +6,8 @@
 
         var defaults = {
                 classes : {
-                opened : 'is-opened',
-                closed : 'is-closed',
+                opened : 'js-is-opened',
+                closed : 'js-is-closed',
                 popups : null
             },
             onOpened : function() {},
