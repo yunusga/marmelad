@@ -24,6 +24,8 @@
         plugin.init = function() {
             plugin.settings = $.extend({}, defaults, options);
             plugin.bindEvents();
+
+            $element.addClass('js-uxSwitcher js-uxSwitcher--enabled');
         };
 
         plugin.bindEvents = function() {
@@ -71,7 +73,12 @@
         };
 
         plugin.destroy = function() {
+
             plugin.unBindEvents();
+
+            $element
+                .removeClass('js-uxSwitcher--enabled')
+                .addClass('js-uxSwitcher--destroyed');
             //$element.removeData(pluginName);
         }
 
