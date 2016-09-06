@@ -1,5 +1,7 @@
 ;(function($) {
 
+    // TODO: создание объекта для кеширования необходимых DOM-элементов при инициализации
+
     var pluginName = 'uxSwitcher';
 
     $.uxSwitcher = function(element, options) {
