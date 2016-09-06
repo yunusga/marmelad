@@ -1,6 +1,7 @@
 ;(function($) {
 
     // TODO: создание объекта для кеширования необходимых DOM-элементов при инициализации
+    // TODO: режим работы, checkbox или radiogroup
 
     var pluginName = 'uxSwitcher';
 
