@@ -522,7 +522,7 @@ gulp.task('initialize', (done) => {
 
     runSequence(
         'writeConfiguration',
-        'copyAssets'
+        'copyAssets',
         'startup',
         done
     );
