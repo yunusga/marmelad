@@ -13,6 +13,7 @@
                     closed : 'js-is-closed',
                     popups : null
                 },
+            globalClose : true,
             onOpened : function() {},
             onClosed : function() {}
         };
@@ -45,7 +46,9 @@
                 }
             });
 
-            $(document).on('click' + '.' + pluginName, plugin.close);
+            if (plugin.settings.globalClose) {
+                $(document).on('click' + '.' + pluginName, plugin.close);
+            }
 
             $(document).on('keydown' + '.' + pluginName, function(event) {
                 if (event.keyCode == 27) {
