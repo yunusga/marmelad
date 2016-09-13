@@ -63,3 +63,10 @@ try {
 
     window.addEventListener("test", null, opts);
 } catch (e) {}
+
+/**
+ * определение существования элемента на странице
+ */
+$.exists = function(selector) {
+   return ($(selector).length > 0);
+}
