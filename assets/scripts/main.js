@@ -51,13 +51,13 @@ function GetIEVersion() {
 
 
 // Test via a getter in the options object to see if the passive property is accessed
-var supportsPassive = false;
+window.supportsPassive = false;
 
 try {
 
     var opts = Object.defineProperty({}, 'passive', {
         get: function() {
-            supportsPassive = true;
+            window.supportsPassive = true;
         }
     });
 
