@@ -10,6 +10,7 @@ const $             = require('gulp-load-plugins')();
 const runSequence   = require('run-sequence');
 const pipeErrorStop = require('pipe-error-stop');
 const del           = require('del');
+const requireDir    = require('require-dir');
 const hbsLayouts    = require('handlebars-layouts');
 const notifier      = require('node-notifier');
 const svgMix        = require('../modules/gulp-svg-mix');
@@ -53,55 +54,6 @@ let onError = function(err) {
  * https://www.npmjs.com/package/handlebars-layouts
  */
 $.compileHandlebars.Handlebars.registerHelper(hbsLayouts($.compileHandlebars.Handlebars));
-
-$.compileHandlebars.Handlebars.registerHelper('raw-helper', function(options) {
-    return options.fn(this);
-});
-
-$.compileHandlebars.Handlebars.registerHelper('times', function(n, block) {
-
-    var accum = '';
-
-    for (var i = 0; i < n; ++i) {
-        accum += block.fn(i);
-    }
-
-    return accum;
-});
-
-/**
- * хелпер сравнения, аля if
- */
-$.compileHandlebars.Handlebars.registerHelper('compare', (lvalue, rvalue, options) => {
-
-    if (arguments.length < 3)
-        throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
-
-    let operator = options.hash.operator || "==";
-
-    let operators = {
-        '=='     : function(l,r) { return l == r; },
-        '==='    : function(l,r) { return l === r; },
-        '!='     : function(l,r) { return l != r; },
-        '<'      : function(l,r) { return l < r; },
-        '>'      : function(l,r) { return l > r; },
-        '<='     : function(l,r) { return l <= r; },
-        '>='     : function(l,r) { return l >= r; },
-        'typeof' : function(l,r) { return typeof l == r; }
-    }
-
-    if (!operators[operator])
-        throw new Error("Handlerbars Helper 'compare' doesn't know the operator "+operator);
-
-    let result = operators[operator](lvalue,rvalue);
-
-    if (result) {
-        return options.fn(this);
-    } else {
-        return options.inverse(this);
-    }
-
-});
 
 /**
  * Получение списка директорий Блоков для их подключения в шаблоны
@@ -470,6 +422,7 @@ gulp.task('server', () => {
 });
 
 gulp.task('startup', (cb) => {
+
     runSequence(
         'clean',
         'server',
@@ -506,6 +459,27 @@ gulp.task('writeConfiguration', (done) => {
     });
 });
 
+/**
+ * копирование хелперов для Handlebars
+ */
+gulp.task('copyHbsHelpers', () => {
+    return gulp.src(__dirname.replace('bin', '') + 'assets/helpers/*.*')
+        .pipe(gulp.dest(process.cwd() + '/assets/helpers'));
+});
+
+gulp.task('registerHbsHelpers', function(done) {
+
+    /**
+     * Регистрация кастомных хелперов для Handlebars
+     */
+    const hbsHelpers = requireDir(process.cwd() + '/assets/helpers');
+
+    Object.keys(hbsHelpers).forEach(function(name) {
+        $.compileHandlebars.Handlebars.registerHelper(name, hbsHelpers[name]);
+    });
+
+    done();
+});
 
 /**
  * копирование заготовки проекта
@@ -528,6 +502,16 @@ gulp.task('initialize', (done) => {
     );
 });
 
+gulp.task('addHelpers', function(done) {
+
+    runSequence(
+        'copyHbsHelpers',
+        'registerHbsHelpers',
+        'startup',
+        done
+    );
+});
+
 let init = () => {
 
     fs.exists('marmelad.json', (exist) => {
@@ -537,7 +521,21 @@ let init = () => {
             config.app.version     = pkg.version;
             config.app.name        = pkg.name;
             config.app.description = pkg.description;
-            gulp.start('startup');
+
+
+            fs.exists(process.cwd() + '/assets/helpers', function(exists) {
+
+                console.log(exists);
+
+                if (!exist) {
+                    gulp.start('startup');
+                } else {
+                    gulp.start('addHelpers');
+                }
+
+            });
+
+
         } else {
             gulp.start('initialize');
         }
