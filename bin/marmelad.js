@@ -22,6 +22,12 @@ const pkg           = require('../package.json');
  */
 let config = require('../modules/config');
 
+
+/**
+ * фдаг финальная сборка
+ */
+let isRelease = false;
+
 config.app.browserSync.server.baseDir = config.base.dist;
 config.version = pkg.version;
 config.name    = pkg.name;
@@ -211,6 +217,9 @@ gulp.task('styles:main', () => {
         .pipe($.autoprefixer(config.app.autoprefixer))
         .pipe($.groupCssMediaQueries())
         .pipe(gulp.dest(config.paths.storage + config.base.styles))
+        .pipe($.if(isRelease, $.csso()))
+        .pipe($.if(isRelease, $.rename({suffix: '.min'})))
+        .pipe($.if(isRelease, gulp.dest(config.paths.storage + config.base.styles)))
         .pipe(browserSync.stream());
 });
 
@@ -513,6 +522,10 @@ gulp.task('addHelpers', function(done) {
 });
 
 let init = () => {
+
+    if (process.argv[2] == 'dist') {
+        isRelease = true;
+    }
 
     fs.exists('marmelad.json', (exist) => {
 
