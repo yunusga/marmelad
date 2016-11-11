@@ -525,8 +525,6 @@ let init = () => {
 
             fs.exists(process.cwd() + '/assets/helpers', function(exists) {
 
-                console.log(exists);
-
                 if (!exist) {
                     gulp.start('startup');
                 } else {
