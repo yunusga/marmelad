@@ -259,7 +259,10 @@ gulp.task('scripts:others', function() {
                 collapseWhitespace: true
             })
         )
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
+        .pipe($.if(isRelease, $.uglify()))
+        .pipe($.if(isRelease, $.rename({suffix: '.min'})))
+        .pipe($.if(isRelease, gulp.dest(config.paths.storage + config.base.scripts)));
 });
 
 /**
@@ -283,7 +286,10 @@ gulp.task('scripts:main', (done) => {
                 collapseWhitespace: true
             })
         )
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
+        .pipe($.if(isRelease, $.uglify()))
+        .pipe($.if(isRelease, $.rename({suffix: '.min'})))
+        .pipe($.if(isRelease, gulp.dest(config.paths.storage + config.base.scripts)));;
 
     stream.on('end', () => {
         browserSync.reload();
