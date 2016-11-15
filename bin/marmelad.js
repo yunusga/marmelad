@@ -195,7 +195,7 @@ gulp.task('styles:plugins', () => {
         .pipe($.autoprefixer())
         .pipe($.csso())
         .pipe(gulp.dest(config.paths.storage + config.base.styles))
-        .pipe(browserSync.stream());
+        .pipe($.if(!isRelease, browserSync.stream()));
 });
 
 /**
@@ -221,6 +221,27 @@ gulp.task('styles:main', () => {
         .pipe($.if(isRelease, $.rename({suffix: '.min'})))
         .pipe($.if(isRelease, gulp.dest(config.paths.storage + config.base.styles)))
         .pipe(browserSync.stream());
+});
+
+gulp.task('css:main:dist', () => {
+    return gulp.src([
+            config.paths.styles + '/libs/**/*.styl',
+            config.paths.styles + '/*.styl',
+            config.paths.blocks + '/**/*.styl'
+        ])
+        .pipe($.plumber({errorHandler: onError}))
+        .pipe($.concat('app.styl'))
+        .pipe(
+            $.stylus({
+                'include css': true
+            })
+        )
+        .pipe($.autoprefixer(config.app.autoprefixer))
+        .pipe($.groupCssMediaQueries())
+        .pipe(gulp.dest(config.paths.storage + config.base.styles))
+        .pipe($.csso())
+        .pipe($.rename({suffix: '.min'}))
+        .pipe(gulp.dest(config.paths.storage + config.base.styles));
 });
 
 /**
@@ -251,6 +272,13 @@ gulp.task('scripts:others', function() {
 
     return gulp.src([config.paths.scripts.main + '/others/*.js'])
         .pipe($.plumber({errorHandler: onError}))
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
+});
+
+gulp.task('js:others:dist', function() {
+
+    return gulp.src([config.paths.scripts.main + '/others/*.js'])
+        .pipe($.plumber({errorHandler: onError}))
         .pipe(
             $.jsPrettify({
                 indent_size: 4,
@@ -260,9 +288,9 @@ gulp.task('scripts:others', function() {
             })
         )
         .pipe(gulp.dest(config.paths.storage + config.base.scripts))
-        .pipe($.if(isRelease, $.uglify()))
-        .pipe($.if(isRelease, $.rename({suffix: '.min'})))
-        .pipe($.if(isRelease, gulp.dest(config.paths.storage + config.base.scripts)));
+        .pipe($.uglify())
+        .pipe($.rename({suffix: '.min'}))
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
 });
 
 /**
@@ -271,6 +299,28 @@ gulp.task('scripts:others', function() {
 gulp.task('scripts:main', (done) => {
 
     let stream = gulp.src([
+            config.paths.scripts.main + '/*.js',
+            config.paths.blocks + '/**/*.js',
+            '!' + config.paths.scripts + '/**/_*.*'
+        ])
+        .pipe($.plumber({errorHandler: onError}))
+        .pipe($.concat('main.js'))
+        .pipe($.wrap('$(document).ready(function(){\n\n"use strict";\n\n<%= contents %>\n});'))
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
+
+    stream.on('end', () => {
+        browserSync.reload();
+        done();
+    });
+
+    stream.on('error', (err) => {
+        done(err);
+    });
+});
+
+gulp.task('js:main:dist', function() {
+
+    return gulp.src([
             config.paths.scripts.main + '/*.js',
             config.paths.blocks + '/**/*.js',
             '!' + config.paths.scripts + '/**/_*.*'
@@ -287,18 +337,10 @@ gulp.task('scripts:main', (done) => {
             })
         )
         .pipe(gulp.dest(config.paths.storage + config.base.scripts))
-        .pipe($.if(isRelease, $.uglify()))
-        .pipe($.if(isRelease, $.rename({suffix: '.min'})))
-        .pipe($.if(isRelease, gulp.dest(config.paths.storage + config.base.scripts)));;
+        .pipe($.uglify())
+        .pipe($.rename({suffix: '.min'}))
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
 
-    stream.on('end', () => {
-        browserSync.reload();
-        done();
-    });
-
-    stream.on('error', (err) => {
-        done(err);
-    });
 });
 
 /**
@@ -457,6 +499,26 @@ gulp.task('startup', (cb) => {
         cb);
 });
 
+gulp.task('startup:dist', (cb) => {
+
+    runSequence(
+        'clean',
+        'server',
+        'get-data',
+        'svg-sprite',
+        'handlebars',
+        'styles:plugins',
+        'css:main:dist',
+        'scripts:vendor',
+        'scripts:plugins',
+        'js:others:dist',
+        'js:main:dist',
+        'images',
+        'font',
+        'files',
+        cb);
+});
+
 
 /**
  * создание файла конфигурации проекта
@@ -527,6 +589,16 @@ gulp.task('addHelpers', function(done) {
     );
 });
 
+gulp.task('addHelpers:dist', function(done) {
+
+    runSequence(
+        'copyHbsHelpers',
+        'registerHbsHelpers',
+        'startup:dist',
+        done
+    );
+});
+
 let init = () => {
 
     if (process.argv[2] == 'dist') {
@@ -545,9 +617,9 @@ let init = () => {
             fs.exists(process.cwd() + '/assets/helpers', function(exists) {
 
                 if (!exist) {
-                    gulp.start('startup');
+                    isRelease ? gulp.start('startup:dist') : gulp.start('startup');
                 } else {
-                    gulp.start('addHelpers');
+                    isRelease ? gulp.start('addHelpers:dist') : gulp.start('addHelpers');
                 }
 
             });
