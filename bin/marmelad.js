@@ -363,6 +363,26 @@ gulp.task('images', (done) => {
 });
 
 /**
+ * перекладываем картинки блоков
+ */
+gulp.task('blocks:images', (done) => {
+
+    let stream = gulp.src(config.paths.blocks + '/**/*.{jpg,png,gif,svg,bmp}')
+        .pipe($.plumber({errorHandler: onError}))
+        .pipe($.rename({dirname: ''}))
+        .pipe(gulp.dest(config.paths.files.dest));
+
+    stream.on('end', () => {
+        browserSync.reload();
+        done();
+    });
+
+    stream.on('error', (err) => {
+        done(err);
+    });
+});
+
+/**
  * перекладываем шрифты
  */
 gulp.task('font', (done) => {
@@ -460,6 +480,11 @@ gulp.task('watch', () => {
         gulp.start('images', done);
     }));
 
+    /* КАРТИНКИ БЛОКОВ*/
+    $.watch(config.paths.blocks + '/**/*.{jpg,png,gif,svg,bmp}', $.batch((events, done) => {
+        gulp.start('blocks:images', done);
+    }));
+
     /* ШРИФТЫ ДЛЯ САЙТА*/
     $.watch(config.paths.font.src + '/**', $.batch((events, done) => {
         gulp.start('font', done);
@@ -493,6 +518,7 @@ gulp.task('startup', (cb) => {
         'scripts:others',
         'scripts:main',
         'images',
+        'blocks:images',
         'font',
         'files',
         'watch',
@@ -514,6 +540,7 @@ gulp.task('startup:dist', (cb) => {
         'js:others:dist',
         'js:main:dist',
         'images',
+        'blocks:images',
         'font',
         'files',
         cb);
