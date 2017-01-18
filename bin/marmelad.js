@@ -13,7 +13,7 @@ const del           = require('del');
 const requireDir    = require('require-dir');
 const hbsLayouts    = require('handlebars-layouts');
 const notifier      = require('node-notifier');
-const svgMix        = require('../modules/gulp-svg-mix');
+const iconizer      = require('../modules/gulp-iconizer');
 const browserSync   = require('browser-sync').create();
 const pkg           = require('../package.json');
 
@@ -100,7 +100,7 @@ gulp.task('handlebars', function(done) {
         .on('error', $.notify.onError({title: 'Handlebars'}))
         .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
         .pipe($.beml(config.app.beml))
-        .pipe(svgMix({path: config.paths.svg + '/sprite.svg'}))
+        .pipe(iconizer({path: config.paths.svg + '/sprite.svg'}))
         .pipe($.prettify({indent_size: 4}))
         .pipe($.rename({extname: '.html'}))
         .pipe(gulp.dest(config.paths.dist));
