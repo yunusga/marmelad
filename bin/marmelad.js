@@ -101,7 +101,7 @@ gulp.task('handlebars', function(done) {
         .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
         .pipe($.beml(config.app.beml))
         .pipe(iconizer({path: config.paths.svg + '/sprite.svg'}))
-        .pipe($.prettify({indent_size: 4}))
+        //.pipe($.prettify({indent_size: 4}))
         .pipe($.rename({extname: '.html'}))
         .pipe(gulp.dest(config.paths.dist));
 
