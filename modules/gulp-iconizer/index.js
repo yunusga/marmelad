@@ -3,7 +3,7 @@
  * Licensed under the MIT license.
  */
 
-"use strict";
+'use strict';
 
 const fs          = require('fs');
 const through     = require('through2');
@@ -102,11 +102,11 @@ module.exports = function(options) {
         }
 
         if (file.isStream()) {
-            this.emit("error", new PluginError("gulp-svg-mix", "Streaming not supported"));
+            this.emit('error', new PluginError('gulp-iconizer', 'Streaming not supported'));
             return cb();
         }
 
         this.push(file);
         cb(null, file);
     });
-}
+};

@@ -2,6 +2,7 @@
 
 'use strict';
 
+const path          = require('path');
 const fs            = require('fs');
 const jsonfile      = require('jsonfile');
 const gulp          = require('gulp');
@@ -402,6 +403,32 @@ gulp.task('font', (done) => {
 });
 
 /**
+ * СТАТИКА
+ */
+gulp.task('static', function(done) {
+
+    let stream = gulp.src(config.paths.static + '/**/*.*')
+        .pipe($.plumber())
+        .pipe($.changed(config.paths.dist))
+        .pipe($.logger({
+            before     : '[static] starting',
+            after      : '[static] complete',
+            showChange : true,
+            display    : 'name'
+        }))
+        .pipe(gulp.dest(config.paths.dist));
+
+    stream.on('end', function () {
+        browserSync.reload();
+        done();
+    });
+
+    stream.on('error', function (err) {
+        done(err);
+    });
+});
+
+/**
  * перекладываем прочие файлы
  */
 gulp.task('files', (done) => {
@@ -428,6 +455,11 @@ gulp.task('clean', () => {
 });
 
 gulp.task('watch', () => {
+
+    /* СТАТИКА */
+    $.watch(path.join(config.paths.static, '**', '*'), $.batch((events, done) => {
+        gulp.start('static', done);
+    }));
 
     /* СТИЛИ */
     $.watch(config.paths.plugins + '/**/*.css', $.batch((events, done) => {
@@ -508,6 +540,7 @@ gulp.task('startup', (cb) => {
     runSequence(
         'clean',
         'server',
+        'static',
         'get-data',
         'svg-sprite',
         'handlebars',
@@ -530,6 +563,7 @@ gulp.task('startup:dist', (cb) => {
     runSequence(
         'clean',
         'server',
+        'static',
         'get-data',
         'svg-sprite',
         'handlebars',

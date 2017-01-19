@@ -41,6 +41,7 @@ let app = {
 let base = {
     assets: 'assets',
     dist: 'dist',
+    static: '/static',
     storage: '/images',
     pages: '/pages',
     blocks: '/blocks',
@@ -54,6 +55,7 @@ let paths = {
     assets: base.assets,
     dist: base.dist,
     storage: base.dist + base.storage,
+    static: base.dist + base.static,
     pages: base.assets + base.pages,
     blocks: base.assets + base.blocks,
     plugins: base.assets + base.plugins,
