@@ -450,8 +450,9 @@ gulp.task('files', (done) => {
 /**
  * очищаем папку сборки перед сборкой Ж)
  */
-gulp.task('clean', () => {
-    del('dist');
+gulp.task('build:clean', function (done) {
+    del.sync(config.paths.dist);
+    done();
 });
 
 gulp.task('watch', () => {
@@ -535,10 +536,10 @@ gulp.task('server', () => {
 
 });
 
-gulp.task('startup', (cb) => {
+gulp.task('startup', function(cb) {
 
     runSequence(
-        'clean',
+        'build:clean',
         'server',
         'static',
         'get-data',
@@ -558,10 +559,10 @@ gulp.task('startup', (cb) => {
         cb);
 });
 
-gulp.task('startup:dist', (cb) => {
+gulp.task('startup:dist', function(cb) {
 
     runSequence(
-        'clean',
+        'build:clean',
         'server',
         'static',
         'get-data',
