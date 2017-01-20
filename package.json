@@ -7,7 +7,7 @@
     "node": ">=4.2.1"
   },
   "author": {
-    "email": "yunus.gaziev@gmail.com",
+    "email": "yunusga@yandex.ru",
     "name": "Yunus Gaziev"
   },
   "bin": {
@@ -15,16 +15,28 @@
   },
   "maintainers": [
     {
-      "name": "vitorgan",
+      "name": "vitaliyryazanov",
       "email": "vitaliy0332@gmail.com"
     },
     {
-      "name": "yeger_",
+      "name": "yeger",
       "email": "rets.dima@gmail.com"
     },
     {
-      "name": "hayrulin_shamil",
-      "email": "hayrulin89@gmail.com"
+      "name" : "Askarov-Alex",
+      "email" : "askarov.aleksandr@gmail.com"
+    },
+    {
+      "name" : "nikki15",
+      "email" : "nikki.solution@gmail.com"
+    },
+    {
+      "name" : "ShamilEx",
+      "email" : "shamil9227@gmail.com"
+    },
+    {
+      "name" : "Amirkhanov",
+      "email" : "nikelamigo@gmail.com"
     }
   ],
   "license": "MIT",
