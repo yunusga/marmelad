@@ -1,0 +1,51 @@
+gridColumns   = grid_columns
+gridGutter    = grid_gutter
+gridClass     = grid_class
+gridClassList = grid_class_list
+gridClassItem = grid_class_item
+
+getGridBasis(size)
+    max-width floor((100/size) * 1%, 2)
+    flex-basis floor((100/size) * 1%, 2)
+
+changeGridGutterSize(sizeLeft, sizeBottom)
+    .{gridClass}
+
+        &__{gridClassList}
+            margin 0 0 0 (sizeLeft * -1)
+        &__{gridClassItem}
+            padding 0 0 sizeBottom sizeLeft
+
+.{gridClass}
+
+    &--post-preview
+        changeGridGutterSize(15px, 45px)
+
+    &__{gridClassList}
+        margin 0 0 0 (gridGutter * -1)
+        padding 0
+        list-style-type none
+
+        display flex
+        flex-direction row
+        flex-wrap wrap
+
+    for num in (1..gridColumns)
+        &--1-{num}
+            .{gridClass}__{gridClassItem}
+                getGridBasis(num)
+
+    &__{gridClassItem}
+        max-width 100%
+        flex-basis 100%
+        padding 0 0 gridGutter gridGutter
+        box-sizing border-box
+
+        for num in (1..gridColumns)
+            &.{gridClass}__{gridClassItem}--1-{num}
+                getGridBasis(num)
+
+        for num in (1..gridColumns)
+            &.{gridClass}__{gridClassItem}--{num}-{gridColumns}
+                max-width floor(100 - (100/gridColumns*num) * 1%, 2)
+                flex-basis floor(100 - (100/gridColumns*num) * 1%, 2)

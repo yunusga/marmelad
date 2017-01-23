@@ -2,6 +2,7 @@
 
 'use strict';
 
+const path          = require('path');
 const fs            = require('fs');
 const jsonfile      = require('jsonfile');
 const gulp          = require('gulp');
@@ -10,9 +11,10 @@ const $             = require('gulp-load-plugins')();
 const runSequence   = require('run-sequence');
 const pipeErrorStop = require('pipe-error-stop');
 const del           = require('del');
+const requireDir    = require('require-dir');
 const hbsLayouts    = require('handlebars-layouts');
 const notifier      = require('node-notifier');
-const svgMix        = require('../modules/gulp-svg-mix');
+const iconizer      = require('../modules/gulp-iconizer');
 const browserSync   = require('browser-sync').create();
 const pkg           = require('../package.json');
 
@@ -20,6 +22,12 @@ const pkg           = require('../package.json');
  * конфиг по умолчанию
  */
 let config = require('../modules/config');
+
+
+/**
+ * фдаг финальная сборка
+ */
+let isRelease = false;
 
 config.app.browserSync.server.baseDir = config.base.dist;
 config.version = pkg.version;
@@ -53,55 +61,6 @@ let onError = function(err) {
  * https://www.npmjs.com/package/handlebars-layouts
  */
 $.compileHandlebars.Handlebars.registerHelper(hbsLayouts($.compileHandlebars.Handlebars));
-
-$.compileHandlebars.Handlebars.registerHelper('raw-helper', function(options) {
-    return options.fn(this);
-});
-
-$.compileHandlebars.Handlebars.registerHelper('times', function(n, block) {
-
-    var accum = '';
-
-    for (var i = 0; i < n; ++i) {
-        accum += block.fn(i);
-    }
-
-    return accum;
-});
-
-/**
- * хелпер сравнения, аля if
- */
-$.compileHandlebars.Handlebars.registerHelper('compare', (lvalue, rvalue, options) => {
-
-    if (arguments.length < 3)
-        throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
-
-    let operator = options.hash.operator || "==";
-
-    let operators = {
-        '=='     : function(l,r) { return l == r; },
-        '==='    : function(l,r) { return l === r; },
-        '!='     : function(l,r) { return l != r; },
-        '<'      : function(l,r) { return l < r; },
-        '>'      : function(l,r) { return l > r; },
-        '<='     : function(l,r) { return l <= r; },
-        '>='     : function(l,r) { return l >= r; },
-        'typeof' : function(l,r) { return typeof l == r; }
-    }
-
-    if (!operators[operator])
-        throw new Error("Handlerbars Helper 'compare' doesn't know the operator "+operator);
-
-    let result = operators[operator](lvalue,rvalue);
-
-    if (result) {
-        return options.fn(this);
-    } else {
-        return options.inverse(this);
-    }
-
-});
 
 /**
  * Получение списка директорий Блоков для их подключения в шаблоны
@@ -142,8 +101,8 @@ gulp.task('handlebars', function(done) {
         .on('error', $.notify.onError({title: 'Handlebars'}))
         .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
         .pipe($.beml(config.app.beml))
-        .pipe(svgMix({path: config.paths.svg + '/sprite.svg'}))
-        .pipe($.prettify({indent_size: 4}))
+        .pipe(iconizer({path: config.paths.svg + '/sprite.svg'}))
+        //.pipe($.prettify({indent_size: 4}))
         .pipe($.rename({extname: '.html'}))
         .pipe(gulp.dest(config.paths.dist));
 
@@ -237,7 +196,7 @@ gulp.task('styles:plugins', () => {
         .pipe($.autoprefixer())
         .pipe($.csso())
         .pipe(gulp.dest(config.paths.storage + config.base.styles))
-        .pipe(browserSync.stream());
+        .pipe($.if(!isRelease, browserSync.stream()));
 });
 
 /**
@@ -259,7 +218,31 @@ gulp.task('styles:main', () => {
         .pipe($.autoprefixer(config.app.autoprefixer))
         .pipe($.groupCssMediaQueries())
         .pipe(gulp.dest(config.paths.storage + config.base.styles))
+        .pipe($.if(isRelease, $.csso()))
+        .pipe($.if(isRelease, $.rename({suffix: '.min'})))
+        .pipe($.if(isRelease, gulp.dest(config.paths.storage + config.base.styles)))
         .pipe(browserSync.stream());
+});
+
+gulp.task('css:main:dist', () => {
+    return gulp.src([
+            config.paths.styles + '/libs/**/*.styl',
+            config.paths.styles + '/*.styl',
+            config.paths.blocks + '/**/*.styl'
+        ])
+        .pipe($.plumber({errorHandler: onError}))
+        .pipe($.concat('app.styl'))
+        .pipe(
+            $.stylus({
+                'include css': true
+            })
+        )
+        .pipe($.autoprefixer(config.app.autoprefixer))
+        .pipe($.groupCssMediaQueries())
+        .pipe(gulp.dest(config.paths.storage + config.base.styles))
+        .pipe($.csso())
+        .pipe($.rename({suffix: '.min'}))
+        .pipe(gulp.dest(config.paths.storage + config.base.styles));
 });
 
 /**
@@ -290,6 +273,13 @@ gulp.task('scripts:others', function() {
 
     return gulp.src([config.paths.scripts.main + '/others/*.js'])
         .pipe($.plumber({errorHandler: onError}))
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
+});
+
+gulp.task('js:others:dist', function() {
+
+    return gulp.src([config.paths.scripts.main + '/others/*.js'])
+        .pipe($.plumber({errorHandler: onError}))
         .pipe(
             $.jsPrettify({
                 indent_size: 4,
@@ -298,6 +288,9 @@ gulp.task('scripts:others', function() {
                 collapseWhitespace: true
             })
         )
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
+        .pipe($.uglify())
+        .pipe($.rename({suffix: '.min'}))
         .pipe(gulp.dest(config.paths.storage + config.base.scripts));
 });
 
@@ -314,14 +307,6 @@ gulp.task('scripts:main', (done) => {
         .pipe($.plumber({errorHandler: onError}))
         .pipe($.concat('main.js'))
         .pipe($.wrap('$(document).ready(function(){\n\n"use strict";\n\n<%= contents %>\n});'))
-        .pipe(
-            $.jsPrettify({
-                indent_size: 4,
-                indent_char: " ",
-                eol: "\n",
-                collapseWhitespace: true
-            })
-        )
         .pipe(gulp.dest(config.paths.storage + config.base.scripts));
 
     stream.on('end', () => {
@@ -334,51 +319,39 @@ gulp.task('scripts:main', (done) => {
     });
 });
 
-/**
- * перекладываем картинки
- */
-gulp.task('images', (done) => {
+gulp.task('js:main:dist', function() {
 
-    let stream = gulp.src(config.paths.images.src + '/**/*')
+    return gulp.src([
+            config.paths.scripts.main + '/*.js',
+            config.paths.blocks + '/**/*.js',
+            '!' + config.paths.scripts + '/**/_*.*'
+        ])
         .pipe($.plumber({errorHandler: onError}))
-        .pipe(gulp.dest(config.paths.images.dest));
+        .pipe($.concat('main.js'))
+        .pipe($.wrap('$(document).ready(function(){\n\n"use strict";\n\n<%= contents %>\n});'))
+        .pipe(
+            $.jsPrettify({
+                indent_size: 4,
+                indent_char: " ",
+                eol: "\n",
+                collapseWhitespace: true
+            })
+        )
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
+        .pipe($.uglify())
+        .pipe($.rename({suffix: '.min'}))
+        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
 
-    stream.on('end', () => {
-        browserSync.reload();
-        done();
-    });
-
-    stream.on('error', (err) => {
-        done(err);
-    });
 });
 
 /**
- * перекладываем шрифты
+ * перекладываем картинки блоков
  */
-gulp.task('font', (done) => {
+gulp.task('blocks:images', (done) => {
 
-    let stream = gulp.src(config.paths.font.src + '/**/*')
+    let stream = gulp.src(config.paths.blocks + '/**/*.{jpg,png,gif,svg,bmp}')
         .pipe($.plumber({errorHandler: onError}))
-        .pipe(gulp.dest(config.paths.font.dest));
-
-    stream.on('end', () => {
-        browserSync.reload();
-        done();
-    });
-
-    stream.on('error', (err) => {
-        done(err);
-    });
-});
-
-/**
- * перекладываем прочие файлы
- */
-gulp.task('files', (done) => {
-
-    let stream = gulp.src(config.paths.files.src + '/**/*')
-        .pipe($.plumber({errorHandler: onError}))
+        .pipe($.rename({dirname: ''}))
         .pipe(gulp.dest(config.paths.files.dest));
 
     stream.on('end', () => {
@@ -392,13 +365,45 @@ gulp.task('files', (done) => {
 });
 
 /**
+ * СТАТИКА
+ */
+gulp.task('static', function(done) {
+
+    let stream = gulp.src(config.paths.static + '/**/*.*')
+        .pipe($.plumber())
+        .pipe($.changed(config.paths.dist))
+        .pipe($.logger({
+            before     : '[static] starting',
+            after      : '[static] complete',
+            showChange : true,
+            display    : 'name'
+        }))
+        .pipe(gulp.dest(config.paths.dist));
+
+    stream.on('end', function () {
+        browserSync.reload();
+        done();
+    });
+
+    stream.on('error', function (err) {
+        done(err);
+    });
+});
+
+/**
  * очищаем папку сборки перед сборкой Ж)
  */
-gulp.task('clean', () => {
-    del('dist');
+gulp.task('build:clean', function (done) {
+    del.sync(config.paths.dist);
+    done();
 });
 
 gulp.task('watch', () => {
+
+    /* СТАТИКА */
+    $.watch(path.join(config.paths.static, '**', '*'), $.batch((events, done) => {
+        gulp.start('static', done);
+    }));
 
     /* СТИЛИ */
     $.watch(config.paths.plugins + '/**/*.css', $.batch((events, done) => {
@@ -446,19 +451,9 @@ gulp.task('watch', () => {
         gulp.start('refresh-data', done);
     }));
 
-    /* КАРТИНКИ ДЛЯ САЙТА*/
-    $.watch(config.paths.images.src + '/**', $.batch((events, done) => {
-        gulp.start('images', done);
-    }));
-
-    /* ШРИФТЫ ДЛЯ САЙТА*/
-    $.watch(config.paths.font.src + '/**', $.batch((events, done) => {
-        gulp.start('font', done);
-    }));
-
-    /* ФАЙЛЫ ДЛЯ САЙТА*/
-    $.watch(config.paths.files.src + '/**', $.batch((events, done) => {
-        gulp.start('files', done);
+    /* КАРТИНКИ БЛОКОВ*/
+    $.watch(config.paths.blocks + '/**/*.{jpg,png,gif,svg,bmp}', $.batch((events, done) => {
+        gulp.start('blocks:images', done);
     }));
 
 });
@@ -469,10 +464,12 @@ gulp.task('server', () => {
 
 });
 
-gulp.task('startup', (cb) => {
+gulp.task('startup', function(cb) {
+
     runSequence(
-        'clean',
+        'build:clean',
         'server',
+        'static',
         'get-data',
         'svg-sprite',
         'handlebars',
@@ -482,10 +479,27 @@ gulp.task('startup', (cb) => {
         'scripts:plugins',
         'scripts:others',
         'scripts:main',
-        'images',
-        'font',
-        'files',
+        'blocks:images',
         'watch',
+        cb);
+});
+
+gulp.task('startup:dist', function(cb) {
+
+    runSequence(
+        'build:clean',
+        'server',
+        'static',
+        'get-data',
+        'svg-sprite',
+        'handlebars',
+        'styles:plugins',
+        'css:main:dist',
+        'scripts:vendor',
+        'scripts:plugins',
+        'js:others:dist',
+        'js:main:dist',
+        'blocks:images',
         cb);
 });
 
@@ -506,6 +520,27 @@ gulp.task('writeConfiguration', (done) => {
     });
 });
 
+/**
+ * копирование хелперов для Handlebars
+ */
+gulp.task('copyHbsHelpers', () => {
+    return gulp.src(__dirname.replace('bin', '') + 'assets/helpers/*.*')
+        .pipe(gulp.dest(process.cwd() + '/assets/helpers'));
+});
+
+gulp.task('registerHbsHelpers', function(done) {
+
+    /**
+     * Регистрация кастомных хелперов для Handlebars
+     */
+    const hbsHelpers = requireDir(process.cwd() + '/assets/helpers');
+
+    Object.keys(hbsHelpers).forEach(function(name) {
+        $.compileHandlebars.Handlebars.registerHelper(name, hbsHelpers[name]);
+    });
+
+    done();
+});
 
 /**
  * копирование заготовки проекта
@@ -516,14 +551,6 @@ gulp.task('copyAssets', () => {
 });
 
 /**
- * копирование .editorconfig
- */
-gulp.task('copyEditorconfig', () => {
-    return gulp.src(__dirname.replace('bin', '') + '.editorconfig')
-        .pipe(gulp.dest(process.cwd()));
-});
-
-/**
  * инициализация нового проекта
  */
 gulp.task('initialize', (done) => {
@@ -531,13 +558,36 @@ gulp.task('initialize', (done) => {
     runSequence(
         'writeConfiguration',
         'copyAssets',
-        'copyEditorconfig',
         'startup',
         done
     );
 });
 
+gulp.task('addHelpers', function(done) {
+
+    runSequence(
+        'copyHbsHelpers',
+        'registerHbsHelpers',
+        'startup',
+        done
+    );
+});
+
+gulp.task('addHelpers:dist', function(done) {
+
+    runSequence(
+        'copyHbsHelpers',
+        'registerHbsHelpers',
+        'startup:dist',
+        done
+    );
+});
+
 let init = () => {
+
+    if (process.argv[2] == 'dist') {
+        isRelease = true;
+    }
 
     fs.exists('marmelad.json', (exist) => {
 
@@ -546,7 +596,19 @@ let init = () => {
             config.app.version     = pkg.version;
             config.app.name        = pkg.name;
             config.app.description = pkg.description;
-            gulp.start('startup');
+
+
+            fs.exists(process.cwd() + '/assets/helpers', function(exists) {
+
+                if (!exist) {
+                    isRelease ? gulp.start('startup:dist') : gulp.start('startup');
+                } else {
+                    isRelease ? gulp.start('addHelpers:dist') : gulp.start('addHelpers');
+                }
+
+            });
+
+
         } else {
             gulp.start('initialize');
         }

@@ -1,15 +1,19 @@
 ;(function($) {
 
+    // TODO: создание объекта для кеширования необходимых DOM-элементов при инициализации
+    // TODO: режим работы, checkbox или radiogroup
+
     var pluginName = 'uxSwitcher';
 
     $.uxSwitcher = function(element, options) {
 
         var defaults = {
                 classes : {
-                opened : 'is-opened',
-                closed : 'is-closed',
-                popups : null
-            },
+                    opened : 'js-is-opened',
+                    closed : 'js-is-closed',
+                    popups : null
+                },
+            globalClose : true,
             onOpened : function() {},
             onClosed : function() {}
         };
@@ -24,6 +28,8 @@
         plugin.init = function() {
             plugin.settings = $.extend({}, defaults, options);
             plugin.bindEvents();
+
+            $element.addClass('js-uxSwitcher js-uxSwitcher--enabled');
         };
 
         plugin.bindEvents = function() {
@@ -40,7 +46,9 @@
                 }
             });
 
-            $(document).on('click' + '.' + pluginName, plugin.close);
+            if (plugin.settings.globalClose) {
+                $(document).on('click' + '.' + pluginName, plugin.close);
+            }
 
             $(document).on('keydown' + '.' + pluginName, function(event) {
                 if (event.keyCode == 27) {
@@ -71,7 +79,12 @@
         };
 
         plugin.destroy = function() {
+
             plugin.unBindEvents();
+
+            $element
+                .removeClass('js-uxSwitcher--enabled')
+                .addClass('js-uxSwitcher--destroyed');
             //$element.removeData(pluginName);
         }
 
