@@ -2,6 +2,7 @@
 
 'use strict';
 
+const commander     = require('commander');
 const path          = require('path');
 const fs            = require('fs');
 const jsonfile      = require('jsonfile');

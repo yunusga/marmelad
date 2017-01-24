@@ -23,26 +23,27 @@
       "email": "rets.dima@gmail.com"
     },
     {
-      "name" : "Askarov-Alex",
-      "email" : "askarov.aleksandr@gmail.com"
+      "name": "Askarov-Alex",
+      "email": "askarov.aleksandr@gmail.com"
     },
     {
-      "name" : "nikki15",
-      "email" : "nikki.solution@gmail.com"
+      "name": "nikki15",
+      "email": "nikki.solution@gmail.com"
     },
     {
-      "name" : "ShamilEx",
-      "email" : "shamil9227@gmail.com"
+      "name": "ShamilEx",
+      "email": "shamil9227@gmail.com"
     },
     {
-      "name" : "Amirkhanov",
-      "email" : "nikelamigo@gmail.com"
+      "name": "Amirkhanov",
+      "email": "nikelamigo@gmail.com"
     }
   ],
   "license": "MIT",
   "dependencies": {
     "browser-sync": "2.13.0",
     "chalk": "1.1.3",
+    "commander": "2.9.0",
     "del": "2.2.1",
     "gulp": "3.9.1",
     "gulp-autoprefixer": "3.1.1",
