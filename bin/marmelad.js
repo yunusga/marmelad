@@ -179,6 +179,23 @@ gulp.task('refresh-data', (cb) => {
 
 
 /**
+ * сборка стилей блоков, для каждого отдельный css
+ */
+gulp.task('stylus:blocks', function() {
+
+    return gulp.src([config.paths.blocks + '/**/*.styl'])
+        .pipe($.plumber())
+        .pipe($.stylus({
+            'include css' : true
+        }))
+        .pipe($.autoprefixer())
+        .pipe($.groupCssMediaQueries())
+        .pipe(gulp.dest(function(file) {
+            return file.base;
+        }));
+});
+
+/**
  * СТИЛИ ПАГИНОВ
  */
 gulp.task('styles:plugins', () => {
@@ -474,6 +491,7 @@ gulp.task('startup', function(cb) {
         'get-data',
         'svg-sprite',
         'handlebars',
+        'stylus:blocks',
         'styles:plugins',
         'styles:main',
         'scripts:vendor',
