@@ -7,6 +7,7 @@ const path          = require('path');
 const fs            = require('fs');
 const jsonfile      = require('jsonfile');
 const gulp          = require('gulp');
+const decache       = require('decache');
 //const logger        = require('../modules/logger')(gulp);
 const $             = require('gulp-load-plugins')();
 const runSequence   = require('run-sequence');
@@ -20,9 +21,9 @@ const browserSync   = require('browser-sync').create();
 const pkg           = require('../package.json');
 const terminal      = require('terminal-logger')('marmelad');
 const chalk         = require('chalk');
-const emoji         = require('node-emoji').emoji;
 
-let settings = {};
+let settings = require('../assets/marmelad.settings');
+let database = {};
 
 /**
  * фдаг финальная сборка
@@ -51,6 +52,8 @@ let onError = function(err) {
     this.emit('end');
 };
 
+
+
 /**
  * регистрация хелперов расширения шаблонов handlebars-layouts
  * https://www.npmjs.com/package/handlebars-layouts
@@ -74,7 +77,39 @@ let getPartialsPaths = (dest) => {
     });
 
     return partials;
-}
+};
+
+/**
+ * обновление данных для шаблонов
+ */
+gulp.task('get:data', (done) => {
+
+    let dataPath = path.join(process.cwd(), settings.paths.assets, 'marmelad.data');
+
+    decache(dataPath);
+
+    database = require(dataPath);
+
+    Object.assign(database.app, {
+        package  : pkg,
+        settings : settings
+    });
+
+    terminal
+        .write()
+        .tick(`data for handlebars templates ${chalk.bold.yellow('refreshed')}\n`);
+
+    done();
+
+});
+
+/**
+ * обновление данных для шаблонов
+ * пересборка шаблонов с новыми данными
+ */
+gulp.task('refresh:data', (cb) => {
+    runSequence('get:data', 'handlebars', cb);
+});
 
 /**
  * сборка шаблонов handlebars
@@ -87,17 +122,22 @@ gulp.task('handlebars', function(done) {
             '!' + settings.paths.pages + '/**/_*.{hbs,handlebars}'
         ])
         .pipe($.plumber())
+        .pipe($.logger({
+            before     : '[handlebars] starting',
+            after      : '[handlebars] complete',
+            showChange : true,
+            display    : 'name'
+        }))
         .pipe(
-            $.compileHandlebars(db, {
+            $.compileHandlebars(database, {
                 ignorePartials: false,
                 batch: getPartialsPaths(settings.paths.blocks)
             })
         )
-        .on('error', $.notify.onError({title: 'Handlebars'}))
+        //.on('error', $.notify.onError({title: 'Handlebars'}))
         .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
         .pipe($.beml(settings.app.beml))
-        .pipe(iconizer({path: settings.paths.iconizer + '/sprite.svg'}))
-        //.pipe($.prettify({indent_size: 4}))
+        .pipe(iconizer({path: settings.paths.iconizer.src + '/sprite.svg'}))
         .pipe($.rename({extname: '.html'}))
         .pipe(gulp.dest(settings.paths.dist));
 
@@ -130,33 +170,6 @@ gulp.task('build:iconizer', () => {
  */
 gulp.task('build:iconizer:refresh', (cb) => {
     runSequence('build:iconizer', 'handlebars', cb);
-});
-
-/**
- * обновление данных для шаблонов
- */
-gulp.task('get-data', (done) => {
-
-    jsonfile.readFile(settings.paths.assets + '/data.json', (error, data) => {
-
-        if (error) {
-            data = {
-                pageTitle : 'Error in data.json'
-            };
-        }
-
-        db = data;
-
-        done();
-    });
-});
-
-/**
- * обновление данных для шаблонов
- * пересборка шаблонов с новыми данными
- */
-gulp.task('refresh-data', (cb) => {
-    runSequence('get-data', 'handlebars', cb);
 });
 
 
@@ -406,20 +419,18 @@ gulp.task('watch', () => {
     //     gulp.start('scripts:main', done);
     // }));
 
-    /* ШАБЛОНЫ */
-    // $.watch(settings.paths.pages + '/**/*.{hbs,handlebars}', $.batch((events, done) => {
-    //     gulp.start('handlebars', done);
-    // }));
-    // $.watch(settings.paths.blocks + '/**/*.{hbs,handlebars}', $.batch((events, done) => {
-    //     gulp.start('handlebars', done);
-    // }));
-
-
-
     /* ДАННЫЕ ДЛЯ ШАБЛОНОВ */
-    // $.watch(settings.paths.assets + '/data.json', $.batch((events, done) => {
-    //     gulp.start('refresh-data', done);
-    // }));
+    $.watch(path.join(settings.paths.assets, 'marmelad.data.js'), $.batch((events, done) => {
+        gulp.start('refresh:data', done);
+    }));
+
+    /* ШАБЛОНЫ */
+    $.watch(settings.paths.pages + '/**/*.{hbs,handlebars}', $.batch((events, done) => {
+        gulp.start('handlebars', done);
+    }));
+    $.watch(settings.paths.blocks + '/**/*.{hbs,handlebars}', $.batch((events, done) => {
+        gulp.start('handlebars', done);
+    }));
 
     /* КАРТИНКИ БЛОКОВ*/
     // $.watch(settings.paths.blocks + '/**/*.{jpg,png,gif,svg,bmp}', $.batch((events, done) => {
@@ -466,27 +477,6 @@ gulp.task('build:server', (done) => {
     browserSync.init(settings.app.browserSync, done);
 });
 
-gulp.task('marmelad:start', function(done) {
-
-    runSequence(
-        'build:clean',
-        'build:server',
-        'build:static',
-        // 'get-data',
-        'build:iconizer',
-        //'handlebars',
-        //'stylus:blocks',
-        // 'styles:plugins',
-        // 'styles:main',
-        // 'scripts:vendor',
-        // 'scripts:plugins',
-        // 'scripts:others',
-        // 'scripts:main',
-        // 'blocks:images',
-        'watch',
-        done);
-});
-
 gulp.task('registerHbsHelpers', function(done) {
 
     /**
@@ -531,13 +521,34 @@ gulp.task('marmelad:init', (done) => {
 
 });
 
+gulp.task('marmelad:start', function(done) {
+
+    runSequence(
+        'build:clean',
+        'build:server',
+        'build:static',
+        'get:data',
+        'build:iconizer',
+        'handlebars',
+        //'stylus:blocks',
+        // 'styles:plugins',
+        // 'styles:main',
+        // 'scripts:vendor',
+        // 'scripts:plugins',
+        // 'scripts:others',
+        // 'scripts:main',
+        // 'blocks:images',
+        'watch',
+        done);
+});
+
 let init = () => {
 
     fs.exists('assets/marmelad.settings.js', (exist) => {
 
         if (exist) {
 
-            settings = require(path.join(process.cwd(), 'assets', 'marmelad.settings.js'));
+            settings = require(path.join(process.cwd(), 'assets', 'marmelad.settings'));
 
             settings.app.package = pkg;
 
