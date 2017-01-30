@@ -387,7 +387,10 @@ gulp.task('blocks:images', (done) => {
  */
 gulp.task('static', function(done) {
 
-    let stream = gulp.src(config.paths.static + '/**/*.*')
+    let stream = gulp.src([
+            config.paths.static + '/**/*.*',
+            '!' + config.paths.static + '/**/*.db'
+        ])
         .pipe($.plumber())
         .pipe($.changed(config.paths.dist))
         .pipe($.logger({
@@ -419,7 +422,10 @@ gulp.task('build:clean', function (done) {
 gulp.task('watch', () => {
 
     /* СТАТИКА */
-    $.watch(path.join(config.paths.static, '**', '*'), $.batch((events, done) => {
+    $.watch([
+        path.join(config.paths.static, '**', '*'),
+        '!' + config.paths.static + '/**/*.db'
+        ], $.batch((events, done) => {
         gulp.start('static', done);
     }));
 
