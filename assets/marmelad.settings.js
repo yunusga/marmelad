@@ -6,15 +6,20 @@ const folders = {
     dist    : 'dist',
     storage : 'public',
     assets  : 'assets',
-    blocks  : 'blocks',
-    pages   : 'pages',
-    helpers : 'helpers',
-    static  : 'static',
+    blocks  : '_blocks',
+    pages   : '_pages',
+    helpers : '_helpers',
+    js      : {
+        src    : 'js',
+        vendors: 'vendors',
+        plugins: 'plugins'
+    },
     stylus  : 'stylus',
     iconizer: {
         src  : 'iconizer',
         icons: 'icons'
     },
+    static  : 'static',
 };
 
 const paths = {
@@ -24,12 +29,17 @@ const paths = {
     blocks  : path.join(folders.assets, folders.blocks),
     pages   : path.join(folders.assets, folders.pages),
     helpers : path.join(folders.assets, folders.helpers),
-    static  : path.join(folders.assets, folders.static),
+    js      : {
+        src    : path.join(folders.assets, folders.js.src),
+        vendors: path.join(folders.assets, folders.js.src, folders.js.vendors),
+        plugins: path.join(folders.assets, folders.js.src, folders.js.plugins),
+    },
     stylus  : path.join(folders.assets, folders.stylus),
     iconizer: {
         src  : path.join(folders.assets, folders.iconizer.src),
         icons: path.join(folders.assets, folders.iconizer.src, folders.iconizer.icons),
-    }
+    },
+    static  : path.join(folders.assets, folders.static),
 };
 
 const app = {
@@ -79,6 +89,7 @@ const app = {
 };
 
 module.exports = {
-    app  : app,
-    paths: paths
+    app    : app,
+    folders: folders,
+    paths  : paths
 };
