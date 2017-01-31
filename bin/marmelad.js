@@ -164,45 +164,28 @@ gulp.task('build:iconizer:refresh', (cb) => {
 /**
  * сборка стилей блоков, для каждого отдельный css
  */
-gulp.task('stylus:blocks', function() {
+gulp.task('stylus:main', function() {
 
     return gulp.src([
-            path.join(settings.paths.blocks, '**', '*.styl'),
-            path.join(settings.paths.stylus, '**', '*.styl'),
-            '!' + path.join(settings.paths.stylus, '**', '_*.styl')
+            path.join(settings.paths.stylus, '**', '_*.styl'),
+            path.join(settings.paths.stylus, 'app.styl'),
+            path.join(settings.paths.blocks, '**', '*.styl')
         ])
         .pipe($.plumber())
         .pipe($.concat('app.styl'))
-        .pipe($.stylus({
-            'include css' : true,
-            include : path.join(settings.paths.stylus)
-        }))
+        .pipe($.stylus())
         .pipe($.autoprefixer())
         .pipe($.groupCssMediaQueries())
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')));
 
-    // return gulp.src([settings.paths.blocks + '/**/*.styl'])
-    //     .pipe($.plumber())
-    //     .pipe($.stylus({
-    //         'include css' : true
-    //     }))
-    //     .pipe($.autoprefixer())
-    //     .pipe($.groupCssMediaQueries())
-    //     .pipe(gulp.dest(function(file) {
-    //         return file.base;
-    //     }));
 });
 
 /**
  * СТИЛИ ПАГИНОВ
  */
-gulp.task('styles:plugins', () => {
-    return gulp.src([
-            settings.paths.styles + '/libs/_variables.styl',
-            settings.paths.plugins + '/**/*.css',
-            settings.paths.plugins + '/**/*.styl'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
+gulp.task('stylus:plugins', () => {
+    return gulp.src(path.join(settings.paths.js.plugins, '**', '*.{styl,css}'))
+        .pipe($.plumber())
         .pipe(
             $.stylus({
                 'include css': true
@@ -211,54 +194,7 @@ gulp.task('styles:plugins', () => {
         .pipe($.concat('plugins.min.css'))
         .pipe($.autoprefixer())
         .pipe($.csso())
-        .pipe(gulp.dest(settings.paths.storage + settings.base.styles))
-        .pipe($.if(!isRelease, browserSync.stream()));
-});
-
-/**
- * СТИЛИ ОСНОВНЫЕ
- */
-gulp.task('styles:main', () => {
-    return gulp.src([
-            settings.paths.styles + '/libs/**/*.styl',
-            settings.paths.styles + '/*.styl',
-            settings.paths.blocks + '/**/*.styl'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('app.styl'))
-        .pipe(
-            $.stylus({
-                'include css': true
-            })
-        )
-        .pipe($.autoprefixer(settings.app.autoprefixer))
-        .pipe($.groupCssMediaQueries())
-        .pipe(gulp.dest(settings.paths.storage + settings.base.styles))
-        .pipe($.if(isRelease, $.csso()))
-        .pipe($.if(isRelease, $.rename({suffix: '.min'})))
-        .pipe($.if(isRelease, gulp.dest(settings.paths.storage + settings.base.styles)))
-        .pipe(browserSync.stream());
-});
-
-gulp.task('css:main:dist', () => {
-    return gulp.src([
-            settings.paths.styles + '/libs/**/*.styl',
-            settings.paths.styles + '/*.styl',
-            settings.paths.blocks + '/**/*.styl'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('app.styl'))
-        .pipe(
-            $.stylus({
-                'include css': true
-            })
-        )
-        .pipe($.autoprefixer(settings.app.autoprefixer))
-        .pipe($.groupCssMediaQueries())
-        .pipe(gulp.dest(settings.paths.storage + settings.base.styles))
-        .pipe($.csso())
-        .pipe($.rename({suffix: '.min'}))
-        .pipe(gulp.dest(settings.paths.storage + settings.base.styles));
+        .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
 });
 
 /**
@@ -353,7 +289,11 @@ gulp.task('blocks:images', (done) => {
 gulp.task('watch', () => {
 
     /* СТАТИКА */
-    $.watch(path.join(settings.paths.static, '**', '*.*'), $.batch((events, done) => {
+    $.watch([
+        settings.paths.static + '/**/*.*',
+        '!' + settings.paths.static + '/**/Thumbs.db',
+        '!' + settings.paths.static + '/**/*tmp*'
+    ], $.batch((events, done) => {
         gulp.start('build:static', done);
     }));
 
@@ -362,15 +302,16 @@ gulp.task('watch', () => {
         gulp.start('build:iconizer:refresh', done);
     }));
 
-
-
     /* СТИЛИ */
-    // $.watch(settings.paths.plugins + '/**/*.css', $.batch((events, done) => {
-    //     gulp.start('styles:plugins', done);
-    // }));
-    // $.watch(settings.paths.styles + '/**/*.{styl,css}', $.batch((events, done) => {
-    //     gulp.start('styles:main', done);
-    // }));
+    $.watch([
+        path.join(settings.paths.stylus, '**', '*.styl'),
+        path.join(settings.paths.blocks, '**', '*.styl')
+    ], $.batch((events, done) => {
+        gulp.start('stylus:main', done);
+    }));
+    $.watch(path.join(settings.paths.js.plugins, '**', '*.css'), $.batch((events, done) => {
+        gulp.start('stylus:plugins', done);
+    }));
     // $.watch(settings.paths.blocks + '/**/*.{styl,css}', $.batch((events, done) => {
     //     gulp.start('styles:main', done);
     // }));
@@ -414,7 +355,11 @@ gulp.task('watch', () => {
  */
 gulp.task('build:static', function(done) {
 
-    let stream = gulp.src(settings.paths.static + '/**/*.*')
+    let stream = gulp.src([
+            settings.paths.static + '/**/*.*',
+            '!' + settings.paths.static + '/**/Thumbs.db',
+            '!' + settings.paths.static + '/**/*tmp*'
+        ])
         .pipe($.plumber())
         .pipe($.changed(settings.paths.dist))
         .pipe(gulp.dest(settings.paths.dist));
@@ -494,10 +439,8 @@ gulp.task('marmelad:start', function(done) {
         'build:iconizer',
         'get:data',
         'handlebars',
-        'stylus:blocks',
-        //'stylus:blocks',
-        // 'styles:plugins',
-        // 'styles:main',
+        'stylus:main',
+        'stylus:plugins',
         'scripts:vendors',
         'scripts:plugins',
         'scripts:app',
