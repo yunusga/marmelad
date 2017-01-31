@@ -8,7 +8,7 @@ const fs            = require('fs');
 const jsonfile      = require('jsonfile');
 const gulp          = require('gulp');
 const decache       = require('decache');
-//const logger        = require('../modules/logger')(gulp);
+const logger        = require('../modules/logger')(gulp);
 const $             = require('gulp-load-plugins')();
 const runSequence   = require('run-sequence');
 const pipeErrorStop = require('pipe-error-stop');
@@ -84,7 +84,7 @@ let getPartialsPaths = (dest) => {
  */
 gulp.task('get:data', (done) => {
 
-    let dataPath = path.join(process.cwd(), settings.paths.assets, 'marmelad.data');
+    let dataPath = path.join(process.cwd(), settings.paths.assets, 'marmelad.data.js');
 
     decache(dataPath);
 
@@ -97,7 +97,7 @@ gulp.task('get:data', (done) => {
 
     terminal
         .write()
-        .tick(`data for handlebars templates ${chalk.bold.yellow('refreshed')}\n`);
+        .tick(`database for handlebars templates ${chalk.bold.yellow('refreshed')}\n`);
 
     done();
 
@@ -117,24 +117,14 @@ gulp.task('refresh:data', (cb) => {
  */
 gulp.task('handlebars', function(done) {
 
-    let stream = gulp.src([
-            settings.paths.pages + '/**/*.{hbs,handlebars}',
-            '!' + settings.paths.pages + '/**/_*.{hbs,handlebars}'
-        ])
+    let stream = gulp.src(settings.paths.pages + '/**/*.{hbs,handlebars}')
         .pipe($.plumber())
-        .pipe($.logger({
-            before     : '[handlebars] starting',
-            after      : '[handlebars] complete',
-            showChange : true,
-            display    : 'name'
-        }))
         .pipe(
             $.compileHandlebars(database, {
                 ignorePartials: false,
                 batch: getPartialsPaths(settings.paths.blocks)
             })
         )
-        //.on('error', $.notify.onError({title: 'Handlebars'}))
         .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
         .pipe($.beml(settings.app.beml))
         .pipe(iconizer({path: settings.paths.iconizer.src + '/sprite.svg'}))
@@ -158,9 +148,7 @@ gulp.task('handlebars', function(done) {
 gulp.task('build:iconizer', () => {
 
     return gulp.src(settings.paths.iconizer.icons + '/*.svg')
-        .pipe(
-            $.svgSprite(settings.app.svgSprite)
-        )
+        .pipe($.svgSprite(settings.app.svgSprite))
         .pipe(gulp.dest('.'));
 });
 
@@ -178,16 +166,31 @@ gulp.task('build:iconizer:refresh', (cb) => {
  */
 gulp.task('stylus:blocks', function() {
 
-    return gulp.src([settings.paths.blocks + '/**/*.styl'])
+    return gulp.src([
+            path.join(settings.paths.blocks, '**', '*.styl'),
+            path.join(settings.paths.stylus, '**', '*.styl'),
+            '!' + path.join(settings.paths.stylus, '**', '_*.styl')
+        ])
         .pipe($.plumber())
+        .pipe($.concat('app.styl'))
         .pipe($.stylus({
-            'include css' : true
+            'include css' : true,
+            include : path.join(settings.paths.stylus)
         }))
         .pipe($.autoprefixer())
         .pipe($.groupCssMediaQueries())
-        .pipe(gulp.dest(function(file) {
-            return file.base;
-        }));
+        .pipe(gulp.dest(path.join(settings.paths.storage, 'css')));
+
+    // return gulp.src([settings.paths.blocks + '/**/*.styl'])
+    //     .pipe($.plumber())
+    //     .pipe($.stylus({
+    //         'include css' : true
+    //     }))
+    //     .pipe($.autoprefixer())
+    //     .pipe($.groupCssMediaQueries())
+    //     .pipe(gulp.dest(function(file) {
+    //         return file.base;
+    //     }));
 });
 
 /**
@@ -261,66 +264,61 @@ gulp.task('css:main:dist', () => {
 /**
  * СКРИПТЫ ВЕНДОРНЫЕ
  */
-gulp.task('scripts:vendor', () => {
+gulp.task('scripts:vendors', (done) => {
 
-    return gulp.src([settings.paths.scripts.vendor + '/**/*.js'])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe(gulp.dest(settings.paths.storage + settings.base.scripts + '/vendor'));
+    let vendorsDist = path.join(settings.paths.storage,  settings.folders.js.src, settings.folders.js.vendors);
+
+    let stream = gulp.src(settings.paths.js.vendors + '/**/*.js')
+        .pipe($.plumber())
+        .pipe($.changed(vendorsDist))
+        .pipe(gulp.dest(vendorsDist));
+
+    stream.on('end', function () {
+        browserSync.reload();
+        done();
+    });
+
+    stream.on('error', function (err) {
+        done(err);
+    });
+
 });
 
 /**
  * СКРИПТЫ ПЛАГИНОВ
  */
-gulp.task('scripts:plugins', () => {
-    return gulp.src([settings.paths.plugins + '/**/*.js'])
-        .pipe($.plumber({errorHandler: onError}))
+gulp.task('scripts:plugins', (done) => {
+
+    let stream = gulp.src(settings.paths.js.vendors + '/**/*.js')
+        .pipe($.plumber())
         .pipe($.concat('plugins.min.js'))
         .pipe($.uglify())
-        .pipe(gulp.dest(settings.paths.storage + settings.base.scripts));
-});
+        .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
-/**
- * СКРИПТЫ ПРОЧИЕ
- */
-gulp.task('scripts:others', function() {
+    stream.on('end', function () {
+        browserSync.reload();
+        done();
+    });
 
-    return gulp.src([settings.paths.scripts.main + '/others/*.js'])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe(gulp.dest(settings.paths.storage + settings.base.scripts))
-});
+    stream.on('error', function (err) {
+        done(err);
+    });
 
-gulp.task('js:others:dist', function() {
-
-    return gulp.src([settings.paths.scripts.main + '/others/*.js'])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe(
-            $.jsPrettify({
-                indent_size: 4,
-                indent_char: " ",
-                eol: "\n",
-                collapseWhitespace: true
-            })
-        )
-        .pipe(gulp.dest(settings.paths.storage + settings.base.scripts))
-        .pipe($.uglify())
-        .pipe($.rename({suffix: '.min'}))
-        .pipe(gulp.dest(settings.paths.storage + settings.base.scripts));
 });
 
 /**
  * СКРИПТЫ ОСНОВНЫЕ
  */
-gulp.task('scripts:main', (done) => {
+gulp.task('scripts:app', (done) => {
 
     let stream = gulp.src([
-            settings.paths.scripts.main + '/*.js',
+            settings.paths.js.src + '/app.js',
             settings.paths.blocks + '/**/*.js',
-            '!' + settings.paths.scripts + '/**/_*.*'
         ])
         .pipe($.plumber())
-        .pipe($.concat('main.js'))
-        .pipe($.wrap('$(document).ready(function(){\n\n"use strict";\n\n<%= contents %>\n});'))
-        .pipe(gulp.dest(settings.paths.storage + settings.base.scripts));
+        .pipe($.concat('app.js'))
+        .pipe($.wrap("$(function () {\n\n    'use strict';\n\n<%= contents %>\n});"))
+        .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
     stream.on('end', () => {
         browserSync.reload();
@@ -330,31 +328,6 @@ gulp.task('scripts:main', (done) => {
     stream.on('error', (err) => {
         done(err);
     });
-});
-
-gulp.task('js:main:dist', function() {
-
-    return gulp.src([
-            settings.paths.scripts.main + '/*.js',
-            settings.paths.blocks + '/**/*.js',
-            '!' + settings.paths.scripts + '/**/_*.*'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('main.js'))
-        .pipe($.wrap('$(document).ready(function(){\n\n"use strict";\n\n<%= contents %>\n});'))
-        .pipe(
-            $.jsPrettify({
-                indent_size: 4,
-                indent_char: " ",
-                eol: "\n",
-                collapseWhitespace: true
-            })
-        )
-        .pipe(gulp.dest(settings.paths.storage + settings.base.scripts))
-        .pipe($.uglify())
-        .pipe($.rename({suffix: '.min'}))
-        .pipe(gulp.dest(settings.paths.storage + settings.base.scripts));
-
 });
 
 /**
@@ -403,21 +376,18 @@ gulp.task('watch', () => {
     // }));
 
     /* СКРИПТЫ */
-    // $.watch(settings.paths.scripts.vendor + '/**/*.js', $.batch((events, done) => {
-    //     gulp.start('scripts:vendor', done);
-    // }));
-    // $.watch(settings.paths.plugins + '/**/*.js', $.batch((events, done) => {
-    //     gulp.start('scripts:plugins', done);
-    // }));
-    // $.watch(settings.paths.scripts.main + '/*.js', $.batch((events, done) => {
-    //     gulp.start('scripts:main', done);
-    // }));
-    // $.watch(settings.paths.scripts.main + '/others/*.js', $.batch((events, done) => {
-    //     gulp.start('scripts:others', done);
-    // }));
-    // $.watch(settings.paths.blocks + '/**/*.js', $.batch((events, done) => {
-    //     gulp.start('scripts:main', done);
-    // }));
+    $.watch(path.join(settings.paths.js.vendors, '**' + '*.js'), $.batch((events, done) => {
+        gulp.start('scripts:vendors', done);
+    }));
+    $.watch(path.join(settings.paths.js.plugins, '**' + '*.js'), $.batch((events, done) => {
+        gulp.start('scripts:plugins', done);
+    }));
+    $.watch([
+            settings.paths.js.src + '/app.js',
+            settings.paths.blocks + '/**/*.js',
+        ], $.batch((events, done) => {
+            gulp.start('scripts:app', done);
+        }));
 
     /* ДАННЫЕ ДЛЯ ШАБЛОНОВ */
     $.watch(path.join(settings.paths.assets, 'marmelad.data.js'), $.batch((events, done) => {
@@ -447,12 +417,6 @@ gulp.task('build:static', function(done) {
     let stream = gulp.src(settings.paths.static + '/**/*.*')
         .pipe($.plumber())
         .pipe($.changed(settings.paths.dist))
-        .pipe($.logger({
-            before     : '[static] starting',
-            after      : '[static] complete',
-            showChange : true,
-            display    : 'name'
-        }))
         .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', function () {
@@ -527,16 +491,16 @@ gulp.task('marmelad:start', function(done) {
         'build:clean',
         'build:server',
         'build:static',
-        'get:data',
         'build:iconizer',
+        'get:data',
         'handlebars',
+        'stylus:blocks',
         //'stylus:blocks',
         // 'styles:plugins',
         // 'styles:main',
-        // 'scripts:vendor',
-        // 'scripts:plugins',
-        // 'scripts:others',
-        // 'scripts:main',
+        'scripts:vendors',
+        'scripts:plugins',
+        'scripts:app',
         // 'blocks:images',
         'watch',
         done);
