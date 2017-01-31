@@ -286,15 +286,62 @@ gulp.task('blocks:images', (done) => {
     });
 });
 
+<<<<<<< HEAD
+/**
+ * СТАТИКА
+ */
+gulp.task('static', function(done) {
+
+    let stream = gulp.src([
+            config.paths.static + '/**/*.*',
+            '!' + config.paths.static + '/**/*.db'
+        ])
+        .pipe($.plumber())
+        .pipe($.changed(config.paths.dist))
+        .pipe($.logger({
+            before     : '[static] starting',
+            after      : '[static] complete',
+            showChange : true,
+            display    : 'name'
+        }))
+        .pipe(gulp.dest(config.paths.dist));
+
+    stream.on('end', function () {
+        browserSync.reload();
+        done();
+    });
+
+    stream.on('error', function (err) {
+        done(err);
+    });
+});
+
+/**
+ * очищаем папку сборки перед сборкой Ж)
+ */
+gulp.task('build:clean', function (done) {
+    del.sync(config.paths.dist);
+    done();
+});
+
+=======
+>>>>>>> feature/replace-json-config-with-js
 gulp.task('watch', () => {
 
     /* СТАТИКА */
     $.watch([
+<<<<<<< HEAD
+        path.join(config.paths.static, '**', '*'),
+        '!' + config.paths.static + '/**/*.db'
+        ], $.batch((events, done) => {
+        gulp.start('static', done);
+=======
         settings.paths.static + '/**/*.*',
         '!' + settings.paths.static + '/**/Thumbs.db',
         '!' + settings.paths.static + '/**/*tmp*'
     ], $.batch((events, done) => {
         gulp.start('build:static', done);
+>>>>>>> feature/replace-json-config-with-js
     }));
 
     /* ICONIZER */

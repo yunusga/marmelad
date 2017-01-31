@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="{{app.lang}}">
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="cleartype" content="on">
+
+        <meta name="theme-color" content="{{app.themeColor}}">
+
+        <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
+        <meta name="format-detection" content="telephone=no">
+
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Disable link highlighting on IE 10 on Windows Phone (https://blogs.windows.com/buildingapps/2012/11/15/adapting-your-webkit-optimized-site-for-internet-explorer-10/) -->
+        <meta name="msapplication-tap-highlight" content="no">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <meta name="MobileOptimized" content="320">
+        <meta name="HandheldFriendly" content="True">
+
+        <title>{{pageTitle}}</title>
+
+        <link rel="stylesheet" href="images/styles/plugins.min.css">
+        <link rel="stylesheet" href="images/styles/app.css">
+
+    </head>
+
+    <body block="app-wrapper" mod="{{template}}">
+
+        {{> browserupgrade}}
+
+        <div block="b-scroll-wrapper">
+
+            {{> app-header}}
+
+            <div class="app-body">
+                <main class="app-content">
+                    {{#block 'content'}}{{/block}}
+                </main>
+                {{#if leftbar}}
+                <nav class="app-leftbar">
+                    {{#block 'leftbar'}}{{/block}}
+                </nav>
+                {{/if}}
+                {{#if rightbar}}
+                <aside class="app-rightbar">
+                    {{#block 'rightbar'}}{{/block}}
+                </aside>
+                {{/if}}
+            </div>
+
+            {{> app-footer}}
+
+        </div><!-- /b-scroll-wrapper -->
+
+        <script src="images/scripts/vendor/jquery-2.2.0.min.js"></script>
+        <script src="images/scripts/plugins.min.js"></script>
+        <script src="images/scripts/main.js"></script>
+
+        <script>
+            // Фикс. исчезающих svg-иконок (xlink из спрайта) в IE, после jquery wrap
+            svg4everybody();
+        </script>
+
+    </body>
+</html>
