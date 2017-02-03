@@ -22,6 +22,20 @@ const pkg           = require('../package.json');
 const terminal      = require('terminal-logger')('marmelad');
 const chalk         = require('chalk');
 
+fs.exists('marmelad.json', (exist) => {
+
+    if (exist) {
+
+        console.info(`\n`);
+
+        console.info(` ${chalk.bold.red('ВНИМАНИЕ!')}`);
+        console.info(` Вы запустили ${chalk.bold.yellow('marmelad!')} ветки ${chalk.bold.green('develop')} для старой сборки`);
+        console.info(` Переключитесь на ветку ${chalk.bold.green('master')}`);
+        process.exit(1);
+    }
+
+});
+
 let settings = require('../assets/marmelad.settings');
 let database = {};
 
