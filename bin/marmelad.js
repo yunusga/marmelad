@@ -176,7 +176,8 @@ gulp.task('stylus:main', function() {
         .pipe($.stylus())
         .pipe($.autoprefixer())
         .pipe($.groupCssMediaQueries())
-        .pipe(gulp.dest(path.join(settings.paths.storage, 'css')));
+        .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
+        .pipe(browserSync.stream());
 
 });
 
@@ -195,6 +196,7 @@ gulp.task('stylus:plugins', () => {
         .pipe($.autoprefixer())
         .pipe($.csso())
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
+        .pipe(browserSync.stream());
 });
 
 /**
@@ -225,7 +227,7 @@ gulp.task('scripts:vendors', (done) => {
  */
 gulp.task('scripts:plugins', (done) => {
 
-    let stream = gulp.src(settings.paths.js.vendors + '/**/*.js')
+    let stream = gulp.src(settings.paths.js.plugins + '/**/*.js')
         .pipe($.plumber())
         .pipe($.concat('plugins.min.js'))
         .pipe($.uglify())
@@ -309,6 +311,14 @@ gulp.task('watch', () => {
     ], $.batch((events, done) => {
         gulp.start('stylus:main', done);
     }));
+
+    $.watch([
+        path.join(settings.paths.stylus, '**', '*.styl'),
+        path.join(settings.paths.blocks, '**', '*.styl')
+    ], $.batch((events, done) => {
+        gulp.start('stylus:main', done);
+    }));
+
     $.watch(path.join(settings.paths.js.plugins, '**', '*.css'), $.batch((events, done) => {
         gulp.start('stylus:plugins', done);
     }));
@@ -317,10 +327,10 @@ gulp.task('watch', () => {
     // }));
 
     /* СКРИПТЫ */
-    $.watch(path.join(settings.paths.js.vendors, '**' + '*.js'), $.batch((events, done) => {
+    $.watch(path.join(settings.paths.js.vendors, '**', '*.js'), $.batch((events, done) => {
         gulp.start('scripts:vendors', done);
     }));
-    $.watch(path.join(settings.paths.js.plugins, '**' + '*.js'), $.batch((events, done) => {
+    $.watch(path.join(settings.paths.js.plugins, '**', '*.js'), $.batch((events, done) => {
         gulp.start('scripts:plugins', done);
     }));
     $.watch([
@@ -386,12 +396,12 @@ gulp.task('build:server', (done) => {
     browserSync.init(settings.app.browserSync, done);
 });
 
-gulp.task('registerHbsHelpers', function(done) {
+gulp.task('handlebars:registerHelpers', function(done) {
 
     /**
      * Регистрация кастомных хелперов для Handlebars
      */
-    const hbsHelpers = requireDir(process.cwd() + '/assets/helpers');
+    const hbsHelpers = requireDir(path.join(process.cwd(), settings.paths.helpers));
 
     Object.keys(hbsHelpers).forEach(function(name) {
         $.compileHandlebars.Handlebars.registerHelper(name, hbsHelpers[name]);
@@ -438,6 +448,7 @@ gulp.task('marmelad:start', function(done) {
         'build:static',
         'build:iconizer',
         'get:data',
+        'handlebars:registerHelpers',
         'handlebars',
         'stylus:main',
         'stylus:plugins',
