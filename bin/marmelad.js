@@ -24,6 +24,20 @@ const pkg           = require('../package.json');
 let config = require('../modules/config');
 
 
+fs.exists('assets/marmelad.settings.js', (exist) => {
+
+    if (exist) {
+
+        console.info(`\n`);
+
+        console.info(` ВНИМАНИЕ!`);
+        console.info(` Вы запустили marmelad ветки -> master для новой сборки`);
+        console.info(` Переключитесь на ветку -> develop`);
+        process.exit(1);
+    }
+
+});
+
 /**
  * фдаг финальная сборка
  */
