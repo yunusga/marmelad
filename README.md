@@ -2,8 +2,10 @@
 
 Сборщик статичных сайтов на базе Gulp
 
+в ветке `develop` несовместимые изменения с веткой `master`, для старых проектов используйте `master` ветку
+
 ## Установка
-```git clone https://github.com/yunusga/marmelad.git && cd marmelad && git pull --all && git checkout develop && npm i . -g && npm link```
+```git clone https://github.com/yunusga/marmelad.git && cd marmelad && git pull --all && git checkout master && npm i . -g && npm link```
 
 ## Как работает
 - создаем папку проекта, открываем её (папку) в терминале, запускаем сборку командой ```marmelad```
