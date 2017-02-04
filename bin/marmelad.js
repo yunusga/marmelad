@@ -36,20 +36,19 @@ fs.exists('marmelad.json', (exist) => {
 
 });
 
+// обработка аргументов командной строки
+commander
+    .version(pkg.version)
+    .option('-r, --release', 'Release build')
+    .parse(process.argv);
+
 let settings = require('../assets/marmelad.settings');
 let database = {};
-
-/**
- * фдаг финальная сборка
- */
 let isRelease = false;
 
-/**
- * данные для шаблонов
- */
-let db = {
-    pageTitle : 'Marmelad project'
-};
+if (commander.release) {
+    isRelease = true;
+}
 
 /**
  * обработчик ошибок для plumber
@@ -190,6 +189,7 @@ gulp.task('stylus:main', function() {
         .pipe($.stylus())
         .pipe($.autoprefixer())
         .pipe($.groupCssMediaQueries())
+        .pipe($.if(isRelease, $.csso()))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .pipe(browserSync.stream());
 
