@@ -189,7 +189,7 @@ gulp.task('stylus:main', function() {
         .pipe($.stylus())
         .pipe($.autoprefixer())
         .pipe($.groupCssMediaQueries())
-        .pipe($.if(isRelease, $.csso()))
+        .pipe($.if(isRelease, $.csso({restructure: false})))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .pipe(browserSync.stream());
 
@@ -270,6 +270,7 @@ gulp.task('scripts:app', (done) => {
         .pipe($.plumber())
         .pipe($.concat('app.js'))
         .pipe($.wrap("$(function () {\n\n    'use strict';\n\n<%= contents %>\n});"))
+        .pipe($.if(isRelease, $.uglify()))
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
     stream.on('end', () => {
