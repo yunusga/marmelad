@@ -64,7 +64,7 @@ const app = {
         server        : {
             baseDir: paths.dist
         },
-        port          : 7654,
+        port          : 7000,
         open          : false,
         directory     : true,
         ghostMode     : false,

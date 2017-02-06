@@ -1,3 +1,33 @@
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+// requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+// MIT license
+
+;(function() {
+    var lastTime = 0;
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
+            || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
+
 /**
  * Возвращает функцию, которая не будет срабатывать, пока продолжает вызываться.
  * Она сработает только один раз через N миллисекунд после последнего вызова.
@@ -51,18 +81,18 @@ function GetIEVersion() {
 
 
 // Test via a getter in the options object to see if the passive property is accessed
-window.supportsPassive = false;
-
+var supportsPassive = false;
 try {
-
     var opts = Object.defineProperty({}, 'passive', {
         get: function() {
-            window.supportsPassive = true;
+            supportsPassive = true;
         }
     });
-
     window.addEventListener("test", null, opts);
 } catch (e) {}
+
+// Use our detect's results. passive applied if supported, capture will be false either way.
+//elem.addEventListener('touchstart', fn, supportsPassive ? { passive: true } : false);
 
 
 /**
@@ -83,23 +113,16 @@ function getMarmeladIconHTML(name, tag, attrs) {
 
     var iconHTML = [
         '<<%= tag %> <%= classes %>>',
-            '<svg class="svg-icon__link">',
-                '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#<%= name %>"></use>',
-            '</svg>',
+        '<svg class="svg-icon__link">',
+        '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#<%= name %>"></use>',
+        '</svg>',
         '</<%= tag %>>'
     ]
-    .join('')
-    .replace(/<%= classes %>/g, 'class="' + classes + '"')
-    .replace(/<%= tag %>/g, tag)
-    .replace(/<%= name %>/g, name);
+        .join('')
+        .replace(/<%= classes %>/g, 'class="' + classes + '"')
+        .replace(/<%= tag %>/g, tag)
+        .replace(/<%= name %>/g, name);
 
     return iconHTML;
 
-}
-
-/**
- * определение существования элемента на странице
- */
-$.exists = function(selector) {
-   return ($(selector).length > 0);
 }

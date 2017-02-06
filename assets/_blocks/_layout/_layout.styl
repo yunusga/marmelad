@@ -1,0 +1,31 @@
+html
+    height : 100%
+    background-color : theme_color
+
+body,
+.b-scroll-wrapper
+
+    height 100%
+
+.m-page
+    @extend .display_flex
+    @extend .flex-direction_column
+    height 100%
+
+    &__wrapper
+        @extend .display_flex
+        @extend .flex-direction_column
+        height : 100%
+
+    &__body
+        display flex
+        flex 1 0 auto
+
+    &__content
+        flex 1
+
+    &__aside
+        flex : 0 0 240px
+
+        &_left-column
+            order -1

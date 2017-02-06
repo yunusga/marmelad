@@ -25,47 +25,47 @@
 
         <title>{{pageTitle}}</title>
 
-        <link rel="stylesheet" href="images/styles/plugins.min.css">
-        <link rel="stylesheet" href="images/styles/app.css">
+        <link rel="stylesheet" href="{{app.settings.folders.storage}}/css/plugins.min.css">
+        <link rel="stylesheet" href="{{app.settings.folders.storage}}/css/app.css">
 
     </head>
 
-    <body block="app-wrapper" mod="{{template}}">
+    <body block="m-page" mod="{{template}}">
 
         {{> browserupgrade}}
 
-        <div block="b-scroll-wrapper">
+        <div elem="wrapper">
 
-            {{> app-header}}
+            {{> page-head}}
 
-            <div class="app-body">
-                <main class="app-content">
+            <div elem="body">
+                <main elem="content">
                     {{#block 'content'}}{{/block}}
-                </main>
+                </main><!-- /m-page__content -->
                 {{#if leftbar}}
-                <nav class="app-leftbar">
+                <aside elem="aside" mod="left-column">
                     {{#block 'leftbar'}}{{/block}}
-                </nav>
+                </aside>
                 {{/if}}
                 {{#if rightbar}}
-                <aside class="app-rightbar">
+                <aside elem="aside" mod="right-column">
                     {{#block 'rightbar'}}{{/block}}
                 </aside>
                 {{/if}}
-            </div>
+            </div><!-- /m-page__body -->
 
-            {{> app-footer}}
+            {{> page-foot}}
 
-        </div><!-- /b-scroll-wrapper -->
+        </div><!-- /m-page__wrapper -->
 
-        <script src="images/scripts/vendor/jquery-2.2.0.min.js"></script>
-        <script src="images/scripts/plugins.min.js"></script>
-        <script src="images/scripts/main.js"></script>
+        <script src="{{app.settings.folders.storage}}/js/vendors/jquery-2.2.0.min.js"></script>
+        <script src="{{app.settings.folders.storage}}/js/plugins.min.js"></script>
+        <script src="{{app.settings.folders.storage}}/js/app.js"></script>
 
-        <script>
-            // Фикс. исчезающих svg-иконок (xlink из спрайта) в IE, после jquery wrap
+        {{!--<script>-->
+            <!--// Фикс. исчезающих svg-иконок (xlink из спрайта) в IE, после jquery wrap-->
             svg4everybody();
-        </script>
+        </script>--}}
 
     </body>
 </html>
