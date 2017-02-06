@@ -2,11 +2,6 @@ html
     height : 100%
     background-color : theme_color
 
-body,
-.b-scroll-wrapper
-
-    height 100%
-
 .m-page
     @extend .display_flex
     @extend .flex-direction_column
@@ -18,7 +13,7 @@ body,
         height : 100%
 
     &__body
-        display flex
+        @extend .display_flex
         flex 1 0 auto
 
     &__content
