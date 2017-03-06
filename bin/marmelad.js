@@ -314,8 +314,8 @@ gulp.task('static', function(done) {
         '!' + settings.paths.static + '/**/*tmp*'
     ])
         .pipe(plumber())
-        .pipe(changed(settings.paths.storage))
-        .pipe(gulp.dest(settings.paths.storage));
+        .pipe(changed(settings.paths.dist))
+        .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', function () {
 
