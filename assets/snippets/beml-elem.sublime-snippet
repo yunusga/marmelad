@@ -1,7 +1,0 @@
-<snippet>
-    <content><![CDATA[
-<${1:div} elem="${2:beml-elem}" mod="${3:mod}">${4:content}</${1:div}>
-]]></content>
-    <tabTrigger>elem</tabTrigger>
-    <!-- <scope>source.python</scope> -->
-</snippet>
