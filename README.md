@@ -32,7 +32,7 @@
 - `marmelad/js/plugins/**/*.css` стили плагинов, собираются в plugins.min.css
 
 пример сборки базовых стилей вместе с блоками
-```
+```styl
 // style.styl
 
 @require 'components/_variables';
@@ -100,13 +100,13 @@
 подключение файлов обеспечено плагином [gulp-include#include-directives](https://www.npmjs.com/package/gulp-include#include-directives)
 
 #### подключаем все блоки в один файл
-```
+```js
 // например: в marmelad/js/blocks.js
 //=require ../_blocks/**/*.js
 ```
 
 #### подключаем конкретный блок в файл
-```
+```js
 // например: в marmelad/js/blocks.native.js
 //=require ../_blocks/**/scroll-top.js
 ```
