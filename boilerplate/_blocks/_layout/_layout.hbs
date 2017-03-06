@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="{{app.lang}}">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="cleartype" content="on">
+
+        <meta name="theme-color" content="{{app.themeColor}}">
+
+        <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
+        <meta name="format-detection" content="telephone=no">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="msapplication-tap-highlight" content="no">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <meta name="MobileOptimized" content="320">
+        <meta name="HandheldFriendly" content="True">
+
+        <link rel="yandex-tableau-widget" href="{{app.storage}}/yandex-tableau.json" />
+        <meta name="msapplication-config" content="{{app.storage}}/browserconfig.xml" />
+
+        <link rel="apple-touch-icon" href="{{app.storage}}/apple-touch-icon.png">
+        <link rel="icon" href="{{app.storage}}/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="{{app.storage}}/favicon.ico" type="image/x-icon">
+
+        <title>{{pageTitle}}</title>
+
+        <link rel="stylesheet" href="{{app.storage}}/css/style.css">
+
+        <script src="{{app.storage}}/js/vendors/modernizr.js" async></script>
+        <script src="{{app.storage}}/js/vendors/pep-0.4.2.min.js" async></script>
+
+    </head>
+
+    <body block="w-page" mod="{{bodyMod}}" mix="block:{{pageClasses}}">
+
+        <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+        <div elem="scroll-fix">
+
+            {{> _page-header}}
+
+            <div elem="body" mix="block:{{bodyClasses}}">
+
+                <div elem="main">
+                    {{#block 'main'}}{{/block}}
+                </div><!-- e:main -->
+
+                {{#if asideLeft}}
+                <div elem="aside" mod="left">
+                    {{#block 'asideLeft'}}{{/block}}
+                </div><!-- e:aside m:left -->
+                {{/if}}
+
+                {{#if asideRight}}
+                <div elem="aside" mod="right">
+                    {{#block 'asideRight'}}{{/block}}
+                </div><!-- e:aside m:right -->
+                {{/if}}
+
+            </div><!-- e:body -->
+
+            {{> _page-footer}}
+
+        </div><!-- e:scroll-fix -->
+
+        <script src="{{app.storage}}/js/vendors/jquery-2.2.0.min.js"></script>
+        <script src="{{app.storage}}/js/plugins.min.js"></script>
+        <script src="{{app.storage}}/js/app.js"></script>
+
+        {{!-- <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+        <script>
+            window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+            ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+        </script>
+        <script src="https://www.google-analytics.com/analytics.js" async defer></script> --}}
+
+    </body><!-- b:w-page -->
+
+</html>

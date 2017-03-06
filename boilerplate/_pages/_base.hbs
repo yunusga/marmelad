@@ -1,0 +1,155 @@
+{{#extend "_layout" pageTitle="Demo page" bodyMod="demo" pageClasses="w-container" bodyClasses=null asideRight=true}}
+
+<!--name=(concat 'first' '-' 'second')-->
+{{#content "main"}}
+
+<h1>Base</h1>
+
+<p>Provides the default style for default HTML elements in WordPress TinyMCE editor and web-page content.</p>
+<hr>
+<h2>Headings</h2>
+<p>Use the <code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> elements to define your headings.</p>
+<table style="width: 100%;">
+<tbody>
+<tr>
+<td>
+{{#times 6}}
+<h{{math 1 "+" index}}>h{{math 1 "+" index}} Heading {{math 1 "+" index}}</h{{math 1 "+" index}}>
+{{/times}}
+</td>
+<td>
+{{#times 6}}
+<div class="h{{math 1 "+" index}}">h{{math 1 "+" index}} Heading {{math 1 "+" index}}</div>
+{{/times}}
+</td>
+</tr>
+</tbody>
+</table>
+<p>You can add the <code>.h1</code>, <code>.h2</code>, <code>.h3</code>, <code>.h4</code>, <code>.h5</code> or <code>.h6</code> class to alter the size of your headings, for example have a <code>h1</code> look like a <code>h3</code>.</p>
+<hr>
+<h2>Paragraphs</h2>
+<p>The global font-size, line-height and regular margins between elements are set through variables, which can be customized. Paragraphs and other block elements stick to these values.</p>
+<hr>
+<h2>Text-level semantics</h2>
+<p>The following list gives you a short overview of the most commonly used text-level semantics and how to utilize them.</p>
+<table style="width: 100%;">
+<thead>
+<tr>
+<th style="width: 20%;">Element</th>
+<th style="width: 80%;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;a&gt;</code></td>
+<td>Turn text into hypertext using the <a href="#">a element</a>.</td>
+</tr>
+<tr>
+<td><code>&lt;em&gt;</code></td>
+<td>Emphasize text using the <em>em element</em>.</td>
+</tr>
+<tr>
+<td><code>&lt;strong&gt;</code></td>
+<td>Imply any extra importance using the <strong>strong element</strong>.</td>
+</tr>
+<tr>
+<td><code>&lt;code&gt;</code></td>
+<td>Define inline code snippets using the <code>code element</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;del&gt;</code></td>
+<td>Mark document changes as deleted text using the <del>del element</del>.</td>
+</tr>
+<tr>
+<td><code>&lt;ins&gt;</code></td>
+<td>Mark document changes as inserted text using the <ins>ins element</ins>.</td>
+</tr>
+<tr>
+<td><code>&lt;mark&gt;</code></td>
+<td>Highlight text with no semantic meaning using the <mark>mark element</mark>.</td>
+</tr>
+<tr>
+<td><code>&lt;q&gt;</code></td>
+<td>Define inline quotations using <q>q element <q>inside</q> a q element</q>.</td>
+</tr>
+<tr>
+<td><code>&lt;abbr&gt;</code></td>
+<td>Define an abbreviation using the <abbr title="Abbreviation Element">abbr element</abbr> with a title.</td>
+</tr>
+<tr>
+<td><code>&lt;dfn&gt;</code></td>
+<td>Define a definition term using the <dfn title="Defines a definition term">dfn element</dfn> with a title.</td>
+</tr>
+<tr>
+<td><code>&lt;small&gt;</code></td>
+<td>De-emphasize text for small print using the <small>small element</small>.</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>&lt;pre&gt;
+    &lt;code&gt;...&lt;/code&gt;
+&lt;/pre&gt;</code></pre>
+
+<hr>
+<h2>Blockquotes</h2>
+<p>For quoting multiple lines of content from another source within your document, use the <code>&lt;blockquote&gt;</code> element.</p>
+<blockquote><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+<p><small>Someone famous</small></p></blockquote>
+<hr>
+<h2>Lists</h2>
+<p>Create an unordered list using the <code>&lt;ul&gt;</code> element and the <code>&lt;ol&gt;</code> element for ordered lists. The <code>&lt;li&gt;</code> element defines the list item.</p>
+<table style="width: 100%;">
+<tbody>
+<tr>
+<td>
+<ul>
+<li>Item 1</li>
+<li>Item 2
+<ul>
+<li>Item 1</li>
+<li>Item 2
+<ul>
+<li>Item 1</li>
+<li>Item 2</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Item 3</li>
+<li>Item 4</li>
+</ul>
+</td>
+<td>
+<ol>
+<li>Item 1</li>
+<li>Item 2
+<ol>
+<li>Item 1</li>
+<li>Item 2
+<ol>
+<li>Item 1</li>
+<li>Item 2</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Item 3</li>
+<li>Item 4</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+
+{{/content}}
+
+    {{#content 'asideLeft'}}
+        <p>aside left</p>
+    {{/content}}
+
+    {{#content 'asideRight'}}
+        <p>aside right</p>
+    {{/content}}
+
+{{/extend}}
