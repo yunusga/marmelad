@@ -58,17 +58,29 @@ a,
     color : links.default
     cursor pointer
 
+    .svg-icon
+        fill : links.default
+
     if links.hover
         &:hover
             color : links.hover
+
+            .svg-icon
+                fill : links.hover
 
     if links.active
         &:active
             color : links.active
 
+            .svg-icon
+                fill : links.active
+
     if links.visited
         &:visited
             color : links.visited
+
+            .svg-icon
+                fill : links.visited
 
 /* Text-level semantics
  ========================================================================== */
