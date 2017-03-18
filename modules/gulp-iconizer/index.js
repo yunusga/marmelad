@@ -14,8 +14,8 @@ function icon(name, options) {
 
     options = options || {};
 
-    let size    = options.size ? `svg-icon--${options.size}` : '';
-    let classes = `svg-icon svg-icon--${name} ${size} ${(options.class || '')}`;
+    let size    = options.size ? `svg-icon_${options.size}` : '';
+    let classes = `svg-icon svg-icon_${name} ${size} ${(options.class || '')}`;
 
     classes     = classes.trim();
 
@@ -82,7 +82,7 @@ function iconizeHtml(src, options) {
         sprite = sprite.replace(/<style[\s\S]*?\/style><path[\s\S]*?\s+?d=/g, '<path d=');
         sprite = sprite.replace(/\sfill[\s\S]*?(['"])[\s\S]*?\1/g, '');
         sprite = sprite.replace(/(['"])[\s\S]*?\1/, function(match) { return match + ' class="main-svg-sprite"' });
-        html = html.replace(/<body.*?>/, function(match) { return match + '\n' + sprite });
+        html = html.replace(/<body.*?>/, function(match) { return `${match}\n\n    ${sprite}\n` });
     }
 
     return replaceIconTags(html);
@@ -91,6 +91,7 @@ function iconizeHtml(src, options) {
 module.exports = function(options) {
 
     return through.obj(function(file, enc, cb) {
+
         if (file.isNull()) {
             cb(null, file);
         }

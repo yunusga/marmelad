@@ -1,0 +1,51 @@
+.gallery
+    @extend .display_flex
+    @extend .flex-direction_row
+    @extend .flex-wrap_wrap
+
+    margin : base-gutter 0 0 unit(wp.gallery.gutter * -1, px)
+
+    a
+        display : block
+
+    img,
+    .attachment-thumbnail
+        vertical-align : top
+
+    .gallery-caption
+        fontSize(base-font-small)
+        padding : unit(wp.gallery.gutter, px) 0
+
+    for column in (1..wp.gallery.columns)
+        &.gallery-columns-{column}
+
+            .gallery-item
+                column_width = (100 / column * 1%)
+                max-width : column_width
+                flex-basis : column_width
+                padding : 0 0 unit(wp.gallery.gutter, px) unit(wp.gallery.gutter, px)
+                margin : 0
+
+/* Wordpress align images
+ ========================================================================== */
+.alignnone
+    margin : .5rem
+
+.aligncenter
+    display : block
+    margin : .5rem auto
+
+.alignleft
+    float : left
+    margin : .5rem .5rem 0 0
+
+.alignright
+    float : right
+    margin : .5rem 0 0 .5rem
+
+.wp-caption
+    max-width : 100%
+
+    &-text
+        fontSize(base-font-small, base-font-size, (base-font-small + 8))
+        padding-top : 5px

@@ -2,6 +2,7 @@
 
 'use strict';
 
+<<<<<<< HEAD
 const path          = require('path');
 const fs            = require('fs');
 const jsonfile      = require('jsonfile');
@@ -47,81 +48,153 @@ config.app.browserSync.server.baseDir = config.base.dist;
 config.version = pkg.version;
 config.name    = pkg.name;
 config.description = pkg.description;
+=======
+let path              = require('path');
+let fs                = require('fs-extra');
+let program           = require('commander');
+let bsSP              = require('browser-sync').create();
+let basicAuth         = require('basic-auth');
+let gulp              = require('gulp');
+let glogger           = require('../modules/gulp-event-logger')(gulp);
+let iconizer          = require('../modules/gulp-iconizer');
+let gutil             = require('gulp-util');
+let plumber           = require('gulp-plumber');
+let eslint            = require('gulp-eslint');
+let compileHandlebars = require('gulp-compile-handlebars');
+let beml              = require('gulp-beml');
+let svgSprite         = require('gulp-svg-sprite');
+let stylus            = require('gulp-stylus');
+let autoprefixer      = require('gulp-autoprefixer');
+let csslint           = require('gulp-csslint');
+let csso              = require('gulp-csso');
+let rename            = require('gulp-rename');
+let header            = require('gulp-header');
+let changed           = require('gulp-changed');
+let concat            = require('gulp-concat');
+let uglify            = require('gulp-uglify');
+let include           = require('gulp-include');
+let babel             = require('gulp-babel');
+let groupCssMQ        = require('gulp-group-css-media-queries');
+let watch             = require('gulp-watch');
+let batch             = require('gulp-batch');
+let hbsLayouts        = require('handlebars-layouts');
+let decache           = require('decache');
+let requireDir        = require('require-dir');
+let runSequence       = require('run-sequence');
+let pipeErrorStop     = require('pipe-error-stop');
+let del               = require('del');
+let chalk             = require('chalk');
+let pkg               = require('../package');
+
+let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
+let database = {};
+
+program
+    .version(pkg.version)
+    .option('-a, --auth', 'enable basic access authentication')
+    .option('-u, --user [username]', 'set authentication user')
+    .option('-p, --pass [password]', 'set authentication password')
+    .parse(process.argv);
+
+if (program.auth) {
+
+    if (!program.user || !program.pass) {
+        gutil.log(`You are running ${chalk.bold.yellow('marmelad')} with basic auth but did not set the USER ${chalk.bold.yellow('-u')} and PASSWORD ${chalk.bold.yellow('-p')} with cli args.`);
+        process.exit(1);
+    }
+}
+>>>>>>> release/v2
 
 /**
- * данные для шаблонов
+ * plumber onError handler
  */
-let db = {
-    pageTitle : 'Marmelad project'
-};
-
-/**
- * обработчик ошибок для plumber
- */
-let onError = function(err) {
-
-    $.util.log(err.message);
-
-    notifier.notify({
-        'title': 'Error',
-        'message': err.message
-    });
-
+let plumberOnError = function(err) {
+    gutil.log(gutil.colors.red('Error (' + err.plugin + '): ' + err.message));
     this.emit('end');
 };
 
 /**
- * регистрация хелперов расширения шаблонов handlebars-layouts
- * https://www.npmjs.com/package/handlebars-layouts
- */
-$.compileHandlebars.Handlebars.registerHelper(hbsLayouts($.compileHandlebars.Handlebars));
-
-/**
- * Получение списка директорий Блоков для их подключения в шаблоны
+ * list of blocks directories
  *
- * @author Yunus Gaziev <yunus.gaziev@gmail.com>
- * @param dest {String} путь до папки в которой лежат блоки
- * @returns {Array} массив путей до шаблонов handlebars
+ * @param blocksPath {String} path to blocks destination
+ * @returns {Array} blocks paths
  */
-let getPartialsPaths = (dest) => {
+let getHbsPartialsPaths = (blocksPath) => {
 
-    let folders = fs.readdirSync(dest); // массив папок-блоков
-    let partials = []; // массив путей до шаблонов handlebars
+    let folders = fs.readdirSync(blocksPath);
+    let partials = [];
 
     folders.forEach(function (el) {
-        partials.push(dest + '/' + el);
+        partials.push(blocksPath + '/' + el);
     });
 
     return partials;
-}
+};
+
+/**
+ * register handlebars-layouts helpers
+ * https://www.npmjs.com/package/handlebars-layouts
+ */
+compileHandlebars.Handlebars.registerHelper(hbsLayouts(compileHandlebars.Handlebars));
+
+/**
+ * обновление данных для шаблонов
+ */
+gulp.task('handlebars:data', (done) => {
+
+    let dataPath = path.join(process.cwd(), 'marmelad', 'data.marmelad.js');
+
+    decache(dataPath);
+
+    database = require(dataPath);
+
+    console.log(settings.paths.storage);
+
+    Object.assign(database.app, {
+        package  : pkg,
+        settings : settings,
+        storage  : settings.folders.storage
+    });
+
+    gutil.log(`database for handlebars templates ${chalk.bold.yellow('refreshed')}`);
+
+    done();
+
+});
+
+/**
+ * обновление данных для шаблонов
+ * пересборка шаблонов с новыми данными
+ */
+gulp.task('handlebars:refresh', (done) => {
+    runSequence('handlebars:data', 'handlebars:templates', done);
+});
 
 /**
  * сборка шаблонов handlebars
  * https://www.npmjs.com/package/gulp-compile-handlebars
  */
-gulp.task('handlebars', function(done) {
+gulp.task('handlebars:templates', function(done) {
 
-    let stream = gulp.src([
-            config.paths.pages + '/**/*.{hbs,handlebars}',
-            '!' + config.paths.pages + '/**/_*.{hbs,handlebars}'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
+    let stream = gulp.src(settings.paths._pages + '/**/*.{hbs,handlebars}')
+        .pipe(plumber({errorHandler: plumberOnError}))
         .pipe(
-            $.compileHandlebars(db, {
+            compileHandlebars(database, {
                 ignorePartials: false,
-                batch: getPartialsPaths(config.paths.blocks)
+                batch: getHbsPartialsPaths(settings.paths._blocks),
+                helpers: requireDir(path.join(process.cwd(), settings.paths._helpers))
             })
         )
-        .on('error', $.notify.onError({title: 'Handlebars'}))
         .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
-        .pipe($.beml(config.app.beml))
-        .pipe(iconizer({path: config.paths.svg + '/sprite.svg'}))
-        //.pipe($.prettify({indent_size: 4}))
-        .pipe($.rename({extname: '.html'}))
-        .pipe(gulp.dest(config.paths.dist));
+        .pipe(beml(settings.app.beml))
+        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
+        .pipe(rename({extname: '.html'}))
+        .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', function() {
-        browserSync.reload();
+
+        bsSP.reload();
+
         done();
     });
 
@@ -130,28 +203,13 @@ gulp.task('handlebars', function(done) {
     });
 });
 
-
 /**
  * генерация svg спрайта
  */
-gulp.task('svg-sprite', () => {
+gulp.task('iconizer', () => {
 
-    return gulp.src(config.paths.svg + '/icons/*.svg')
-        .pipe(
-            $.svgSprite({
-                mode: {
-                    symbol: { // symbol mode to build the SVG
-                        dest: config.paths.svg, // destination folder
-                        sprite: 'sprite.svg', //sprite name
-                        example: true // Build sample page
-                    }
-                },
-                svg: {
-                    xmlDeclaration: false, // strip out the XML attribute
-                    doctypeDeclaration: false // don't include the !DOCTYPE declaration
-                }
-            })
-        )
+    return gulp.src(settings.paths.iconizer.icons + '/*.svg')
+        .pipe(svgSprite(settings.app.svgSprite))
         .pipe(gulp.dest('.'));
 });
 
@@ -159,223 +217,140 @@ gulp.task('svg-sprite', () => {
  * обновляет svg спрайт
  * пересборка шаблонов
  */
-gulp.task('refresh-svg', (cb) => {
-    runSequence('svg-sprite', 'handlebars', cb);
+gulp.task('iconizer:refresh', (done) => {
+    runSequence('iconizer', 'handlebars:templates', done);
 });
 
 /**
- * обновление данных для шаблонов
+ * scripts from blocks
  */
-gulp.task('get-data', (done) => {
+gulp.task('scripts:blocks', (done) => {
 
-    jsonfile.readFile(config.paths.assets + '/data.json', (error, data) => {
+    return gulp.src(path.join(settings.paths._blocks, '**', '*.js'))
+        .pipe(plumber({errorHandler: plumberOnError}))
+        .pipe(eslint(settings.app.eslint))
+        .pipe(eslint.format());
+        // .pipe(concat('blocks.js'))
+        // .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
+});
 
-        if (error) {
-            data = {
-                pageTitle : 'Error in data.json'
-            };
-        }
+/**
+ * scripts from blocks
+ */
+gulp.task('scripts:others', ['scripts:blocks'], (done) => {
 
-        db = data;
+    let stream = gulp.src(path.join(settings.paths.js.src, '*.js'))
+        .pipe(plumber({errorHandler: plumberOnError}))
+        .pipe(include({
+            extensions: 'js',
+            hardFail: false
+        }))
+            .on('error', gutil.log)
+        .pipe(babel(settings.app.babel))
+        .pipe(eslint(settings.app.eslint))
+        .pipe(eslint.format())
+        .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
+
+    stream.on('end', () => {
+
+        bsSP.reload();
 
         done();
     });
-});
 
-/**
- * обновление данных для шаблонов
- * пересборка шаблонов с новыми данными
- */
-gulp.task('refresh-data', (cb) => {
-    runSequence('get-data', 'handlebars', cb);
-});
-
-
-/**
- * СТИЛИ ПАГИНОВ
- */
-gulp.task('styles:plugins', () => {
-    return gulp.src([
-            config.paths.styles + '/libs/_variables.styl',
-            config.paths.plugins + '/**/*.css',
-            config.paths.plugins + '/**/*.styl'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe(
-            $.stylus({
-                'include css': true
-            })
-        )
-        .pipe($.concat('plugins.min.css'))
-        .pipe($.autoprefixer())
-        .pipe($.csso())
-        .pipe(gulp.dest(config.paths.storage + config.base.styles))
-        .pipe($.if(!isRelease, browserSync.stream()));
-});
-
-/**
- * СТИЛИ ОСНОВНЫЕ
- */
-gulp.task('styles:main', () => {
-    return gulp.src([
-            config.paths.styles + '/libs/**/*.styl',
-            config.paths.styles + '/*.styl',
-            config.paths.blocks + '/**/*.styl'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('app.styl'))
-        .pipe(
-            $.stylus({
-                'include css': true
-            })
-        )
-        .pipe($.autoprefixer(config.app.autoprefixer))
-        .pipe($.groupCssMediaQueries())
-        .pipe(gulp.dest(config.paths.storage + config.base.styles))
-        .pipe($.if(isRelease, $.csso()))
-        .pipe($.if(isRelease, $.rename({suffix: '.min'})))
-        .pipe($.if(isRelease, gulp.dest(config.paths.storage + config.base.styles)))
-        .pipe(browserSync.stream());
-});
-
-gulp.task('css:main:dist', () => {
-    return gulp.src([
-            config.paths.styles + '/libs/**/*.styl',
-            config.paths.styles + '/*.styl',
-            config.paths.blocks + '/**/*.styl'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('app.styl'))
-        .pipe(
-            $.stylus({
-                'include css': true
-            })
-        )
-        .pipe($.autoprefixer(config.app.autoprefixer))
-        .pipe($.groupCssMediaQueries())
-        .pipe(gulp.dest(config.paths.storage + config.base.styles))
-        .pipe($.csso())
-        .pipe($.rename({suffix: '.min'}))
-        .pipe(gulp.dest(config.paths.storage + config.base.styles));
+    stream.on('error', (err) => {
+        done(err);
+    });
 });
 
 /**
  * СКРИПТЫ ВЕНДОРНЫЕ
  */
-gulp.task('scripts:vendor', () => {
+gulp.task('scripts:vendors', (done) => {
 
-    return gulp.src([config.paths.scripts.vendor + '/**/*.js'])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts + '/vendor'));
+    let vendorsDist = path.join(settings.paths.storage,  settings.folders.js.src, settings.folders.js.vendors);
+
+    let stream = gulp.src(settings.paths.js.vendors + '/**/*.js')
+        .pipe(plumber())
+        .pipe(changed(vendorsDist))
+        .pipe(gulp.dest(vendorsDist));
+
+    stream.on('end', function () {
+
+        bsSP.reload();
+
+        done();
+    });
+
+    stream.on('error', function (err) {
+        done(err);
+    });
+
 });
 
 /**
  * СКРИПТЫ ПЛАГИНОВ
  */
-gulp.task('scripts:plugins', () => {
-    return gulp.src([config.paths.plugins + '/**/*.js'])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('plugins.min.js'))
-        .pipe($.uglify())
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
-});
+gulp.task('scripts:plugins', (done) => {
 
-/**
- * СКРИПТЫ ПРОЧИЕ
- */
-gulp.task('scripts:others', function() {
+    let stream = gulp.src(settings.paths.js.plugins + '/**/*.js')
+        .pipe(plumber())
+        .pipe(concat('plugins.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
-    return gulp.src([config.paths.scripts.main + '/others/*.js'])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
-});
+    stream.on('end', function () {
 
-gulp.task('js:others:dist', function() {
+        bsSP.reload();
 
-    return gulp.src([config.paths.scripts.main + '/others/*.js'])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe(
-            $.jsPrettify({
-                indent_size: 4,
-                indent_char: " ",
-                eol: "\n",
-                collapseWhitespace: true
-            })
-        )
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
-        .pipe($.uglify())
-        .pipe($.rename({suffix: '.min'}))
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
-});
-
-/**
- * СКРИПТЫ ОСНОВНЫЕ
- */
-gulp.task('scripts:main', (done) => {
-
-    let stream = gulp.src([
-            config.paths.scripts.main + '/*.js',
-            config.paths.blocks + '/**/*.js',
-            '!' + config.paths.scripts + '/**/_*.*'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('main.js'))
-        .pipe($.wrap('$(document).ready(function(){\n\n"use strict";\n\n<%= contents %>\n});'))
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
-
-    stream.on('end', () => {
-        browserSync.reload();
         done();
     });
 
-    stream.on('error', (err) => {
+    stream.on('error', function (err) {
         done(err);
     });
-});
-
-gulp.task('js:main:dist', function() {
-
-    return gulp.src([
-            config.paths.scripts.main + '/*.js',
-            config.paths.blocks + '/**/*.js',
-            '!' + config.paths.scripts + '/**/_*.*'
-        ])
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.concat('main.js'))
-        .pipe($.wrap('$(document).ready(function(){\n\n"use strict";\n\n<%= contents %>\n});'))
-        .pipe(
-            $.jsPrettify({
-                indent_size: 4,
-                indent_char: " ",
-                eol: "\n",
-                collapseWhitespace: true
-            })
-        )
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts))
-        .pipe($.uglify())
-        .pipe($.rename({suffix: '.min'}))
-        .pipe(gulp.dest(config.paths.storage + config.base.scripts));
 
 });
 
 /**
- * перекладываем картинки блоков
+ * СТИЛИ ПЛАГИНОВ
  */
-gulp.task('blocks:images', (done) => {
+gulp.task('styles:plugins', (done) => {
 
-    let stream = gulp.src(config.paths.blocks + '/**/*.{jpg,png,gif,svg,bmp}')
-        .pipe($.plumber({errorHandler: onError}))
-        .pipe($.rename({dirname: ''}))
-        .pipe(gulp.dest(config.paths.files.dest));
+    let stream = gulp.src(settings.paths.js.plugins + '/**/*.css')
+        .pipe(plumber())
+        .pipe(concat('plugins.min.css'))
+        .pipe(groupCssMQ())
+        .pipe(csso())
+        .pipe(gulp.dest(path.join(settings.paths.storage, 'css')));
 
-    stream.on('end', () => {
-        browserSync.reload();
+    stream.on('end', function () {
+
+        bsSP.stream();
+
         done();
     });
 
-    stream.on('error', (err) => {
+    stream.on('error', function (err) {
         done(err);
     });
+
+});
+
+/**
+ * сборка стилей блоков, для каждого отдельный css
+ */
+gulp.task('stylus', function() {
+
+    return gulp.src(path.join(settings.paths.stylus, '*.styl'))
+        .pipe(plumber({errorHandler: plumberOnError}))
+        .pipe(stylus())
+        .pipe(autoprefixer(settings.app.autoprefixer))
+        .pipe(groupCssMQ())
+        // .pipe(csslint())
+        // .pipe(csslint.formatter())
+        .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
+        .pipe(bsSP.stream());
 });
 
 /**
@@ -384,21 +359,18 @@ gulp.task('blocks:images', (done) => {
 gulp.task('static', function(done) {
 
     let stream = gulp.src([
-            config.paths.static + '/**/*.*',
-            '!' + config.paths.static + '/**/*.db'
-        ])
-        .pipe($.plumber())
-        .pipe($.changed(config.paths.dist))
-        .pipe($.logger({
-            before     : '[static] starting',
-            after      : '[static] complete',
-            showChange : true,
-            display    : 'name'
-        }))
-        .pipe(gulp.dest(config.paths.dist));
+        settings.paths.static + '/**/*.*',
+        '!' + settings.paths.static + '/**/Thumbs.db',
+        '!' + settings.paths.static + '/**/*tmp*'
+    ])
+        .pipe(plumber())
+        .pipe(changed(settings.paths.dist))
+        .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', function () {
-        browserSync.reload();
+
+        bsSP.reload();
+
         done();
     });
 
@@ -408,233 +380,146 @@ gulp.task('static', function(done) {
 });
 
 /**
- * очищаем папку сборки перед сборкой Ж)
+ * static server
  */
-gulp.task('build:clean', function (done) {
-    del.sync(config.paths.dist);
-    done();
+gulp.task('server:static', (done) => {
+
+    if (program.auth) {
+
+        settings.app.bsSP.server.middleware = function (req, res, next) {
+
+            let auth = basicAuth(req);
+
+            if (auth && auth.name === program.user && auth.pass === program.pass) {
+                return next();
+            } else {
+                res.statusCode = 401;
+                res.setHeader('WWW-Authenticate', 'Basic realm="Marmelad Static Server"');
+                res.end('Access denied');
+            }
+
+        }
+    }
+
+    bsSP.init(settings.app.bsSP, done);
 });
 
 gulp.task('watch', () => {
 
     /* СТАТИКА */
-    $.watch([
-        path.join(config.paths.static, '**', '*'),
-        '!' + config.paths.static + '/**/*.db'
-        ], $.batch((events, done) => {
+    watch([
+        settings.paths.static + '/**/*.*',
+        '!' + settings.paths.static + '/**/Thumbs.db',
+        '!' + settings.paths.static + '/**/*tmp*'
+    ], batch((events, done) => {
         gulp.start('static', done);
     }));
 
-    /* СТИЛИ */
-    $.watch(config.paths.plugins + '/**/*.css', $.batch((events, done) => {
-        gulp.start('styles:plugins', done);
-    }));
-    $.watch(config.paths.styles + '/**/*.{styl,css}', $.batch((events, done) => {
-        gulp.start('styles:main', done);
-    }));
-    $.watch(config.paths.blocks + '/**/*.{styl,css}', $.batch((events, done) => {
-        gulp.start('styles:main', done);
+    /* STYLUS */
+    watch([
+        path.join(settings.paths._blocks, '**', '*.styl'),
+        path.join(settings.paths.stylus, '**', '*.styl')
+    ], batch(function (events, done) {
+        gulp.start('stylus', done);
     }));
 
     /* СКРИПТЫ */
-    $.watch(config.paths.scripts.vendor + '/**/*.js', $.batch((events, done) => {
-        gulp.start('scripts:vendor', done);
+    watch(path.join(settings.paths.js.vendors, '**', '*.js'), batch((events, done) => {
+        gulp.start('scripts:vendors', done);
     }));
-    $.watch(config.paths.plugins + '/**/*.js', $.batch((events, done) => {
+
+    watch(path.join(settings.paths.js.plugins, '**', '*.js'), batch((events, done) => {
         gulp.start('scripts:plugins', done);
     }));
-    $.watch(config.paths.scripts.main + '/*.js', $.batch((events, done) => {
-        gulp.start('scripts:main', done);
+    watch(path.join(settings.paths.js.plugins, '**', '*.css'), batch((events, done) => {
+        gulp.start('styles:plugins', done);
     }));
-    $.watch(config.paths.scripts.main + '/others/*.js', $.batch((events, done) => {
+
+    watch(path.join(settings.paths._blocks, '**', '*.js'), batch(function (events, done) {
         gulp.start('scripts:others', done);
     }));
-    $.watch(config.paths.blocks + '/**/*.js', $.batch((events, done) => {
-        gulp.start('scripts:main', done);
+    watch(path.join(settings.paths.js.src, '*.js'), batch(function (events, done) {
+        gulp.start('scripts:others', done);
     }));
 
-    /* ШАБЛОНЫ */
-    $.watch(config.paths.pages + '/**/*.{hbs,handlebars}', $.batch((events, done) => {
-        gulp.start('handlebars', done);
-    }));
-    $.watch(config.paths.blocks + '/**/*.{hbs,handlebars}', $.batch((events, done) => {
-        gulp.start('handlebars', done);
-    }));
-
-    /* SVG-ИКОНКИ */
-    $.watch(config.paths.svg + '/icons/*.svg', $.batch((events, done) => {
-        gulp.start('refresh-svg', done);
+    /* ICONIZER */
+    watch(path.join(settings.paths.iconizer.icons, '*.svg'), batch(function (events, done) {
+        gulp.start('iconizer:refresh', done);
     }));
 
     /* ДАННЫЕ ДЛЯ ШАБЛОНОВ */
-    $.watch(config.paths.assets + '/data.json', $.batch((events, done) => {
-        gulp.start('refresh-data', done);
+    watch(path.join(settings.paths.marmelad, 'data.marmelad.js'), batch((events, done) => {
+        gulp.start('handlebars:refresh', done);
     }));
 
-    /* КАРТИНКИ БЛОКОВ*/
-    $.watch(config.paths.blocks + '/**/*.{jpg,png,gif,svg,bmp}', $.batch((events, done) => {
-        gulp.start('blocks:images', done);
+    /* ШАБЛОНЫ */
+    watch(path.join(settings.paths._pages, '**', '*.{hbs,handlebars}'), batch((events, done) => {
+        gulp.start('handlebars:templates', done);
+    }));
+    watch(path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}'), batch((events, done) => {
+        gulp.start('handlebars:templates', done);
     }));
 
-});
-
-gulp.task('server', () => {
-
-    browserSync.init(config.app.browserSync);
-
-});
-
-gulp.task('startup', function(cb) {
-
-    runSequence(
-        'build:clean',
-        'server',
-        'static',
-        'get-data',
-        'svg-sprite',
-        'handlebars',
-        'styles:plugins',
-        'styles:main',
-        'scripts:vendor',
-        'scripts:plugins',
-        'scripts:others',
-        'scripts:main',
-        'blocks:images',
-        'watch',
-        cb);
-});
-
-gulp.task('startup:dist', function(cb) {
-
-    runSequence(
-        'build:clean',
-        'server',
-        'static',
-        'get-data',
-        'svg-sprite',
-        'handlebars',
-        'styles:plugins',
-        'css:main:dist',
-        'scripts:vendor',
-        'scripts:plugins',
-        'js:others:dist',
-        'js:main:dist',
-        'blocks:images',
-        cb);
-});
-
-
-/**
- * создание файла конфигурации проекта
- */
-gulp.task('writeConfiguration', (done) => {
-
-    jsonfile.writeFile('marmelad.json', config, {spaces: 4}, (err) => {
-        if (err) {
-            $.util.log(err);
-            done();
-        } else {
-            $.util.log('Configuration create success');
-            done();
-        }
-    });
 });
 
 /**
- * копирование хелперов для Handlebars
+ * очищаем папку сборки перед сборкой Ж)
  */
-gulp.task('copyHbsHelpers', () => {
-    return gulp.src(__dirname.replace('bin', '') + 'assets/helpers/*.*')
-        .pipe(gulp.dest(process.cwd() + '/assets/helpers'));
-});
-
-gulp.task('registerHbsHelpers', function(done) {
-
-    /**
-     * Регистрация кастомных хелперов для Handlebars
-     */
-    const hbsHelpers = requireDir(process.cwd() + '/assets/helpers');
-
-    Object.keys(hbsHelpers).forEach(function(name) {
-        $.compileHandlebars.Handlebars.registerHelper(name, hbsHelpers[name]);
-    });
-
+gulp.task('clean', (done) => {
+    del.sync(settings.paths.dist);
     done();
 });
 
+gulp.task('marmelad:start', function(done) {
+
+    runSequence(
+        'clean',
+        'server:static',
+        'static',
+        'iconizer',
+        'handlebars:data',
+        'handlebars:templates',
+        'scripts:vendors',
+        'scripts:plugins',
+        'scripts:others',
+        'stylus',
+        'styles:plugins',
+        'watch',
+        done);
+
+});
+
 /**
- * копирование заготовки проекта
+ * project init
  */
-gulp.task('copyAssets', () => {
-    return gulp.src(__dirname.replace('bin', '') + 'assets/**/*.*')
-        .pipe(gulp.dest(process.cwd() + '/assets'));
-});
+gulp.task('marmelad:init', function(done) {
 
-/**
- * инициализация нового проекта
- */
-gulp.task('initialize', (done) => {
+    let stream = gulp.src(
+        [path.join(__dirname.replace('bin', ''), 'boilerplate', '**', '*.*')],
+        {
+            dot: true
+        })
+        .pipe(gulp.dest(path.join(process.cwd(), 'marmelad')));
 
-    runSequence(
-        'writeConfiguration',
-        'copyAssets',
-        'startup',
-        done
-    );
-});
-
-gulp.task('addHelpers', function(done) {
-
-    runSequence(
-        'copyHbsHelpers',
-        'registerHbsHelpers',
-        'startup',
-        done
-    );
-});
-
-gulp.task('addHelpers:dist', function(done) {
-
-    runSequence(
-        'copyHbsHelpers',
-        'registerHbsHelpers',
-        'startup:dist',
-        done
-    );
-});
-
-let init = () => {
-
-    if (process.argv[2] == 'dist') {
-        isRelease = true;
-    }
-
-    fs.exists('marmelad.json', (exist) => {
-
-        if (exist) {
-            config = require(process.cwd() + '/marmelad.json');
-            config.app.version     = pkg.version;
-            config.app.name        = pkg.name;
-            config.app.description = pkg.description;
-
-
-            fs.exists(process.cwd() + '/assets/helpers', function(exists) {
-
-                if (!exist) {
-                    isRelease ? gulp.start('startup:dist') : gulp.start('startup');
-                } else {
-                    isRelease ? gulp.start('addHelpers:dist') : gulp.start('addHelpers');
-                }
-
-            });
-
-
-        } else {
-            gulp.start('initialize');
-        }
-
+    stream.on('end', function () {
+        done();
     });
-}
 
+    stream.on('error', function (err) {
+        done(err);
+    });
 
-init();
+});
+
+fs.exists(path.join('marmelad', 'settings.marmelad.js'), function(exists) {
+
+    if (exists) {
+
+        settings = require(path.join(process.cwd(), 'marmelad', 'settings.marmelad'));
+
+        gulp.start('marmelad:start');
+
+    } else {
+        gulp.start('marmelad:init');
+    }
+});

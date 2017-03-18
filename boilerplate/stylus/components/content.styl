@@ -1,0 +1,480 @@
+/* Selection pseudo-element
+ ========================================================================== */
+::-moz-selection
+    background : selection['bgc']
+    color : selection['color']
+    text-shadow : none
+
+::selection
+    background : selection['bgc']
+    color : selection['color']
+    text-shadow : none
+
+*
+    min-width 0
+    min-height 0
+    -webkit-tap-highlight-color rgba(0, 0, 0, 0)
+    box-sizing border-box
+
+html
+    font-size        : html.fontSize
+    font-family      : html.family
+    font-weight      : html.weight
+    color            : html.color
+    background-color : html.bgc
+
+    font-feature-settings : kern, liga, onum
+    -webkit-font-smoothing : antialiased
+    -webkit-text-size-adjust : 100%
+    -ms-text-size-adjust : 100%
+
+body
+    fontSize(html.fontSize)
+    font-family      : inherit
+    font-weight      : inherit
+    color            : inherit
+    background-color : inherit
+
+/* Links
+ ========================================================================== */
+
+/*
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+
+a
+    /* 1 */
+    background-color transparent
+    /* 2 */
+    -webkit-text-decoration-skip objects
+
+    &:active,
+    &:hover
+        outline 0
+
+a,
+.link
+    color : links.default
+    cursor pointer
+
+    .svg-icon
+        fill : links.default
+
+    if links.hover
+        &:hover
+            color : links.hover
+
+            .svg-icon
+                fill : links.hover
+
+    if links.active
+        &:active
+            color : links.active
+
+            .svg-icon
+                fill : links.active
+
+    if links.visited
+        &:visited
+            color : links.visited
+
+            .svg-icon
+                fill : links.visited
+
+/* Text-level semantics
+ ========================================================================== */
+
+/*
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+
+abbr[title]
+    text-decoration       : none
+    text-decoration-style : dotted
+    border-bottom         : 1px dotted
+
+
+/*
+ * 1. Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+ * 2. Add the correct font weight in Chrome, Edge, and Safari.
+ */
+
+/* 1 */
+b,
+strong
+    font-weight : inherit
+
+/* 2 */
+b,
+strong
+    font-weight : bolder
+
+/*
+ * Emphasize
+ */
+
+em
+    color : em-color
+
+/*
+ * Insert
+ */
+ins
+    background      : ins-bgc
+    color           : ins-color
+    text-decoration : none
+
+/*
+ * Mark
+ */
+mark
+    background : mark-bgc
+    color      : mark-color
+
+/*
+ * Quote
+ */
+q
+    font-style : quote_style
+
+/*
+ * Add the correct font size in all browsers.
+ */
+
+small
+    fontSize(base-font-small)
+    display inline-block
+
+/*
+ * Prevents `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup
+    font-size 75%
+    line-height 0
+    position relative
+    vertical-align baseline
+
+sup
+    top -50%
+sub
+    bottom -25%
+
+/* Embedded content
+ ========================================================================== */
+
+/*
+ * Remove the gap between embedded content and the bottom of their containers.
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video
+    vertical-align middle
+
+/*
+ * Responsiveness
+ * 1. Set a maximum width
+ * 2. Auto scale the height. Only needed if `height` attribute is present
+ * 2. Corrects `max-width` behavior if padding and border are used
+ */
+
+audio,
+canvas,
+img,
+video
+    /* 1 */
+    max-width 100%
+    /* 2 */
+    height auto
+    /* 3 */
+    box-sizing border-box
+
+/*
+ * Remove the border on images inside links in IE 10-.
+ */
+
+img
+    border-style none
+
+/*
+ * Hide the overflow in IE.
+ */
+
+svg:not(:root)
+    overflow: hidden
+
+
+/* Block elements
+ ========================================================================== */
+
+/*
+ * Margins
+ */
+
+p,
+ul,
+ol,
+dl,
+pre,
+address,
+fieldset,
+figure
+    margin : 0
+
+/* Add margin if adjacent element */
+*
+    + p,
+    + ul,
+    + ol,
+    + dl,
+    + pre,
+    + address,
+    + fieldset,
+    + figure
+        margin-top : base-gutter
+
+/* Headings
+ ========================================================================== */
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6
+    margin         : 0 0 headings.gutter 0
+    font-family    : headings.family
+    font-weight    : headings.weight
+    color          : headings.color
+    text-transform : headings.transform
+
+/* Add margin if adjacent element */
+*
++ h1, + .h1,
++ h2, + .h2,
++ h3, + .h3,
++ h4, + .h4,
++ h5, + .h5,
++ h6, + .h6
+    margin-top : headings.gutter
+
+/*
+ * Sizes
+ */
+
+h1, .h1
+    fontSize(headings.h1.size)
+
+h2, .h2
+    fontSize(headings.h2.size)
+
+h3, .h3
+    fontSize(headings.h3.size)
+
+h4, .h4
+    fontSize(headings.h4.size)
+
+h5, .h5
+    fontSize(headings.h5.size)
+
+h6, .h6
+    fontSize(headings.h6.size)
+
+
+/* Lists
+ ========================================================================== */
+
+ul,
+ol
+    padding-left: list-padding-left
+
+/*
+ * Reset margin for nested lists
+ */
+
+ul,
+ol
+    > li
+
+        > ul,
+        > ol
+            margin : 0
+
+
+/* Description lists
+ ========================================================================== */
+
+dt
+    font-weight bold
+dd
+    margin-left 0
+
+
+/* Horizontal rules
+ ========================================================================== */
+
+/*
+ * 1. Add the correct box sizing and height in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ * 3. Style
+ */
+hr,
+.hr
+    box-sizing content-box
+    height 0
+    overflow visible
+    margin : 0 0 base-gutter 0
+    border 0
+    border-top : 1px solid rgba(html.color, .12)
+
+*
+    + hr,
+    + .hr
+        margin-top : base-gutter
+
+/* Address
+ ========================================================================== */
+
+address
+    font-style normal
+
+
+/* Blockquotes
+ ========================================================================== */
+
+/*
+ * Content
+ */
+blockquote
+    fontSize(blockquote.font.size)
+    margin       : 0 0 blockquote.gutter 0
+    font-style   : blockquote.font.style
+    padding-left : blockquote.gutter
+    border-left  : blockquote.border.size solid blockquote.border.color
+
+    p:last-of-type
+        margin-bottom: 0
+
+    footer
+        fontSize(blockquote.font.size / 2)
+        margin-top : blockquote.gutter / 1.5
+
+/* Add margin if adjacent element */
+* + blockquote
+    margin-top : blockquote.gutter
+
+
+/* Preformatted text
+ ========================================================================== */
+
+/*
+ * 1. Contain overflow in all browsers.
+ * 2. Override UA
+ */
+
+pre
+    fontSize(base-font-size)
+    font-family unquote(ff-pre)
+    color pre-color
+    -moz-tab-size 4
+    tab-size 4
+    /* 1 */
+    overflow auto
+
+    background-color pre-bgc
+    padding: base-gutter
+
+    code
+        font-family unquote(ff-code)
+
+/*
+ * 1. Correct the odd `em` font sizing in all browsers.
+ * 2. Consolas has a better baseline in running text compared to `Courier`
+ * 3. Style
+ */
+
+:not(pre) > code,
+:not(pre) > kbd,
+:not(pre) > samp
+    /* 1 */
+    fontSize(base-font-size - 2)
+    /* 2 */
+    font-family unquote(ff-code)
+    /* 3 */
+    color #d05
+    background-color : pre-bgc
+    white-space nowrap
+
+    padding 0 4px
+    border 1px solid #e5e5e5
+    border-radius 3px
+
+/* HTML5 elements
+ ========================================================================== */
+
+/*
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ * 2. Add the correct display in IE.
+ */
+
+article,
+aside,
+details, /* 1 */
+figcaption,
+figure,
+footer,
+header,
+main, /* 2 */
+nav,
+section,
+summary /* 1 */
+    display block
+
+/*
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+
+progress
+    vertical-align: baseline
+
+/*
+ * Add the correct display in IE 10-.
+ * 1. Add the correct display in IE.
+ */
+
+template, /* 1 */
+[hidden]
+    display none
+
+
+/* Iframe
+ ========================================================================== */
+
+iframe
+    border: 0
+
+
+/* Prevent the 300ms delay for touchscreen interactions
+ ========================================================================== */
+
+/*
+ * Most browsers prevent the 300ms delay automatically for sites that use the `width=device-width` property.
+ * For Safari on iOS 9.3+, IE 11 and Edge on desktops and IE 11 on Windows Phone 8.1 it must be applied manually.
+ */
+a,
+area,
+button,
+input,
+label,
+select,
+summary,
+textarea
+    touch-action manipulation

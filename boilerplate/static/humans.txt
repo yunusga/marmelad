@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    <name> -- <role> -- <twitter>
+
+# THANKS
+
+    Yandex, Google, Node JS, TJ Holowaychuk, GitHub
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5, JS, NODE JS
+    jQuery, Modernizr, Normalize.css, marmelad builder

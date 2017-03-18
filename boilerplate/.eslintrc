@@ -1,0 +1,12 @@
+{
+  "extends": "wordpress",
+  "env": {
+    "es6" : true,
+    "browser": true,
+    "jquery": true
+  },
+  "globals" : {
+    "supportsPassive" : true,
+    "debounce" : true
+  }
+}
