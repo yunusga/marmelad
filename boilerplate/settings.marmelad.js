@@ -59,11 +59,15 @@ let app = {
             "Safari >= 6"
         ]
     },
+    babel : {
+        presets: ['es2015'],
+        plugins: ["transform-object-assign"]
+    },
     bsSP        : {
         server        : {
             baseDir: paths.dist
         },
-        port          : 8862,
+        port          : 8863,
         open          : false,
         directory     : true,
         ghostMode     : false,

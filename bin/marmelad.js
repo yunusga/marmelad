@@ -26,6 +26,7 @@ let changed           = require('gulp-changed');
 let concat            = require('gulp-concat');
 let uglify            = require('gulp-uglify');
 let include           = require('gulp-include');
+let babel             = require('gulp-babel');
 let groupCssMQ        = require('gulp-group-css-media-queries');
 let watch             = require('gulp-watch');
 let batch             = require('gulp-batch');
@@ -192,13 +193,14 @@ gulp.task('scripts:others', ['scripts:blocks'], (done) => {
 
     let stream = gulp.src(path.join(settings.paths.js.src, '*.js'))
         .pipe(plumber({errorHandler: plumberOnError}))
-        .pipe(eslint(settings.app.eslint))
-        .pipe(eslint.format())
         .pipe(include({
             extensions: 'js',
             hardFail: false
         }))
             .on('error', gutil.log)
+        .pipe(babel(settings.app.babel))
+        .pipe(eslint(settings.app.eslint))
+        .pipe(eslint.format())
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
     stream.on('end', () => {
