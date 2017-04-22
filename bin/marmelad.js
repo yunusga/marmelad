@@ -18,7 +18,6 @@ let beml              = require('gulp-beml');
 let svgSprite         = require('gulp-svg-sprite');
 let stylus            = require('gulp-stylus');
 let autoprefixer      = require('gulp-autoprefixer');
-let csslint           = require('gulp-csslint');
 let csso              = require('gulp-csso');
 let rename            = require('gulp-rename');
 let header            = require('gulp-header');
@@ -297,8 +296,6 @@ gulp.task('stylus', function() {
         .pipe(stylus())
         .pipe(autoprefixer(settings.app.autoprefixer))
         .pipe(groupCssMQ())
-        // .pipe(csslint())
-        // .pipe(csslint.formatter())
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .pipe(bsSP.stream());
 });
