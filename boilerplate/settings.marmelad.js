@@ -58,7 +58,7 @@ let app = {
             "iOS >= 6",
             "Safari >= 6"
         ]
-    }
+    },
     bsSP        : {
         server        : {
             baseDir: paths.dist

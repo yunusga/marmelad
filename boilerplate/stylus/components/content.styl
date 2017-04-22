@@ -17,9 +17,9 @@
     box-sizing border-box
 
 html
-    font-size        : html.fontSize
-    font-family      : html.family
-    font-weight      : html.weight
+    //font-size        : html.fontSize
+    //font-family      : html.family
+    //font-weight      : html.weight
     color            : html.color
     background-color : html.bgc
 
@@ -29,9 +29,9 @@ html
     -ms-text-size-adjust : 100%
 
 body
-    fontSize(html.fontSize)
-    font-family      : inherit
-    font-weight      : inherit
+    //fontSize(html.fontSize)
+    //font-family      : inherit
+    //font-weight      : inherit
     color            : inherit
     background-color : inherit
 
@@ -57,9 +57,14 @@ a,
 .link
     color : links.default
     cursor pointer
+    text-decoration underline
 
     .svg-icon
         fill : links.default
+
+    text-decoration : none
+    background-image: linear-gradient(0deg, transparent, transparent 1px, links.default 0, links.default 2px, transparent 0)
+    text-shadow: 0.03em 0 #fff, -0.03em 0 #fff, 0 0.03em #fff, 0 -0.03em #fff, 0.06em 0 #fff, -0.06em 0 #fff, 0.09em 0 #fff, -0.09em 0 #fff, 0.12em 0 #fff, -0.12em 0 #fff, 0.15em 0 #fff, -0.15em 0 #fff
 
     if links.hover
         &:hover
@@ -353,8 +358,6 @@ address
  * Content
  */
 blockquote
-    fontSize(blockquote.font.size)
-    margin       : 0 0 blockquote.gutter 0
     font-style   : blockquote.font.style
     padding-left : blockquote.gutter
     border-left  : blockquote.border.size solid blockquote.border.color
@@ -363,8 +366,7 @@ blockquote
         margin-bottom: 0
 
     footer
-        fontSize(blockquote.font.size / 2)
-        margin-top : blockquote.gutter / 1.5
+        margin-top : (blockquote.gutter / 1.5)
 
 /* Add margin if adjacent element */
 * + blockquote

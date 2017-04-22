@@ -31,24 +31,26 @@
 
         <title>{{pageTitle}}</title>
 
+
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{app.storage}}/css/style.css">
 
-        <script src="{{app.storage}}/js/vendors/modernizr.js" async></script>
-        <script src="{{app.storage}}/js/vendors/pep-0.4.2.min.js" async></script>
+        {{!-- <script src="{{app.storage}}/js/vendors/modernizr.js" async></script>
+        <script src="{{app.storage}}/js/vendors/pep-0.4.2.min.js" async></script> --}}
 
     </head>
 
-    <body block="w-page" mod="{{bodyMod}}" mix="block:{{pageClasses}}">
+    <body block="m-page" mod="{{bodyMod}}" mix="block:{{pageClasses}}">
 
         <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
 
-        <div elem="scroll-fix">
+        <div block="m-scroll-fix">
 
-            {{> _page-header}}
+            {{> _m-header}}
 
-            <div elem="body" mix="block:{{bodyClasses}}">
+            <div block="m-content" mix="block:{{contentClasses}}">
 
                 <div elem="main">
                     {{#block 'main'}}{{/block}}
@@ -66,11 +68,11 @@
                 </div><!-- e:aside m:right -->
                 {{/if}}
 
-            </div><!-- e:body -->
+            </div><!-- b:m-content -->
 
-            {{> _page-footer}}
+            {{> _m-footer}}
 
-        </div><!-- e:scroll-fix -->
+        </div><!-- b:scroll-fix -->
 
         <script src="{{app.storage}}/js/vendors/jquery-2.2.0.min.js"></script>
         <script src="{{app.storage}}/js/plugins.min.js"></script>

@@ -1,0 +1,45 @@
+{{#extend "_layout" pageTitle=(concat app.package.name ' v' app.package.version) bodyMod="demo" pageClasses=null contentClasses="w-container" asideLeft=false asideRight=false}}
+
+{{#content "main"}}
+
+<style type="text/css">
+
+    .demo-intro {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-pack: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .demo-intro blockquote {
+        margin: 0;
+    }
+
+</style>
+
+<div block="demo-intro">
+
+    <blockquote>
+        Все эти инновации, о которых сейчас трубят на каждом углу — чушь собачья. Кто угодно может заниматься инновациями. «Думать иначе» и всё такое… к чёрту. Это бессмысленно. 99 процентов успеха — это проделанная работа.
+
+        <footer>
+            <cite title="Линус Торвальдс">Линус Торвальдс</cite>
+        </footer>
+    </blockquote>
+
+</div><!-- b:demo-intro -->
+
+{{/content}}
+
+    {{#content 'asideLeft'}}
+        <p>aside left</p>
+    {{/content}}
+
+    {{#content 'asideRight'}}
+        <p>aside right</p>
+    {{/content}}
+
+{{/extend}}

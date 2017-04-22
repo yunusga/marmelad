@@ -1,26 +1,28 @@
 html,
 body
-    margin : 0
-    padding : 0
+    margin 0
+    padding 0
 
 html
-    min-height : 100%
-    min-height : 100vh
+    min-height 100%
+    min-height 100vh
 
-.w-page
+.m-page,
+.m-scroll-fix
     @extend .display_flex
     @extend .flex-direction_column
     height 100%
 
-    &__scroll-fix
-        @extend .display_flex
-        @extend .flex-direction_column
-        min-height : 100%
-        min-height : 100vh
+.m-scroll-fix
+    @extend .display_flex
+    @extend .flex-direction_column
+    height auto
+    min-height 100%
+    min-height 100vh
 
-    &__body
-        @extend .display_flex
-        flex 1 0 auto
+.m-content
+    @extend .display_flex
+    flex 1 0 auto
 
     &__main
         flex 1
@@ -33,5 +35,4 @@ html
             flex : 0 0 aside-width-left
 
         &_right
-            flex 0 0 320px
             flex : 0 0 aside-width-right
