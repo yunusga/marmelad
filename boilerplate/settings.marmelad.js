@@ -58,11 +58,7 @@ let app = {
             "iOS >= 6",
             "Safari >= 6"
         ]
-    },
-    babel : {
-        presets: ['es2015'],
-        plugins: ["transform-object-assign"]
-    },
+    }
     bsSP        : {
         server        : {
             baseDir: paths.dist
