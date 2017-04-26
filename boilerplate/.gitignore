@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+.idea
+.phpintel
+.DS_Store
+*~
+*.diff
+*.patch
+*.psd
+*.db
+test
+static
+!/marmelad/static

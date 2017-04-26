@@ -63,7 +63,7 @@ let app = {
         server        : {
             baseDir: paths.dist
         },
-        port          : 8864,
+        port          : 8965,
         open          : false,
         directory     : true,
         ghostMode     : false,

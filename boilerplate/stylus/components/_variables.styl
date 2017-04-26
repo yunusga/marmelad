@@ -6,19 +6,15 @@ aside-width-right = aside-width-left
 
 base-gutter          = 15px
 base-content-width   = 960px
-base-controls-height = 36px
 
-base-font-family =  'Ubuntu, Roboto, "Segoe UI", Arial, Helvetica, sans-serif'
-base-font-size   = 16px
+base-font-family =  '"Helvetica Neue",Helvetica,Arial,sans-serif'
+base-font-size   = 14px
 base-font-small  = (base-font-size / 100 * 80)
 base-font-weight = 400
-base-line-height = 24
+base-line-height = 1.4
 base-text-color  = #333
 
 pathToFonts = '../assets/fonts'
-
-ff-pre      = 'Consolas, sans-serif'
-ff-code     = ff-pre
 
 selection = {
     bgc   : theme-color_primary,
@@ -31,7 +27,7 @@ html = {
     color      : base-text-color,
     fontSize   : base-font-size,
     lineHeight : base-line-height,
-    bgc        : #f4f4f4
+    bgc        : #fff
 }
 
 breakpoints = {
@@ -69,19 +65,6 @@ iconizer = {
     fill   : #333
 }
 
-controls = {
-    placeholder : {
-        normal : rgba(#333, .7),
-        focus  : transparent
-    },
-    padding : base-gutter,
-    height  : base-controls-height,
-    border  : {
-        width  : 1px,
-        radius : 2px
-    }
-}
-
 text-weight = {
     thin    : 100,
     light   : 300,
@@ -91,33 +74,13 @@ text-weight = {
     black   : 900
 }
 
-
-headings-size = base-font-size
-
 headings = {
     gutter    : base-gutter,
     family    : unquote(base-font-family),
-    weight    : 700,
+    weight    : 500,
     color     : base-text-color,
     transform : none,
-    h1 : {
-        size : headings-size * 2
-    },
-    h2 : {
-        size : headings-size * 1.5
-    },
-    h3 : {
-        size : headings-size * 1.12
-    },
-    h4 : {
-        size : headings-size
-    },
-    h5 : {
-        size : headings-size * 0.87
-    },
-    h6 : {
-        size : headings-size * 0.63
-    }
+    size      : 36
 }
 
 links = {
@@ -125,7 +88,6 @@ links = {
     hover   : #c00,
     active  : false,
     visited : false
-
 }
 
 blockquote = {
@@ -139,18 +101,3 @@ blockquote = {
         style : normal
     }
 }
-
-em-color    = base-text-color
-
-pre-color   = base-text-color
-pre-bgc     = rgba(base-text-color, .05)
-
-ins-color   = base-text-color
-ins-bgc     = #ffa
-
-mark-color  = base-text-color
-mark-bgc    = #ffa
-
-quote_style = italic
-
-list-padding-left = base-gutter

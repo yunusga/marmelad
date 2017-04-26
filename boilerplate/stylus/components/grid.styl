@@ -12,26 +12,28 @@
         padding : 0 0 unit(grid.gutter, px) unit(grid.gutter, px)
         box-sizing : border-box
 
-    for modifier, data in grid.mods
+    for modifier, opts in grid.mods
 
         &_{modifier}
-            margin : 0 0 0 unit(data.gutter * -1, px)
+            margin : 0 0 0 unit(opts.gutter * -1, px)
 
             .{grid.block}__{grid.elem}
-                padding : 0 0 unit(data.gutter, px) unit(data.gutter, px)
+                padding : 0 0 unit(opts.gutter, px) unit(opts.gutter, px)
 
-for column in (1..grid.columns)
+for col_count in (1..grid.columns)
 
-    .w-{column}
-        column_width = (100 / grid.columns * column * 1%)
+    .w-{col_count}
+        column_width = (100 / grid.columns * col_count * 1%)
         max-width : column_width
         flex-basis : column_width
 
 for alias, size in breakpoints
-    @media (min-width size)
-        for column in (1..grid.columns)
-            .{alias}-{column},
-            .{grid.block}.{alias}-{column} .{grid.block}__{grid.elem}
-                column_width = (100 / grid.columns * column * 1%)
+
+    @media (min-width : size)
+
+        for col_count in (1..grid.columns)
+            .{alias}-{col_count},
+            .{grid.block}.{alias}-{col_count} .{grid.block}__{grid.elem}
+                column_width = (100 / grid.columns * col_count * 1%)
                 max-width : column_width
                 flex-basis : column_width

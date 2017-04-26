@@ -1,4 +1,4 @@
-{{#extend "_layout" pageTitle="Marmelad page" bodyMod="marmelad" pageClasses="w-container" bodyClasses=null asideRight=false}}
+{{#extend "_layout" pageTitle=(concat 'UI Preview - Marmelad v' app.package.version) bodyMod="marmelad, demo" bodyClass=null contentClass="w-container" asideRight=false}}
 
 <!--name=(concat 'first' '-' 'second')-->
 {{#content "main"}}
@@ -8,30 +8,21 @@
 <br>
 <br>
 <br>
-<div class="w-8">
-    <a class="h3" href="https://ru.bem.info/methodology/" target="_blank" rel="noreferer, nofolow"><strong>БЭМ методология</strong></a>
+<h1>{{pageTitle}}</h1>
+<hr>
+<p class="w-8">
+    <a class="h4" href="https://ru.bem.info/methodology/" target="_blank" rel="noreferrer, nofollow"><strong>БЭМ методология</strong></a>
     <br>
     <small>Методология БЭМ создана в Яндексе для разработки сайтов, которые надо делать быстро, а поддерживать долгие годы. Она позволяет создавать расширяемые и повторно используемые компоненты интерфейса.</small>
-</div>
-<br>
-<div class="w-8">
-    <a class="h3" href="http://nicothin.github.io/idiomatic-pre-CSS/" target="_blank" rel="noreferer, nofolow"><strong>Как работать с CSS-препроцессорами и БЭМ</strong></a>
+</p>
+<p class="w-8">
+    <a class="h4" href="http://nicothin.github.io/idiomatic-pre-CSS/" target="_blank" rel="noreferrer, nofollow"><strong>Как работать с CSS-препроцессорами и БЭМ</strong></a>
     <br>
     <small>Список рекомендаций по неусложнению жизни себе и другим участникам проекта по вёрстке.</small>
-</div>
-<br>
-<div class="w-8">
-    <a class="h3" href="http://vovanr.com/frontend-elements-dictionary/" target="_blank" rel="noreferer, nofolow"><strong>Front-end Elements Dictionary</strong></a>
-    <br>
-    <small>Popular element names</small>
-</div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h2>Grid</h2>
-<p>Let's start with a simple example. Resize the browser window to see the responsive behavior of the grid</p>
+</p>
+<hr>
+<h2>Сетка</h2>
+<p>Давайте начнем с простого примера. Измените размер окна браузера, чтобы увидеть поведение сетки.</p>
 <div block="w-grid" mod="demo">
     <div elem="col" mix="block:fhd-12 xlg-2 lg-3 hd-4 md-6 sm-12 xs-6">
         <div class="demo-box"></div>
@@ -71,13 +62,13 @@
 
 <h2>Buttons</h2>
 
-<input block="input" type="text" placeholder="placeholder">
+<input block="form-control" type="text" placeholder="placeholder">
 
-<button block="button" mod="default" type="button">button</button>
-<input block="button" mod="default, disabled" type="button" value="input button">
-<a block="button" href="#">link button</a>
-<span block="button">span button</span>
-<div block="button">div button</div>
+<button block="btn" mod="default" type="button">button</button>
+<input block="btn" mod="default, disabled" type="button" value="input button">
+<a block="btn" href="#">link button</a>
+<span block="btn">span button</span>
+<div block="btn">div button</div>
 
 <hr>
 
