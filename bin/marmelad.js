@@ -293,7 +293,9 @@ gulp.task('stylus', function() {
 
     return gulp.src(path.join(settings.paths.stylus, '*.styl'))
         .pipe(plumber({errorHandler: plumberOnError}))
-        .pipe(stylus())
+        .pipe(stylus({
+            'include css': true
+        }))
         .pipe(autoprefixer(settings.app.autoprefixer))
         .pipe(groupCssMQ())
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
