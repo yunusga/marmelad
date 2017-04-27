@@ -36,10 +36,9 @@
 // style.styl
 
 @require 'components/_variables';
+@require 'components/_functions';
 @require 'components/_utils';
-@require 'components/normalize';
 @require 'components/content';
-@require 'components/controls';
 @require 'components/grid';
 @require 'components/iconizer';
 @require 'components/keyframes';
@@ -142,9 +141,6 @@
 ```
 ### eslint
 все скрипты, кроме вендорных и плагинов, обрабатываются `eslint`, настроить его можно в файле `marmelad/.eslintrc`, установлены конфиги для `wordpress` и `jquery`, подключен `wordpress` конфиг
-
-### babel
-все скрипты, кроме вендорных и плагинов, обрабатываются `babel`, настроить его можно в файле `marmelad/settings.marmelad.js`, ключ `babel`
 
 ## static
 формирование файловой структуры проекта в целях имитации серверной файловой структуры (если понадобится), файлы копируются напрямую, в корень `dist` с полным повторением вложенности
