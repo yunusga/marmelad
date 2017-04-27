@@ -59,7 +59,9 @@ if (program.auth) {
  * plumber onError handler
  */
 let plumberOnError = function(err) {
-    gutil.log(gutil.colors.red('Error (' + err.plugin + '): ' + err.message));
+
+    console.log(`\n[${gutil.colors.red('ERROR')}] ${gutil.colors.bgBlack.red(err.plugin)} : ${err.message}`);
+
     this.emit('end');
 };
 
