@@ -1,4 +1,4 @@
-# marmelad <sup>[2.0.1](https://github.com/yunusga/marmelad/blob/develop/CHANGELOG.md)</sup>
+# marmelad <sup>[2.2.3](https://github.com/yunusga/marmelad/blob/develop/CHANGELOG.md)</sup>
 
 Сборщик статичных сайтов на базе Gulp
 
