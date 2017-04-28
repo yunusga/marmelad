@@ -37,6 +37,8 @@ let del               = require('del');
 let chalk             = require('chalk');
 let pkg               = require('../package');
 
+let bemlToStyl        = require('../modules/gulp-beml2styl');
+
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
 
@@ -153,6 +155,26 @@ gulp.task('handlebars:templates', function(done) {
     stream.on('error', function(err) {
         done(err);
     });
+});
+
+/**
+ * Генерация beml html в шаблон для styl
+ */
+gulp.task('handlebars:beml2styl', function() {
+
+    let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
+
+    return gulp.src(pathToBlocks)
+        .pipe(changed(pathToBlocks))
+        .pipe(bemlToStyl({
+            beml : settings.app.beml,
+            tabSize : '    '
+        }))
+        .pipe(rename({ extname: '.bemlstyl' }))
+        .pipe(gulp.dest(function(file) {
+            return file.base;
+        }));
+
 });
 
 /**
@@ -407,8 +429,12 @@ gulp.task('watch', () => {
     watch(path.join(settings.paths._pages, '**', '*.{hbs,handlebars}'), batch((events, done) => {
         gulp.start('handlebars:templates', done);
     }));
+    /* БЛОКИ */
     watch(path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}'), batch((events, done) => {
         gulp.start('handlebars:templates', done);
+    }));
+    watch(path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}'), batch((events, done) => {
+        gulp.start('handlebars:beml2styl', done);
     }));
 
 });
@@ -430,6 +456,7 @@ gulp.task('marmelad:start', function(done) {
         'iconizer',
         'handlebars:data',
         'handlebars:templates',
+        'handlebars:beml2styl',
         'scripts:vendors',
         'scripts:plugins',
         'scripts:others',
