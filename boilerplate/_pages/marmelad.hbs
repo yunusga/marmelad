@@ -60,19 +60,37 @@
 
 <hr>
 
-<h2>Buttons</h2>
+<div block="w-grid" mod="demo">
+    <div elem="col" mix="block:w-3">
+        <button block="m-btn" mod="demo">Button</button>
+        {{#each app.controls}}
+        <br>
+        <br>
+        <button block="m-btn" mod="{{@this}}, demo">{{@this}}</button>
+        {{/each}}
+    </div><!-- e:col -->
+    <div elem="col" mix="block:w-3">
+        <button block="m-btn" mod="demo, ghost">Button</button>
+        {{#each app.controls}}
+        <br>
+        <br>
+        <button block="m-btn" mod="{{@this}}, ghost, demo">{{@this}}</button>
+        {{/each}}
+    </div><!-- e:col -->
 
-<input block="form-control" type="text" placeholder="placeholder">
+    <div elem="col" mix="block:w-3">
+        <input type="text" block="m-ctrl" placeholder="simple">
+        {{#each app.controls}}
+        <br>
+        <br>
+        <input type="text" block="m-ctrl" mod="{{@this}}" placeholder="{{@this}}">
+        {{/each}}
+    </div><!-- e:col -->
 
-<button block="btn" mod="default" type="button">button</button>
-<input block="btn" mod="default, disabled" type="button" value="input button">
-<a block="btn" href="#">link button</a>
-<span block="btn">span button</span>
-<div block="btn">div button</div>
+</div><!-- b:w-grid -->
 
 <hr>
 
-<hr>
 <h2>Default Wordpress gallery</h2>
 <div class="gallery gallery-columns-5">
     {{#times 10}}

@@ -1,4 +1,4 @@
-theme-color_primary   = #00bcd4
+theme-color_primary   = #009688
 theme-color_secondary = #c00
 
 aside-width-left  = 300px
@@ -8,7 +8,7 @@ base-gutter          = 15px
 base-content-width   = 960px
 
 base-font-family =  '"Helvetica Neue",Helvetica,Arial,sans-serif'
-base-font-size   = 14px
+base-font-size   = 16px
 base-font-small  = (base-font-size / 100 * 80)
 base-font-weight = 400
 base-line-height = 1.4
@@ -19,6 +19,11 @@ pathToFonts = '../assets/fonts'
 selection = {
     bgc   : theme-color_primary,
     color : #fff
+}
+
+placeholders = {
+    normal : base-text-color,
+    focus : transparent
 }
 
 html = {
@@ -99,5 +104,32 @@ blockquote = {
     font : {
         size  : base-font-size,
         style : normal
+    }
+}
+
+controls = {
+    default : {
+        bgc : #eee,
+        color : base-text-color
+    },
+    brand : {
+        bgc : theme-color_primary,
+        color : #fff
+    },
+    success : {
+        bgc : #66bb6a,
+        color : #fff
+    },
+    info : {
+        bgc : #26c6da,
+        color : #fff
+    },
+    warning : {
+        bgc : #ffca28,
+        color : #fff
+    },
+    danger : {
+        bgc : #ff7043,
+        color : #fff
     }
 }

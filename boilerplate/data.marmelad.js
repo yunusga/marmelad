@@ -17,6 +17,14 @@ module.exports = {
             "more_vert",
             "favorite",
             "favorite_border"
+        ],
+        controls : [
+            'default',
+            'brand',
+            'success',
+            'info',
+            'warning',
+            'danger'
         ]
     },
     pageTitle: 'marmelad'
