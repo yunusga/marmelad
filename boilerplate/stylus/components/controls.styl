@@ -1,0 +1,99 @@
+.m-btn,
+.m-ctrl
+    @extend .reset-control
+    display inline-block
+    vertical-align middle
+    max-width 100%
+    height 36px
+    line-height 36px
+    padding 0 15px
+    border 1px solid transparent
+
+
+.m-btn
+    text-decoration none
+    border-radius 3px
+    user-select none
+    cursor pointer
+
+    &.a
+        text-shadow none
+        text-decoration none
+
+    &:hover,
+    &:focus
+        background-color darken(#fff, 3%)
+        background-image none
+
+    &:active
+        background-color darken(#fff, 5%)
+
+    &_demo
+        text-transform capitalize
+
+    for btn_mod in controls
+
+        &_{btn_mod}
+            background-color : controls[btn_mod].bgc
+            color : controls[btn_mod].color
+
+            &:hover,
+            &:focus
+                background-color : darken(controls[btn_mod].bgc, 5%)
+
+            &:active
+                background-color : darken(controls[btn_mod].bgc, 10%)
+
+            &.m-btn_ghost
+                background-color transparent
+                border-color : controls[btn_mod].bgc
+
+                if (btn_mod == 'default')
+                    color : base-text-color
+                else
+                    color : darken(controls[btn_mod].bgc, 5%)
+
+
+                &:hover,
+                &:focus
+                    background-color : darken(controls[btn_mod].bgc, 5%)
+                    border-color : darken(controls[btn_mod].bgc, 5%)
+                    color : controls[btn_mod].color
+
+                &:active
+                    border-color : darken(controls[btn_mod].bgc, 10%)
+                    background-color : darken(controls[btn_mod].bgc, 10%)
+                    color : controls[btn_mod].color
+
+.m-ctrl
+    color : base-text-color
+
+    for ctrl_mod in controls
+
+        &_{ctrl_mod}
+            border-color : controls[ctrl_mod].bgc
+
+            &:hover,
+            &:focus
+                border-color : darken(controls[ctrl_mod].bgc, 10%)
+
+            if (ctrl_mod == 'default')
+
+                &::-webkit-input-placeholder
+                    color : base-text-color
+                &::-moz-placeholder
+                    color : base-text-color
+                &:-moz-placeholder
+                    color : base-text-color
+                &:-ms-input-placeholder
+                    color : base-text-color
+            else
+
+                &::-webkit-input-placeholder
+                    color : controls[ctrl_mod].bgc
+                &::-moz-placeholder
+                    color : controls[ctrl_mod].bgc
+                &:-moz-placeholder
+                    color : controls[ctrl_mod].bgc
+                &:-ms-input-placeholder
+                    color : controls[ctrl_mod].bgc
