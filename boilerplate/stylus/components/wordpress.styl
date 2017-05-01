@@ -7,13 +7,15 @@
 
     a
         display : block
+        background-image none
 
     img,
     .attachment-thumbnail
         vertical-align : top
+        width : 100%
+        height : auto
 
     .gallery-caption
-        fontSize(base-font-small)
         padding : unit(wp.gallery.gutter, px) 0
 
     for column in (1..wp.gallery.columns)
@@ -37,15 +39,22 @@
 
 .alignleft
     float : left
-    margin : .5rem .5rem 0 0
+    margin : 0 base-gutter base-gutter 0
 
 .alignright
     float : right
-    margin : .5rem 0 0 .5rem
+    margin : 0 0 base-gutter base-gutter
 
 .wp-caption
     max-width : 100%
 
     &-text
-        fontSize(base-font-small, base-font-size, (base-font-small + 8))
         padding-top : 5px
+
+    img
+        width : 100%
+        height : auto
+
+.gallery-caption,
+.wp-caption-text
+     font-size : 90%
