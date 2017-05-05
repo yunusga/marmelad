@@ -1,0 +1,12 @@
+.m-page
+    &_{{bodyMod}} {}
+
+
+.m-scroll-fix {}
+
+
+.m-content
+    &__main {}
+    &__aside
+        &_left {}
+        &_right {}
