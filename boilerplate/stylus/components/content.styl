@@ -110,11 +110,20 @@ h6, .h6
     font-weight    : headings.weight
     color          : headings.color
     text-transform : headings.transform
+    margin-top     : (base-gutter * 1.5)
+    margin-bottom  : base-gutter
 
 for num in (0..5)
     h{num+1},
     .h{num+1}
         font-size : unit(headings.size - (6 * num), px)
+
+p
+    margin 0 0 base-gutter
+
+hr
+    margin-top (base-gutter * 1.5)
+    margin-bottom (base-gutter * 1.5)
 
 blockquote
     font-style   : blockquote.font.style
