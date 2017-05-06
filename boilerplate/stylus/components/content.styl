@@ -112,6 +112,16 @@ h6, .h6
     text-transform : headings.transform
     margin-top     : (base-gutter * 1.5)
     margin-bottom  : base-gutter
+    
+    &::-moz-selection
+        background : theme-color_secondary
+        color : selection['color']
+        text-shadow : none
+
+    &::selection
+        background : theme-color_secondary
+        color : selection['color']
+        text-shadow : none
 
 for num in (0..5)
     h{num+1},
