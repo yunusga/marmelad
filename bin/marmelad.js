@@ -151,14 +151,14 @@ gulp.task('handlebars:templates', function(done) {
 
     let stream = gulp.src(settings.paths._pages + '/**/*.{hbs,handlebars}')
         .pipe(plumber({errorHandler: plumberOnError}))
-        .pipe(
-            compileHandlebars(database, {
-                ignorePartials: false,
-                batch: getHbsPartialsPaths(settings.paths._blocks),
-                helpers: requireDir(path.join(process.cwd(), settings.paths._helpers))
-            })
-        )
-        .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
+        // .pipe(
+        //     compileHandlebars(database, {
+        //         ignorePartials: false,
+        //         batch: getHbsPartialsPaths(settings.paths._blocks),
+        //         helpers: requireDir(path.join(process.cwd(), settings.paths._helpers))
+        //     })
+        // )
+        // .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
         .pipe(beml(settings.app.beml))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
         .pipe(rename({extname: '.html'}))
@@ -373,9 +373,39 @@ gulp.task('static', function(done) {
  */
 gulp.task('server:static', (done) => {
 
+    const hbs = require('handlebars');
+
+    hbs.registerHelper(hbsLayouts(hbs));
+
+    settings.app.bsSP.server.middleware = [
+
+        function (req, res, next) {
+
+            let reqUrl = req.url || req.originalUrl;
+            let ext = '.html';
+
+            if (path.extname(reqUrl) === ext) {
+
+                let page = path.join(process.cwd(), settings.folders.dist, path.basename(reqUrl, ext));
+                let source = fs.readFileSync(page + ext, 'utf-8');
+                let template = hbs.compile(source);
+                let result = template(database);
+                
+                res.writeHead(200, {
+                    'Content-Type': 'text/html'
+                });
+                res.end(result);
+
+            } else {
+                next();
+            }
+
+        }
+    ];
+
     if (program.auth) {
 
-        settings.app.bsSP.server.middleware = function (req, res, next) {
+        let authMiddleware = function (req, res, next) {
 
             let auth = basicAuth(req);
 
@@ -388,6 +418,8 @@ gulp.task('server:static', (done) => {
             }
 
         }
+
+        settings.app.bsSP.server.middleware.push(authMiddleware);
     }
 
     bsSP.init(settings.app.bsSP, done);
