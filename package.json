@@ -1,6 +1,6 @@
 {
   "name": "marmelad",
-  "version": "2.11.12",
+  "version": "2.11.18",
   "description": "Сборщик статичных сайтов на базе Gulp",
   "preferGlobal": true,
   "engines": {
