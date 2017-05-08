@@ -51,6 +51,7 @@
     "del": "2.2.2",
     "extend": "3.0.1",
     "fs-extra": "2.0.0",
+    "fs-extra": "3.0.1",
     "gulp": "3.9.1",
     "gulp-autoprefixer": "4.0.0",
     "gulp-batch": "1.0.5",
