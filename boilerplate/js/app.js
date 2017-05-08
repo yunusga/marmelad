@@ -80,16 +80,16 @@ try {
 // Use our detect's results. passive applied if supported, capture will be false either way.
 //elem.addEventListener('touchstart', fn, supportsPassive ? { passive: true } : false);
 
-/**
- * определение существования элемента на странице
- */
-$.exists = function(selector) {
-    return ($(selector).length > 0);
-};
-
 $(function() {
 
     'use strict';
+
+    /**
+     * определение существования элемента на странице
+     */
+    $.exists = function(selector) {
+        return ($(selector).length > 0);
+    };
 
     //=require ../_blocks/**/*
 });
