@@ -1,0 +1,7 @@
+{
+    "requireCurlyBraces": [
+        "if",
+        "else",
+        "for"
+    ]    
+}

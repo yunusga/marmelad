@@ -12,7 +12,7 @@ let glogger           = require('../modules/gulp-event-logger')(gulp);
 let iconizer          = require('../modules/gulp-iconizer');
 let gutil             = require('gulp-util');
 let plumber           = require('gulp-plumber');
-let eslint            = require('gulp-eslint');
+let jscs              = require('gulp-jscs');
 let compileHandlebars = require('gulp-compile-handlebars');
 let beml              = require('gulp-beml');
 let svgSprite         = require('gulp-svg-sprite');
@@ -221,10 +221,8 @@ gulp.task('scripts:blocks', (done) => {
 
     return gulp.src(path.join(settings.paths._blocks, '**', '*.js'))
         .pipe(plumber({errorHandler: plumberOnError}))
-        .pipe(eslint(settings.app.eslint))
-        .pipe(eslint.format());
-        // .pipe(concat('blocks.js'))
-        // .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
+        .pipe(jscs({ configPath : path.join('marmelad', '.jscsrc') }))
+        .pipe(jscs.reporter());
 });
 
 /**
@@ -237,10 +235,9 @@ gulp.task('scripts:others', ['scripts:blocks'], (done) => {
         .pipe(include({
             extensions: 'js',
             hardFail: false
-        }))
-            .on('error', gutil.log)
-        .pipe(eslint(settings.app.eslint))
-        .pipe(eslint.format())
+        })).on('error', gutil.log)
+        .pipe(jscs({ configPath : path.join('marmelad', '.jscsrc') }))
+        .pipe(jscs.reporter())
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
     stream.on('end', () => {
