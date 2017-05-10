@@ -37,6 +37,8 @@ let del               = require('del');
 let chalk             = require('chalk');
 let pkg               = require('../package');
 
+let hbs = require('handlebars');
+
 let bemlToStyl        = require('../modules/gulp-beml2styl');
 
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
@@ -89,8 +91,8 @@ let getHbsPartialsPaths = (blocksPath) => {
  * register handlebars-layouts helpers
  * https://www.npmjs.com/package/handlebars-layouts
  */
-compileHandlebars.Handlebars.registerHelper(hbsLayouts(compileHandlebars.Handlebars));
-compileHandlebars.Handlebars.registerHelper('create', function(blockName) {
+
+function hpsHelperCreate(blockName) {
 
     const settings = require(path.join(process.cwd(), 'marmelad', 'settings.marmelad'));
 
@@ -108,6 +110,11 @@ compileHandlebars.Handlebars.registerHelper('create', function(blockName) {
 
         console.log(`\n[${gutil.colors.green('CREATE BLOCK')}] ${blockName} ${gutil.colors.green('successfully')}\n`);
     }
+}
+
+compileHandlebars.Handlebars.registerHelper(hbsLayouts(compileHandlebars.Handlebars));
+compileHandlebars.Handlebars.registerHelper('create', function(blockName) {
+    hpsHelperCreate(blockName);
 });
 
 /**
@@ -140,25 +147,17 @@ gulp.task('handlebars:data', (done) => {
  * пересборка шаблонов с новыми данными
  */
 gulp.task('handlebars:refresh', (done) => {
-    runSequence('handlebars:data', 'handlebars:templates', done);
+    runSequence('handlebars:data', 'handlebars:pages', done);
 });
 
 /**
  * сборка шаблонов handlebars
  * https://www.npmjs.com/package/gulp-compile-handlebars
  */
-gulp.task('handlebars:templates', function(done) {
+gulp.task('handlebars:pages', function(done) {
 
     let stream = gulp.src(settings.paths._pages + '/**/*.{hbs,handlebars}')
         .pipe(plumber({errorHandler: plumberOnError}))
-        // .pipe(
-        //     compileHandlebars(database, {
-        //         ignorePartials: false,
-        //         batch: getHbsPartialsPaths(settings.paths._blocks),
-        //         helpers: requireDir(path.join(process.cwd(), settings.paths._helpers))
-        //     })
-        // )
-        // .pipe(pipeErrorStop()) // на случай если handlebars сломается, иначе таск останавливается
         .pipe(beml(settings.app.beml))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
         .pipe(rename({extname: '.html'}))
@@ -176,14 +175,40 @@ gulp.task('handlebars:templates', function(done) {
     });
 });
 
-/**
- * Генерация beml html в шаблон для styl
- */
-gulp.task('handlebars:beml2styl', function() {
+gulp.task('handlebars:blocks', function(done) {
 
     let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
 
-    return gulp.src(pathToBlocks)
+    let stream = gulp.src(settings.paths._blocks + '/**/*.{hbs,handlebars}')
+        .pipe(plumber({errorHandler: plumberOnError}))
+        .pipe(changed(pathToBlocks))
+        .pipe(beml(settings.app.beml))
+        .pipe(rename({
+            dirname : '',
+            extname : '.html'
+        }))
+        .pipe(gulp.dest(path.join(settings.paths.dist, 'partials')));
+
+    stream.on('end', function() {
+
+        bsSP.reload();
+
+        done();
+    });
+
+    stream.on('error', function(err) {
+        done(err);
+    });
+});
+
+/**
+ * Генерация beml html в шаблон для styl
+ */
+gulp.task('handlebars:beml2styl', function(done) {
+
+    let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
+
+    let stream = gulp.src(pathToBlocks)
         .pipe(changed(pathToBlocks))
         .pipe(bemlToStyl({
             beml : settings.app.beml,
@@ -193,6 +218,15 @@ gulp.task('handlebars:beml2styl', function() {
         .pipe(gulp.dest(function(file) {
             return file.base;
         }));
+
+    stream.on('end', function() {
+        bsSP.reload();
+        done();
+    });
+
+    stream.on('error', function(err) {
+        done(err);
+    });
 
 });
 
@@ -211,7 +245,7 @@ gulp.task('iconizer', () => {
  * пересборка шаблонов
  */
 gulp.task('iconizer:refresh', (done) => {
-    runSequence('iconizer', 'handlebars:templates', done);
+    runSequence('iconizer', 'handlebars:pages', done);
 });
 
 /**
@@ -373,9 +407,16 @@ gulp.task('static', function(done) {
  */
 gulp.task('server:static', (done) => {
 
-    const hbs = require('handlebars');
-
     hbs.registerHelper(hbsLayouts(hbs));
+    hbs.registerHelper('create', function(blockName) {
+        hpsHelperCreate(blockName);
+    });
+
+    let helpers = requireDir(path.join(process.cwd(), settings.paths._helpers));
+
+    for(let h in helpers) {
+        hbs.registerHelper(h, helpers[h]);
+    }
 
     settings.app.bsSP.server.middleware = [
 
@@ -386,13 +427,26 @@ gulp.task('server:static', (done) => {
 
             if (path.extname(reqUrl) === ext) {
 
+                let partialsFiles = fs.readdirSync(path.join(settings.paths.dist, 'partials'));
+
+                partialsFiles.forEach(function (partial) {
+
+                    let partialPath = path.join(settings.paths.dist, 'partials', partial);
+                    let template = fs.readFileSync(partialPath, 'utf8');
+
+                    hbs.registerPartial(path.basename(partial, '.html'), template);
+                });
+                
+
                 let page = path.join(process.cwd(), settings.folders.dist, path.basename(reqUrl, ext));
-                let source = fs.readFileSync(page + ext, 'utf-8');
+                let source = fs.readFileSync(page + ext, 'utf8');
                 let template = hbs.compile(source);
                 let result = template(database);
                 
                 res.writeHead(200, {
-                    'Content-Type': 'text/html'
+                    'Content-Type': 'text/html; charset=UTF-8',
+                    'Generator': 'marmelad v.' + pkg.version
+
                 });
                 res.end(result);
 
@@ -475,14 +529,17 @@ gulp.task('watch', () => {
 
     /* ШАБЛОНЫ */
     watch(path.join(settings.paths._pages, '**', '*.{hbs,handlebars}'), batch((events, done) => {
-        gulp.start('handlebars:templates', done);
+        gulp.start('handlebars:pages', done);
     }));
     /* БЛОКИ */
     watch(path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}'), batch((events, done) => {
-        gulp.start('handlebars:templates', done);
-    }));
-    watch(path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}'), batch((events, done) => {
-        gulp.start('handlebars:beml2styl', done);
+
+        runSequence(
+            'handlebars:blocks',
+            'handlebars:beml2styl',
+            'handlebars:pages',
+            done
+        );
     }));
 
 });
@@ -503,8 +560,9 @@ gulp.task('marmelad:start', function(done) {
         'static',
         'iconizer',
         'handlebars:data',
-        'handlebars:templates',
         'handlebars:beml2styl',
+        'handlebars:blocks',
+        'handlebars:pages',
         'scripts:vendors',
         'scripts:plugins',
         'scripts:others',
