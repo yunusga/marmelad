@@ -121,8 +121,6 @@ gulp.task('handlebars:data', (done) => {
 
     database = require(dataPath);
 
-    console.log(settings.paths.storage);
-
     Object.assign(database.app, {
         package  : pkg,
         settings : settings,
