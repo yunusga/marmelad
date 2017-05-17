@@ -1,40 +1,40 @@
 ::-moz-selection
-    background : selection['bgc']
-    color : selection['color']
+    background : $selection.bgc
+    color : $selection.color
     text-shadow : none
 
 ::selection
-    background : selection['bgc']
-    color : selection['color']
+    background : $selection.bgc
+    color : $selection.color
     text-shadow : none
 
 
 /* IE 10+ */
 ::-webkit-input-placeholder
-    color : placeholders.normal
+    color : $placeholders.normal
 :-moz-placeholder
-    color : placeholders.normal
+    color : $placeholders.normal
 /* FF 4-18 */
 ::-moz-placeholder
-    color : placeholders.normal
+    color : $placeholders.normal
 /* FF 19+ */
 :-ms-input-placeholder
-    color : placeholders.normal
+    color : $placeholders.normal
 
-if placeholders.focus
+if $placeholders.focus
     /* Input placeholder color
      ========================================================================== */
     /* IE 10+ */
     input:focus::-webkit-input-placeholder
-        color : placeholders.focus
+        color : $placeholders.focus
     input:focus:-moz-placeholder
-        color : placeholders.focus
+        color : $placeholders.focus
     /* FF 4-18 */
     input:focus::-moz-placeholder
-        color : placeholders.focus
+        color : $placeholders.focus
     /* FF 19+ */
     input:focus:-ms-input-placeholder
-        color : placeholders.focus
+        color : $placeholders.focus
 
 
 
@@ -45,11 +45,11 @@ if placeholders.focus
     box-sizing border-box
 
 html
-    font-size : html.fontSize
-    font-family : html.family
-    font-weight : html.weight
-    color : html.color
-    background-color : html.bgc
+    font-size : $html.fontSize
+    font-family : $html.family
+    font-weight : $html.weight
+    color : $html.color
+    background-color : $html.bgc
 
     font-feature-settings : kern, liga, onum
     -webkit-font-smoothing : antialiased
@@ -66,12 +66,12 @@ body
 a,
 .m-link
     display : inline
-    color : links.default
+    color : $links.default
     background-color : transparent
     -webkit-text-decoration-skip : objects
     text-decoration : none
     background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
-    link_text_shadow(html.bgc)
+    link_text_shadow($html.bgc)
 
     .svg-icon
         fill : currentColor
@@ -82,19 +82,19 @@ a,
         outline 0
         text-decoration : none
 
-    if links.hover
+    if $links.hover
         &:hover
-            color : links.hover
+            color : $links.hover
             background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
 
-    if links.active
+    if $links.active
         &:active
-            color : links.active
+            color : $links.active
             background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
 
-    if links.visited
+    if $links.visited
         &:visited
-            color : links.visited
+            color : $links.visited
             background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
 
 /*
@@ -106,27 +106,27 @@ h3, .h3,
 h4, .h4,
 h5, .h5,
 h6, .h6
-    font-family    : headings.family
-    font-weight    : headings.weight
-    color          : headings.color
-    text-transform : headings.transform
+    font-family    : $headings.family
+    font-weight    : $headings.weight
+    color          : $headings.color
+    text-transform : $headings.transform
     margin-top     : (base-gutter * 1.5)
     margin-bottom  : base-gutter
     
     &::-moz-selection
         background : theme-color_secondary
-        color : selection['color']
+        color : $selection.color
         text-shadow : none
 
     &::selection
         background : theme-color_secondary
-        color : selection['color']
+        color : $selection.color
         text-shadow : none
 
 for num in (0..5)
     h{num+1},
     .h{num+1}
-        font-size : unit(headings.size - (6 * num), px)
+        font-size : unit($headings.size - (6 * num), px)
 
 p
     margin 0 0 base-gutter

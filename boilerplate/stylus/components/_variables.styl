@@ -1,18 +1,74 @@
-theme-color_primary   = #ffc107
-theme-color_secondary = #e91e63
+$textDarkColor  = #000;
+$textLightColor = #fff;
+
+$colorPrimary = #3E50B4;
+$colorAccent  = #FF3F80;
+
+$colors = {
+    primary   : $colorPrimary,
+    secondary : $colorAccent,
+    bgc       : #fff,
+    txtDark : {
+        primary   : rgba($textDarkColor, .87),
+        secondary : rgba($textDarkColor, .54),
+        hint      : rgba($textDarkColor, .38),
+        divider   : rgba($textDarkColor, .12)
+    },
+    txtLight : {
+        primary   : rgba($textLightColor, 1),
+        secondary : rgba($textLightColor, .7),
+        hint      : rgba($textLightColor, .5),
+        divider   : rgba($textLightColor, .12)
+    }
+}
+
+$links = {
+    default : #0054b9,
+    hover   : #c00,
+    active  : false,
+    visited : false
+}
+
+$selection = {
+    bgc   : $colors.primary,
+    color : #fff
+}
+
+$placeholders = {
+    normal : base-text-color,
+    focus : transparent
+}
+
+$fonts = {
+    base     : unquote('"Helvetica Neue", Helvetica, Arial, sans-serif'),
+    headings : unquote('Georgia, serif')
+}
+
+$html = {
+    family     : $fonts.base,
+    weight     : 400,
+    color      : $colors.txtDark.primary,
+    fontSize   : 16px,
+    lineHeight : 1.4,
+    bgc        : $colors.bgc
+}
+
+$headings = {
+    gutter    : base-gutter,
+    family    : $fonts.headings,
+    weight    : 700,
+    color     : base-text-color,
+    transform : none,
+    size      : 34
+}
 
 aside-width-left  = 300px
 aside-width-right = aside-width-left
 
-base-gutter          = 15px
-base-content-width   = 1000px
+base-gutter        = 15px
+base-content-width = 1000px
 
-fonts = {
-    base : unquote('"Helvetica Neue",Helvetica,Arial,sans-serif'),
-    headings : unquote('Georgia, serif')
-}
-
-base-font-family =  fonts.base
+base-font-family =  $fonts.base
 base-font-size   = 16px
 base-font-small  = (base-font-size / 100 * 80)
 base-font-weight = 400
@@ -23,34 +79,6 @@ controls_height = 36px
 controls_radius = 3px
 
 pathToFonts = '../assets/fonts'
-
-selection = {
-    bgc   : theme-color_primary,
-    color : #fff
-}
-
-placeholders = {
-    normal : base-text-color,
-    focus : transparent
-}
-
-html = {
-    family     : fonts.base,
-    weight     : base-font-weight,
-    color      : base-text-color,
-    fontSize   : base-font-size,
-    lineHeight : base-line-height,
-    bgc        : #fff
-}
-
-headings = {
-    gutter    : base-gutter,
-    family    : fonts.headings,
-    weight    : 700,
-    color     : base-text-color,
-    transform : none,
-    size      : 34
-}
 
 breakpoints = {
     xs  : 480px,
@@ -96,18 +124,11 @@ text-weight = {
     black   : 900
 }
 
-links = {
-    default : #0054b9,
-    hover   : #c00,
-    active  : false,
-    visited : false
-}
-
 blockquote = {
     gutter : base-gutter,
     border : {
         size  : 5px,
-        color : theme-color_primary
+        color : $colors.primary
     },
     font : {
         size  : base-font-size,
@@ -121,7 +142,7 @@ controls = {
         color : base-text-color
     },
     brand : {
-        bgc : theme-color_primary,
+        bgc : $colors.primary,
         color : #fff
     },
     success : {
