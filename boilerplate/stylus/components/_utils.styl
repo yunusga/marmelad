@@ -70,6 +70,6 @@
         align-items stretch
 
 // HELPERS CLASSES ====================================================
-for alias, weight in text-weight
-    .text-{alias}
-        font-weight : weight
+for $weight, $value in $fontWeight
+    .font-{$weight}
+        font-weight : $value

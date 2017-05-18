@@ -1,39 +1,39 @@
-.{grid.block}
+.{$grid.block}
 
     @extend .display_flex
     @extend .flex-direction_row
     @extend .flex-wrap_wrap
 
-    margin : 0 0 0 unit(grid.gutter * -1, px)
+    margin : 0 0 0 unit($grid.gutter * -1, px)
 
-    &__{grid.elem}
+    &__{$grid.elem}
         width : 100%
         flex-basis : 100%
-        padding : 0 0 unit(grid.gutter, px) unit(grid.gutter, px)
+        padding : 0 0 unit($grid.gutter, px) unit($grid.gutter, px)
         box-sizing : border-box
 
-    for modifier, opts in grid.mods
+    for $modifier, $opts in $grid.mods
 
-        &_{modifier}
-            margin : 0 0 0 unit(opts.gutter * -1, px)
+        &_{$modifier}
+            margin : 0 0 0 unit($opts.gutter * -1, px)
 
-            .{grid.block}__{grid.elem}
-                padding : 0 0 unit(opts.gutter, px) unit(opts.gutter, px)
+            .{$grid.block}__{$grid.elem}
+                padding : 0 0 unit($opts.gutter, px) unit($opts.gutter, px)
 
-for col_count in (1..grid.columns)
+for $cols in (1..$grid.columns)
 
-    .w-{col_count}
-        column_width = (100 / grid.columns * col_count * 1%)
-        max-width : column_width
-        flex-basis : column_width
+    .w-{$cols}
+        $colWidth = (100 / $grid.columns * $cols * 1%)
+        max-width : $colWidth
+        flex-basis : $colWidth
 
-for alias, size in breakpoints
+for $alias, $size in $breakpoints
 
-    @media (min-width : size)
+    @media (min-width : $size)
 
-        for col_count in (1..grid.columns)
-            .{alias}-{col_count},
-            .{grid.block}.{alias}-{col_count} .{grid.block}__{grid.elem}
-                column_width = (100 / grid.columns * col_count * 1%)
-                max-width : column_width
-                flex-basis : column_width
+        for $cols in (1..$grid.columns)
+            .{$alias}-{$cols},
+            .{$grid.block}.{$alias}-{$cols} .{$grid.block}__{$grid.elem}
+                $colWidth = (100 / $grid.columns * $cols * 1%)
+                max-width : $colWidth
+                flex-basis : $colWidth
