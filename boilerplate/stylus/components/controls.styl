@@ -1,14 +1,15 @@
 .m-btn,
 .m-ctrl
     @extend .reset-control
+
     display inline-block
     vertical-align middle
     max-width 100%
-    height : controls_height
-    line-height : controls_height
+    height : $controlsHeight
+    line-height : $controlsHeight
     padding 0 15px
     border 1px solid transparent
-    border-radius : controls_radius
+    border-radius : $controlsRadius
 
 .m-btn
     text-decoration none
@@ -30,42 +31,42 @@
     &_demo
         text-transform capitalize
 
-    for btn_mod in controls
+    for $mod in $controls
 
-        &_{btn_mod}
-            background-color : controls[btn_mod].bgc
-            color : controls[btn_mod].color
+        &_{$mod}
+            background-color : $controls[$mod].bgc
+            color : $controls[$mod].color
 
             &:hover,
             &:focus
-                background-color : darken(controls[btn_mod].bgc, 5%)
+                background-color : darken($controls[$mod].bgc, 5%)
 
             &:active
-                background-color : darken(controls[btn_mod].bgc, 10%)
+                background-color : darken($controls[$mod].bgc, 10%)
 
             &.m-btn_ghost
                 background-color transparent
-                border-color : controls[btn_mod].bgc
+                border-color : $controls[$mod].bgc
 
-                if (btn_mod == 'default')
-                    color : base-text-color
+                if ($mod == 'default')
+                    color : $textColor.primary
                 else
-                    color : darken(controls[btn_mod].bgc, 5%)
+                    color : darken($controls[$mod].bgc, 5%)
 
 
                 &:hover,
                 &:focus
-                    background-color : darken(controls[btn_mod].bgc, 5%)
-                    border-color : darken(controls[btn_mod].bgc, 5%)
-                    color : controls[btn_mod].color
+                    background-color : darken($controls[$mod].bgc, 5%)
+                    border-color : darken($controls[$mod].bgc, 5%)
+                    color : $controls[$mod].color
 
                 &:active
-                    border-color : darken(controls[btn_mod].bgc, 10%)
-                    background-color : darken(controls[btn_mod].bgc, 10%)
-                    color : controls[btn_mod].color
+                    border-color : darken($controls[$mod].bgc, 10%)
+                    background-color : darken($controls[$mod].bgc, 10%)
+                    color : $controls[$mod].color
 
 .m-ctrl
-    color : base-text-color
+    color : $textColor.primary
 
     &_textarea
         padding 10px 15px
@@ -73,32 +74,32 @@
         line-height : 26px
         rasize vertical
 
-    for ctrl_mod in controls
+    for $mod in $controls
 
-        &_{ctrl_mod}
-            border-color : controls[ctrl_mod].bgc
+        &_{$mod}
+            border-color : $controls[$mod].bgc
 
             &:hover,
             &:focus
-                border-color : darken(controls[ctrl_mod].bgc, 10%)
+                border-color : darken($controls[$mod].bgc, 10%)
 
-            if (ctrl_mod == 'default')
+            if ($mod == 'default')
 
                 &::-webkit-input-placeholder
-                    color : base-text-color
+                    color : $textColor.primary
                 &::-moz-placeholder
-                    color : base-text-color
+                    color : $textColor.primary
                 &:-moz-placeholder
-                    color : base-text-color
+                    color : $textColor.primary
                 &:-ms-input-placeholder
-                    color : base-text-color
+                    color : $textColor.primary
             else
 
                 &::-webkit-input-placeholder
-                    color : controls[ctrl_mod].bgc
+                    color : $controls[$mod].bgc
                 &::-moz-placeholder
-                    color : controls[ctrl_mod].bgc
+                    color : $controls[$mod].bgc
                 &:-moz-placeholder
-                    color : controls[ctrl_mod].bgc
+                    color : $controls[$mod].bgc
                 &:-ms-input-placeholder
-                    color : controls[ctrl_mod].bgc
+                    color : $controls[$mod].bgc

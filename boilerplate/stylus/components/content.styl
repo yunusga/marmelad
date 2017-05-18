@@ -73,9 +73,6 @@ a,
     background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
     link_text_shadow($html.bgc)
 
-    .svg-icon
-        fill : currentColor
-
     &:active,
     &:focus,
     &:hover
@@ -110,8 +107,8 @@ h6, .h6
     font-weight    : $headings.weight
     color          : $headings.color
     text-transform : $headings.transform
-    margin-top     : (base-gutter * 1.5)
-    margin-bottom  : base-gutter
+    margin-top     : ($appGutter * 1.5)
+    margin-bottom  : $appGutter
     
     &::-moz-selection
         background : theme-color_secondary
@@ -123,26 +120,26 @@ h6, .h6
         color : $selection.color
         text-shadow : none
 
-for num in (0..5)
-    h{num+1},
-    .h{num+1}
-        font-size : unit($headings.size - (6 * num), px)
+for $num in (0..5)
+    h{$num+1},
+    .h{$num+1}
+        font-size : unit($headings.size - (6 * $num), px)
 
 p
-    margin 0 0 base-gutter
+    margin 0 0 $appGutter
 
 hr
-    margin-top (base-gutter * 1.5)
-    margin-bottom (base-gutter * 1.5)
+    margin-top ($appGutter * 1.5)
+    margin-bottom ($appGutter * 1.5)
 
 blockquote
-    font-style   : blockquote.font.style
-    padding-left : blockquote.gutter
-    border-left  : blockquote.border.size solid blockquote.border.color
-    background-color : rgba(blockquote.border.color, .03)
+    font-style   : $blockquote.font.style
+    padding-left : $blockquote.gutter
+    border-left  : $blockquote.border.size solid $blockquote.border.color
+    background-color : rgba($blockquote.border.color, .03)
 
     footer
-        margin-top : (blockquote.gutter / 1.5)
+        margin-top : ($blockquote.gutter / 1.5)
 
 /*
  * Add the correct vertical alignment in Chrome, Firefox, and Opera.

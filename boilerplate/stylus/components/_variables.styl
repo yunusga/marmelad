@@ -1,8 +1,21 @@
+$colorPrimary = #3E50B4;
+$colorAccent  = #FF3F80;
+
 $textDarkColor  = #000;
 $textLightColor = #fff;
 
-$colorPrimary = #3E50B4;
-$colorAccent  = #FF3F80;
+$theme = 'light' // dark
+
+aside-width-left  = 300px
+aside-width-right = aside-width-left
+
+$appGutter = 20px
+$appWidth  = 1000px
+
+$controlsHeight = 36px
+$controlsRadius = 3px
+
+$pathToFonts = '../assets/fonts'
 
 $colors = {
     primary   : $colorPrimary,
@@ -22,6 +35,8 @@ $colors = {
     }
 }
 
+$textColor = $colors.txtDark;
+
 $links = {
     default : #0054b9,
     hover   : #c00,
@@ -35,8 +50,8 @@ $selection = {
 }
 
 $placeholders = {
-    normal : base-text-color,
-    focus : transparent
+    normal : $textColor.primary,
+    focus  : transparent
 }
 
 $fonts = {
@@ -44,78 +59,7 @@ $fonts = {
     headings : unquote('Georgia, serif')
 }
 
-$html = {
-    family     : $fonts.base,
-    weight     : 400,
-    color      : $colors.txtDark.primary,
-    fontSize   : 16px,
-    lineHeight : 1.4,
-    bgc        : $colors.bgc
-}
-
-$headings = {
-    gutter    : base-gutter,
-    family    : $fonts.headings,
-    weight    : 700,
-    color     : base-text-color,
-    transform : none,
-    size      : 34
-}
-
-aside-width-left  = 300px
-aside-width-right = aside-width-left
-
-base-gutter        = 15px
-base-content-width = 1000px
-
-base-font-family =  $fonts.base
-base-font-size   = 16px
-base-font-small  = (base-font-size / 100 * 80)
-base-font-weight = 400
-base-line-height = 1.4
-base-text-color  = #333
-
-controls_height = 36px
-controls_radius = 3px
-
-pathToFonts = '../assets/fonts'
-
-breakpoints = {
-    xs  : 480px,
-    sm  : 600px,
-    md  : 840px,
-    hd  : 960px,
-    lg  : 1280px,
-    xlg : 1440px,
-    fhd : 1600px
-}
-
-grid = {
-    block   : w-grid,
-    elem    : col,
-    columns : 12,
-    gutter  : 0,
-    mods    : {
-        demo : {
-            gutter : 15
-        }
-    }
-}
-
-wp = {
-    gallery : {
-        columns : 9,
-        gutter  : 15
-    }
-}
-
-iconizer = {
-    width  : 24px,
-    height : 24px,
-    fill   : #333
-}
-
-text-weight = {
+$fontWeight = {
     thin    : 100,
     light   : 300,
     regular : 400,
@@ -124,8 +68,26 @@ text-weight = {
     black   : 900
 }
 
-blockquote = {
-    gutter : base-gutter,
+$html = {
+    family     : $fonts.base,
+    weight     : 400,
+    color      : $textColor.primary,
+    fontSize   : 16px,
+    lineHeight : 1.4,
+    bgc        : $colors.bgc
+}
+
+$headings = {
+    gutter    : $appGutter,
+    family    : $fonts.headings,
+    weight    : 700,
+    color     : $textColor.primary,
+    transform : none,
+    size      : 34
+}
+
+$blockquote = {
+    gutter : $appGutter,
     border : {
         size  : 5px,
         color : $colors.primary
@@ -136,10 +98,10 @@ blockquote = {
     }
 }
 
-controls = {
+$controls = {
     default : {
         bgc : #eee,
-        color : base-text-color
+        color : $textColor.primary
     },
     brand : {
         bgc : $colors.primary,
@@ -161,4 +123,38 @@ controls = {
         bgc : #ff7043,
         color : #fff
     }
+}
+
+$breakpoints = {
+    xs  : 480px,
+    sm  : 600px,
+    md  : 840px,
+    hd  : 960px,
+    lg  : 1280px,
+    xlg : 1440px,
+    fhd : 1600px
+}
+
+$grid = {
+    block   : w-grid,
+    elem    : col,
+    columns : 12,
+    gutter  : 0,
+    mods    : {
+        demo : {
+            gutter : 15
+        }
+    }
+}
+
+$wp = {
+    gallery : {
+        columns : 9,
+        gutter  : 15
+    }
+}
+
+$iconizer = {
+    width  : 24px,
+    height : 24px
 }
