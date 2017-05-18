@@ -177,11 +177,11 @@ gulp.task('handlebars:templates', function(done) {
 /**
  * Генерация beml html в шаблон для styl
  */
-gulp.task('handlebars:beml2styl', function() {
+gulp.task('handlebars:beml2styl', function(done) {
 
     let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
 
-    return gulp.src(pathToBlocks)
+    let stream = gulp.src(pathToBlocks)
         .pipe(changed(pathToBlocks))
         .pipe(bemlToStyl({
             beml : settings.app.beml,
@@ -191,6 +191,14 @@ gulp.task('handlebars:beml2styl', function() {
         .pipe(gulp.dest(function(file) {
             return file.base;
         }));
+    
+    stream.on('end', function() {
+        done();
+    });
+
+    stream.on('error', function(err) {
+        done(err);
+    });
 
 });
 
@@ -445,10 +453,11 @@ gulp.task('watch', () => {
     }));
     /* БЛОКИ */
     watch(path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}'), batch((events, done) => {
-        gulp.start('handlebars:templates', done);
-    }));
-    watch(path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}'), batch((events, done) => {
-        gulp.start('handlebars:beml2styl', done);
+        runSequence(
+            'handlebars:beml2styl',
+            'handlebars:templates',
+            done
+        );
     }));
 
 });
