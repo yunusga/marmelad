@@ -28,11 +28,23 @@ html
         flex 1
 
     &__aside
-        flex : 0 0 aside-width-left
-
-        &_left
+        flex : 0 0 $aside.left.width
+        
+        &{$data.beml.modPrefix}left
             order -1
-            flex : 0 0 aside-width-left
+            flex : 0 0 $aside.left.width
+            
+            if ($aside.left.padding)
+                padding : $aside.left.padding
+            
+            if ($aside.left.margin)
+                margin : $aside.left.margin
 
-        &_right
-            flex : 0 0 aside-width-right
+        &{$data.beml.modPrefix}right
+            flex : 0 0 $aside.right.width
+            
+            if ($aside.right.padding)
+                padding : $aside.right.padding
+            
+            if ($aside.right.margin)
+                margin : $aside.right.margin
