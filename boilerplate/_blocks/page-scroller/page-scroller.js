@@ -2,21 +2,22 @@
 
     'use strict';
 
-    var page          = $('html, body'),
-        pageScroller  = $('.m-page-scroller'),
-        pageYOffset   = 0,
-        inMemory      = false,
-        inMemoryClass = 'is-memorized',
-        enabledOffset = 60;
+    var page           = $('html, body'),
+        pageScroller   = $('.page-scroller'),
+        pageYOffset    = 0,
+        inMemory       = false,
+        inMemoryClass  = 'page-scroller--memorized',
+        isVisibleClass = 'page-scroller--visible',
+        enabledOffset  = 60;
 
     function resetPageScroller() {
 
         setTimeout(function() {
 
             if (window.pageYOffset > enabledOffset) {
-                pageScroller.addClass('is-visible');
+                pageScroller.addClass(isVisibleClass);
             } else if (!pageScroller.hasClass(inMemoryClass)) {
-                pageScroller.removeClass('is-visible');
+                pageScroller.removeClass(isVisibleClass);
             }
 
         }, 150);

@@ -1,6 +1,6 @@
 $page_scroller_bgc = $colors.primary
 
-.m-page-scroller
+.page-scroller
     opacity 0
 
     position fixed
@@ -40,12 +40,12 @@ $page_scroller_bgc = $colors.primary
     &:active
         background-color rgba($page_scroller_bgc, .14)
 
-    &.is-memorized
+    &{$data.beml.modPrefix}memorized
 
-        .m-page-scroller__ctrl
+        .page-scroller__ctrl
             transform rotate(180deg)
     
-    &.is-memorized,
-    &.is-visible
+    &{$data.beml.modPrefix}memorized,
+    &{$data.beml.modPrefix}visible
         opacity 1
         pointer-events auto
