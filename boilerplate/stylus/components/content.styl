@@ -65,13 +65,17 @@ body
 
 a,
 .m-link
+    
+    $underline_distance = 2px
+
     display : inline
     color : $links.default
     background-color : transparent
     -webkit-text-decoration-skip : objects
     text-decoration : none
-    background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
-    link_text_shadow($html.bgc)
+    
+    elegant_link_underline($underline_distance)
+    elegant_link_shadow($html.bgc)
 
     &:active,
     &:focus,
@@ -82,17 +86,17 @@ a,
     if $links.hover
         &:hover
             color : $links.hover
-            background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
+            elegant_link_underline($underline_distance)
 
     if $links.active
         &:active
             color : $links.active
-            background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
+            elegant_link_underline($underline_distance)
 
     if $links.visited
         &:visited
             color : $links.visited
-            background-image : linear-gradient(0deg, transparent, transparent 1px, currentColor 0, currentColor 2px, transparent 0)
+            elegant_link_underline($underline_distance)
 
 /*
  * Sizes
