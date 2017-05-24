@@ -1,5 +1,5 @@
 .m-page
-    &_{{bodyMod}} {}
+    &--{{bodyMods}} {}
 
 
 .m-scroll-fix {}
@@ -8,5 +8,5 @@
 .m-content
     &__main {}
     &__aside
-        &_left {}
-        &_right {}
+        &--left {}
+        &--right {}
