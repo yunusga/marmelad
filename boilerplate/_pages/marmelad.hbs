@@ -1,6 +1,14 @@
-{{#extend "_layout" pageTitle=(concat 'UI Preview - Marmelad v' app.package.version) bodyMod="marmelad, demo" bodyClass=null contentClass="w-container" asideRight=false}}
+{{#extend
+    "_layout"
+    pageTitle=(concat 'UI Preview - Marmelad v' app.package.version)
+    bodyMods="marmelad, demo"
+    bodyClasses=null
+    scrollFixClasses=null
+    contentClasses="w-container"
+    asideLeft=false
+    asideRight=false
+}}
 
-<!--name=(concat 'first' '-' 'second')-->
 {{#content "main"}}
 
 <br>

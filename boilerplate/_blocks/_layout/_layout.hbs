@@ -40,17 +40,17 @@
 
     </head>
 
-    <body block="m-page" mod="{{bodyMod}}" mix="block:{{bodyClass}}">
+    <body block="m-page" mod="{{bodyMods}}" mix="block:{{bodyClasses}}">
 
         <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
 
-        <div block="m-scroll-fix">
+        <div block="m-scroll-fix" mix="block:{{scrollFixClasses}}">
 
             {{> _m-header}}
 
-            <div block="m-content" mix="block:{{contentClass}}">
+            <div block="m-content" mix="block:{{contentClasses}}">
 
                 <div elem="main">
                     {{#block 'main'}}{{/block}}
