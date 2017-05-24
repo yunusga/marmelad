@@ -33,7 +33,7 @@
 
     for $mod in $controls
 
-        &_{$mod}
+        &{$data.beml.modPrefix}{$mod}
             background-color : $controls[$mod].bgc
             color : $controls[$mod].color
 
@@ -68,7 +68,7 @@
 .m-ctrl
     color : $textColor.primary
 
-    &_textarea
+    &{$data.beml.modPrefix}textarea
         padding 10px 15px
         height auto
         line-height : 26px
@@ -76,7 +76,7 @@
 
     for $mod in $controls
 
-        &_{$mod}
+        &{$data.beml.modPrefix}{$mod}
             border-color : $controls[$mod].bgc
 
             &:hover,

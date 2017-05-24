@@ -14,7 +14,7 @@
 
     for $modifier, $opts in $grid.mods
 
-        &_{$modifier}
+        &{$data.beml.modPrefix}{$modifier}
             margin : 0 0 0 unit($opts.gutter * -1, px)
 
             .{$grid.block}__{$grid.elem}

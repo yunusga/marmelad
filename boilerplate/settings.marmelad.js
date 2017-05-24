@@ -47,7 +47,7 @@ let app = {
 
     beml        : {
         elemPrefix: '__',
-        modPrefix : '_',
+        modPrefix : '--',
         modDlmtr  : '-'
     },
     autoprefixer: {

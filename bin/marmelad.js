@@ -337,10 +337,17 @@ gulp.task('styles:plugins', (done) => {
  */
 gulp.task('stylus', function() {
 
+    let $data = {
+        beml: settings.app.beml
+    };
+
+    Object.assign($data, database.app.stylus);
+
     return gulp.src(path.join(settings.paths.stylus, '*.styl'))
         .pipe(plumber({errorHandler: plumberOnError}))
         .pipe(stylus({
-            'include css': true
+            'include css': true,
+            rawDefine : { $data }
         }))
         .pipe(autoprefixer(settings.app.autoprefixer))
         .pipe(groupCssMQ())
