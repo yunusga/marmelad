@@ -1,12 +1,9 @@
-.m-page
-    &--{{bodyMods}} {}
-
-
-.m-scroll-fix {}
-
-
-.m-content
+.app
+    &__wrapper {}
+    &__content {}
     &__main {}
     &__aside
         &--left {}
         &--right {}
+
+    &--{{bodyMods}} {}
