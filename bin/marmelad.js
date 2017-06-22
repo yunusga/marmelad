@@ -17,15 +17,21 @@ let compileHandlebars = require('gulp-compile-handlebars');
 let beml              = require('gulp-beml');
 let svgSprite         = require('gulp-svg-sprite');
 let stylus            = require('gulp-stylus');
-let autoprefixer      = require('gulp-autoprefixer');
-let csso              = require('gulp-csso');
+
+let postcss           = require('gulp-postcss');
+let flexBugsFixes     = require('postcss-flexbugs-fixes');
+let focus             = require('postcss-focus');
+let discardComments   = require('postcss-discard-comments');
+let mqPacker          = require('css-mqpacker');
+let cssnano           = require('cssnano');
+let autoprefixer      = require('autoprefixer');
+
 let rename            = require('gulp-rename');
 let header            = require('gulp-header');
 let changed           = require('gulp-changed');
 let concat            = require('gulp-concat');
 let uglify            = require('gulp-uglify');
 let include           = require('gulp-include');
-let groupCssMQ        = require('gulp-group-css-media-queries');
 let watch             = require('gulp-watch');
 let batch             = require('gulp-batch');
 let hbsLayouts        = require('handlebars-layouts');
@@ -337,11 +343,10 @@ gulp.task('scripts:plugins', (done) => {
  */
 gulp.task('styles:plugins', (done) => {
 
+
     let stream = gulp.src(settings.paths.js.plugins + '/**/*.css')
         .pipe(plumber())
         .pipe(concat('plugins.min.css'))
-        .pipe(groupCssMQ())
-        .pipe(csso())
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')));
 
     stream.on('end', function () {
@@ -362,7 +367,15 @@ gulp.task('styles:plugins', (done) => {
  */
 gulp.task('stylus', function() {
 
-    let $data = {
+    let plugins = [
+        discardComments(),
+        focus(),
+        mqPacker(),
+        autoprefixer(settings.app.autoprefixer),
+        flexBugsFixes(),
+        cssnano()
+    ],
+    $data = {
         beml: settings.app.beml
     };
 
@@ -374,8 +387,7 @@ gulp.task('stylus', function() {
             'include css': true,
             rawDefine : { $data }
         }))
-        .pipe(autoprefixer(settings.app.autoprefixer))
-        .pipe(groupCssMQ())
+        .pipe(postcss(plugins))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .pipe(bsSP.stream());
 });
