@@ -1,3 +1,5 @@
+$system-ui = unquote('-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue')
+
 $colorPrimary = convert($data.theme_color)
 $colorAccent  = #FF3F80
 
@@ -65,8 +67,8 @@ $placeholders = {
 }
 
 $fonts = {
-    base     : unquote('"Helvetica Neue", Helvetica, Arial, sans-serif'),
-    headings : unquote('Georgia, serif')
+    base     : $system-ui,
+    headings : $system-ui
 }
 
 $fontWeight = {
