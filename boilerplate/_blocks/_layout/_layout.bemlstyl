@@ -1,9 +1,0 @@
-.app
-    &__wrapper {}
-    &__content {}
-    &__main {}
-    &__aside
-        &--left {}
-        &--right {}
-
-    &--{{bodyMods}} {}

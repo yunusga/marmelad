@@ -4,7 +4,7 @@ let path = require('path');
 
 let folders = {
     dist    : 'static',
-    storage : 'images',
+    storage : '',
     marmelad : 'marmelad',
     _blocks : '_blocks',
     _helpers: '_helpers',
