@@ -45,7 +45,7 @@ let pkg               = require('../package');
 
 let hbs = require('handlebars');
 
-let bemlToStyl        = require('../modules/gulp-beml2styl');
+//let bemlToStyl        = require('../modules/gulp-beml2styl');
 
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
@@ -208,30 +208,30 @@ gulp.task('handlebars:blocks', function(done) {
 /**
  * Генерация beml html в шаблон для styl
  */
-gulp.task('handlebars:beml2styl', function(done) {
+// gulp.task('handlebars:beml2styl', function(done) {
 
-    let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
+//     let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
 
-    let stream = gulp.src(pathToBlocks)
-        .pipe(changed(pathToBlocks))
-        .pipe(bemlToStyl({
-            beml : settings.app.beml,
-            tabSize : '    '
-        }))
-        .pipe(rename({ extname: '.bemlstyl' }))
-        .pipe(gulp.dest(function(file) {
-            return file.base;
-        }));
+//     let stream = gulp.src(pathToBlocks)
+//         .pipe(changed(pathToBlocks))
+//         .pipe(bemlToStyl({
+//             beml : settings.app.beml,
+//             tabSize : '    '
+//         }))
+//         .pipe(rename({ extname: '.bemlstyl' }))
+//         .pipe(gulp.dest(function(file) {
+//             return file.base;
+//         }));
     
-    stream.on('end', function() {
-        done();
-    });
+//     stream.on('end', function() {
+//         done();
+//     });
 
-    stream.on('error', function(err) {
-        done(err);
-    });
+//     stream.on('error', function(err) {
+//         done(err);
+//     });
 
-});
+// });
 
 /**
  * генерация svg спрайта
@@ -552,7 +552,7 @@ gulp.task('watch', () => {
 
         runSequence(
             'handlebars:blocks',
-            'handlebars:beml2styl',
+            //'handlebars:beml2styl',
             'handlebars:pages',
             done
         );
@@ -576,7 +576,7 @@ gulp.task('marmelad:start', function(done) {
         'static',
         'iconizer',
         'handlebars:data',
-        'handlebars:beml2styl',
+        //'handlebars:beml2styl',
         'handlebars:blocks',
         'handlebars:pages',
         'scripts:vendors',
