@@ -372,9 +372,9 @@ gulp.task('stylus', function() {
     let plugins = [
         discardComments(),
         focus(),
-        mqPacker(),
         autoprefixer(settings.app.autoprefixer),
         flexBugsFixes(),
+        mqPacker(),
         cssnano()
     ],
     $data = {
