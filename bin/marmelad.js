@@ -275,8 +275,13 @@ gulp.task('scripts:others', ['scripts:blocks'], (done) => {
             extensions: 'js',
             hardFail: false
         })).on('error', gutil.log)
-        .pipe(jscs({ configPath : path.join('marmelad', '.jscsrc') }))
-        .pipe(jscs.reporter())
+        .pipe(babel({
+            presets: ['babel-preset-es2015'].map(require.resolve),
+            plugins: ['babel-plugin-transform-object-assign'].map(require.resolve),
+            babelrc: false
+        }))
+        // .pipe(jscs({ configPath : path.join('marmelad', '.jscsrc') }))
+        // .pipe(jscs.reporter())
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
     stream.on('end', () => {
