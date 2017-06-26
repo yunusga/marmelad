@@ -1,3 +1,5 @@
+//=require ../_blocks/**/_*.js
+
 $(function() {
 
     'use strict';
@@ -9,5 +11,8 @@ $(function() {
         return ($(selector).length > 0);
     };
 
-    //=require ../_blocks/**/*
+    /**
+     * [^_]*.js - выборка всех файлов, которые не начинаются с подчеркивания
+     */
+    //=require ../_blocks/**/[^_]*.jquery.js
 });
