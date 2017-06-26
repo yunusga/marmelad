@@ -2,8 +2,8 @@
 
     'use strict';
 
-    var page           = $('html, body'),
-        pageScroller   = $('.page-scroller'),
+    var page           = $('html, body');
+    var pageScroller   = $('.page-scroller'),
         pageYOffset    = 0,
         inMemory       = false,
         inMemoryClass  = 'page-scroller--memorized',
@@ -33,7 +33,7 @@
 
     if (pageScroller.length > 0) {
 
-        window.addEventListener('scroll', resetPageScroller, false);
+        window.addEventListener('scroll', resetPageScroller, window.supportsPassive ? { passive: true } : false);
 
         pageScroller.on('click', function(event) {
 
@@ -49,7 +49,7 @@
                 pageScroller.addClass(inMemoryClass);
 
                 page.stop().animate({ scrollTop : 0 }, 500, 'swing', function() {
-                    window.addEventListener('scroll', resetPageScroller, false);
+                    window.addEventListener('scroll', resetPageScroller, window.supportsPassive ? { passive: true } : false);
                 });
 
             } else {
@@ -59,7 +59,7 @@
                 page.stop().animate({ scrollTop : pageYOffset }, 500, 'swing', function() {
 
                     pageYOffset = 0;
-                    window.addEventListener('scroll', resetPageScroller, false);
+                    window.addEventListener('scroll', resetPageScroller, window.supportsPassive ? { passive: true } : false);
                 });
 
             }
