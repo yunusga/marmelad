@@ -2,48 +2,50 @@
 
 'use strict';
 
-let path              = require('path');
-let fs                = require('fs-extra');
-let program           = require('commander');
-let bsSP              = require('browser-sync').create();
-let basicAuth         = require('basic-auth');
-let gulp              = require('gulp');
-let glogger           = require('../modules/gulp-event-logger')(gulp);
-let iconizer          = require('../modules/gulp-iconizer');
-let gutil             = require('gulp-util');
-let plumber           = require('gulp-plumber');
-let jscs              = require('gulp-jscs');
-let compileHandlebars = require('gulp-compile-handlebars');
-let beml              = require('gulp-beml');
-let svgSprite         = require('gulp-svg-sprite');
-let stylus            = require('gulp-stylus');
+const path              = require('path');
+const fs                = require('fs-extra');
+const program           = require('commander');
+const bsSP              = require('browser-sync').create();
+const gulp              = require('gulp');
+const basicAuth         = require('basic-auth');
+const glogger           = require('../modules/gulp-event-logger')(gulp);
+const iconizer          = require('../modules/gulp-iconizer');
 
-let postcss           = require('gulp-postcss');
-let flexBugsFixes     = require('postcss-flexbugs-fixes');
-let focus             = require('postcss-focus');
-let discardComments   = require('postcss-discard-comments');
-let mqPacker          = require('css-mqpacker');
-let cssnano           = require('cssnano');
-let autoprefixer      = require('autoprefixer');
+const babel             = require('gulp-babel');
+const jscs              = require('gulp-jscs');
+const uglify            = require('gulp-uglify');
 
-let rename            = require('gulp-rename');
-let header            = require('gulp-header');
-let changed           = require('gulp-changed');
-let concat            = require('gulp-concat');
-let uglify            = require('gulp-uglify');
-let include           = require('gulp-include');
-let watch             = require('gulp-watch');
-let batch             = require('gulp-batch');
-let hbsLayouts        = require('handlebars-layouts');
-let decache           = require('decache');
-let requireDir        = require('require-dir');
-let runSequence       = require('run-sequence');
-let pipeErrorStop     = require('pipe-error-stop');
-let del               = require('del');
-let chalk             = require('chalk');
-let pkg               = require('../package');
+const hbs               = require('handlebars');
+const compileHandlebars = require('gulp-compile-handlebars');
+const hbsLayouts        = require('handlebars-layouts');
+const beml              = require('gulp-beml');
+const svgSprite         = require('gulp-svg-sprite');
 
-let hbs = require('handlebars');
+const stylus            = require('gulp-stylus');
+const postcss           = require('gulp-postcss');
+const focus             = require('postcss-focus');
+const discardComments   = require('postcss-discard-comments');
+const autoprefixer      = require('autoprefixer');
+const flexBugsFixes     = require('postcss-flexbugs-fixes');
+const mqPacker          = require('css-mqpacker');
+const cssnano           = require('cssnano');
+
+const gutil             = require('gulp-util');
+const plumber           = require('gulp-plumber');
+const rename            = require('gulp-rename');
+const header            = require('gulp-header');
+const changed           = require('gulp-changed');
+const concat            = require('gulp-concat');
+const include           = require('gulp-include');
+const watch             = require('gulp-watch');
+const batch             = require('gulp-batch');
+const decache           = require('decache');
+const requireDir        = require('require-dir');
+const runSequence       = require('run-sequence');
+const pipeErrorStop     = require('pipe-error-stop');
+const del               = require('del');
+const chalk             = require('chalk');
+const pkg               = require('../package');
 
 //let bemlToStyl        = require('../modules/gulp-beml2styl');
 
