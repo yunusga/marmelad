@@ -55,7 +55,7 @@ function replaceIconTags(src) {
 
     let match, tag, params, name;
     let html = src.toString();
-    let iconRegexp = /<icon\s+([-=\w\d'"\s]+)\s*\/?>(<\/icon>)?/gi;
+    let iconRegexp = /<icon\s+([-=\w\d\c{}'"\s]+)\s*\/?>|<\/icon>/gi;
 
     while (match = iconRegexp.exec(html)) {
         tag     = match[0];
