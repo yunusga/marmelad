@@ -164,8 +164,8 @@ gulp.task('handlebars:pages', function(done) {
 
     let stream = gulp.src(settings.paths._pages + '/**/*.{hbs,handlebars}')
         .pipe(plumber({errorHandler: plumberOnError}))
-        .pipe(beml(settings.app.beml))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
+        .pipe(beml(settings.app.beml))
         .pipe(rename({extname: '.html'}))
         .pipe(gulp.dest(settings.paths.dist));
 
