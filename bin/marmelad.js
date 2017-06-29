@@ -188,6 +188,7 @@ gulp.task('handlebars:blocks', function(done) {
     let stream = gulp.src(settings.paths._blocks + '/**/*.{hbs,handlebars}')
         .pipe(plumber({errorHandler: plumberOnError}))
         .pipe(changed(pathToBlocks))
+        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
         .pipe(beml(settings.app.beml))
         .pipe(rename({
             dirname : '',
@@ -238,11 +239,19 @@ gulp.task('handlebars:blocks', function(done) {
 /**
  * генерация svg спрайта
  */
-gulp.task('iconizer', () => {
+gulp.task('iconizer', (done) => {
 
-    return gulp.src(settings.paths.iconizer.icons + '/*.svg')
+    let stream = gulp.src(settings.paths.iconizer.icons + '/*.svg')
         .pipe(svgSprite(settings.app.svgSprite))
         .pipe(gulp.dest('.'));
+
+    stream.on('end', function() {
+        done();
+    });
+
+    stream.on('error', function(err) {
+        done(err);
+    });
 });
 
 /**
@@ -250,7 +259,7 @@ gulp.task('iconizer', () => {
  * пересборка шаблонов
  */
 gulp.task('iconizer:refresh', (done) => {
-    runSequence('iconizer', 'handlebars:pages', done);
+    runSequence('iconizer', 'handlebars:blocks', 'handlebars:pages', done);
 });
 
 /**
