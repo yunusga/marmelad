@@ -76,7 +76,7 @@ function iconizeHtml(src, options) {
 
     let html = src.toString();
 
-    if (html.indexOf(sprite) == -1) {
+    if (html.indexOf(sprite) === -1) {
         sprite = sprite.replace(/\n/g,'');
         sprite = sprite.replace(/<defs[\s\S]*?\/defs><path[\s\S]*?\s+?d=/g, '<path d=');
         sprite = sprite.replace(/<style[\s\S]*?\/style><path[\s\S]*?\s+?d=/g, '<path d=');
