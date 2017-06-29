@@ -5,21 +5,21 @@ let path = require('path');
 let folders = {
     dist    : 'static',
     storage : '',
-    marmelad : 'marmelad',
+    marmelad: 'marmelad',
     _blocks : '_blocks',
-    _helpers: '_helpers',
     _pages  : '_pages',
+    _helpers: '_helpers',
     iconizer: {
         src  : 'iconizer',
         icons: 'icons'
     },
-    js      : {
+    js: {
         src    : 'js',
         vendors: 'vendors',
         plugins: 'plugins'
     },
-    stylus  : 'stylus',
-    static  : 'static'
+    stylus: 'stylus',
+    static: 'static'
 };
 
 let paths = {

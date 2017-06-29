@@ -5,9 +5,8 @@
     display inline-block
     vertical-align middle
     max-width 100%
-    height : $controlsHeight
-    line-height : $controlsHeight
-    padding 0 15px
+    line-height : 21px
+    padding 5px 15px 7px
     border 1px solid transparent
     border-radius : $controlsRadius
 
@@ -28,7 +27,7 @@
     &:active
         background-color darken(#fff, 5%)
 
-    &_demo
+    &{$modPrefix}demo
         text-transform capitalize
 
     for $mod in $controls
@@ -44,7 +43,7 @@
             &:active
                 background-color : darken($controls[$mod].bgc, 10%)
 
-            &.m-btn_ghost
+            &.m-btn{$modPrefix}ghost
                 background-color transparent
                 border-color : $controls[$mod].bgc
 
@@ -103,3 +102,6 @@
                     color : $controls[$mod].bgc
                 &:-ms-input-placeholder
                     color : $controls[$mod].bgc
+
+textarea
+    resize vertical

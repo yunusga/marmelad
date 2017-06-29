@@ -1,5 +1,9 @@
 $system-ui = unquote('-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue')
 
+$elemPrefix = $data.beml.elemPrefix
+$modPrefix = $data.beml.modPrefix
+$modDlmtr = $data.beml.modDlmtr
+
 $colorPrimary = convert($data.theme_color)
 $colorAccent  = #FF3F80
 
@@ -30,9 +34,9 @@ $controlsRadius = 3px
 $pathToFonts = '../assets/fonts'
 
 $colors = {
-    primary   : $colorPrimary,
-    secondary : $colorAccent,
-    bgc       : #fff,
+    primary : $colorPrimary,
+    accent  : $colorAccent,
+    bgc     : #fff,
     txtDark : {
         primary   : rgba($textDarkColor, .87),
         secondary : rgba($textDarkColor, .54),
@@ -147,14 +151,17 @@ $breakpoints = {
     fhd : 1600px
 }
 
-$grid = {
-    block   : w-grid,
-    elem    : col,
-    columns : 12,
-    gutter  : 0,
+$grids = {
+    block      : grids,
+    col        : col,
+    mq         : 'min',
+    columns    : 12,
+    gutter     : 0,
+    colGutters : 0,
     mods    : {
         demo : {
-            gutter : 15
+            gutter : 0 0 0 -15px,
+            colGutters : 0 0 15px 15px
         }
     }
 }
