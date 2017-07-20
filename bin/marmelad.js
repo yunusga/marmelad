@@ -2,12 +2,41 @@
 
 'use strict';
 
+const CLI               = require('commander');
+const pkg               = require('../package.json');
+const chalk             = require('chalk');
+const password          = require('generate-password').generate({length: 7, numbers: true});
+const getAuthParams     = (params) => params.split('@');
+
+/**
+ * Установка флагов/параметров для командной строки
+ */
+CLI
+    .version(pkg.version)
+    .option('-a, --auth [user@password]', `set user@password for authorization [${pkg.name}@${password}]`, `${pkg.name}@${password}`)
+    .parse(process.argv);
+
+/**
+ * Проверка правильности установки логина и пароля для авторизации
+ */
+if (CLI.auth && getAuthParams(CLI.auth).length !== 2) {
+    console.log(`\n ${chalk.bold.yellow(pkg.name.toUpperCase())} запущен в режиме авторизации\n неправильно установлены ${chalk.bold.yellow('user@password')}`);
+    console.log(`\n ${chalk.bold.green('наберите:')} ${pkg.name} --help для справки`);
+    process.exit(1);
+} else if (CLI.auth && getAuthParams(CLI.auth).length === 2) {
+    console.log(`\n ${chalk.bold.yellow(pkg.name.toUpperCase())} запущен в режиме авторизации`);
+    console.log(chalk.gray('-------------------------------------'));
+    console.log(` ${chalk.bold.green(' логин:')} ${getAuthParams(CLI.auth)[0]}`);
+    console.log(` ${chalk.bold.green('пароль:')} ${getAuthParams(CLI.auth)[1]}`);
+    console.log(chalk.gray('-------------------------------------\n'));
+}
+
 const path              = require('path');
+const basicAuth         = require('basic-auth');
 const fs                = require('fs-extra');
-const program           = require('commander');
 const bsSP              = require('browser-sync').create();
 const gulp              = require('gulp');
-const basicAuth         = require('basic-auth');
+
 const glogger           = require('../modules/gulp-event-logger')(gulp);
 const iconizer          = require('../modules/gulp-iconizer');
 
@@ -44,28 +73,11 @@ const requireDir        = require('require-dir');
 const runSequence       = require('run-sequence');
 const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
-const chalk             = require('chalk');
-const pkg               = require('../package');
 
 //let bemlToStyl        = require('../modules/gulp-beml2styl');
 
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
-
-program
-    .version(pkg.version)
-    .option('-a, --auth', 'enable basic access authentication')
-    .option('-u, --user [username]', 'set authentication user')
-    .option('-p, --pass [password]', 'set authentication password')
-    .parse(process.argv);
-
-if (program.auth) {
-
-    if (!program.user || !program.pass) {
-        gutil.log(`You are running ${chalk.bold.yellow('marmelad')} with basic auth but did not set the USER ${chalk.bold.yellow('-u')} and PASSWORD ${chalk.bold.yellow('-p')} with cli args.`);
-        process.exit(1);
-    }
-}
 
 /**
  * plumber onError handler
@@ -489,13 +501,13 @@ gulp.task('server:static', (done) => {
         }
     ];
 
-    if (program.auth) {
+    if (CLI.auth) {
 
         let authMiddleware = function (req, res, next) {
 
             let auth = basicAuth(req);
 
-            if (auth && auth.name === program.user && auth.pass === program.pass) {
+            if (auth && auth.name === CLI.user && auth.pass === CLI.pass) {
                 return next();
             } else {
                 res.statusCode = 401;
