@@ -301,8 +301,6 @@ gulp.task('scripts:others', ['scripts:blocks'], (done) => {
             plugins: ['babel-plugin-transform-object-assign'].map(require.resolve),
             babelrc: false
         }))
-        // .pipe(jscs({ configPath : path.join('marmelad', '.jscsrc') }))
-        // .pipe(jscs.reporter())
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
     stream.on('end', () => {
