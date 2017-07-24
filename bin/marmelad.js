@@ -441,17 +441,6 @@ gulp.task('static', function(done) {
  */
 gulp.task('server:static', (done) => {
 
-    hbs.registerHelper(hbsLayouts(hbs));
-    hbs.registerHelper('create', function(blockName) {
-        hpsHelperCreate(blockName);
-    });
-
-    let helpers = requireDir(path.join(process.cwd(), settings.paths._helpers));
-
-    for(let h in helpers) {
-        hbs.registerHelper(h, helpers[h]);
-    }
-
     settings.app.bsSP.server.middleware = [
 
         function (req, res, next) {
@@ -615,6 +604,17 @@ fs.exists(path.join('marmelad', 'settings.marmelad.js'), function(exists) {
     if (exists) {
 
         settings = require(path.join(process.cwd(), 'marmelad', 'settings.marmelad'));
+
+        hbs.registerHelper(hbsLayouts(hbs));
+        hbs.registerHelper('create', function(blockName) {
+            hpsHelperCreate(blockName);
+        });
+
+        let helpers = requireDir(path.join(process.cwd(), settings.paths._helpers));
+
+        for(let h in helpers) {
+            hbs.registerHelper(h, helpers[h]);
+        }
 
         gulp.start('marmelad:start');
 
