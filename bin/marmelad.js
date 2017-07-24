@@ -49,7 +49,7 @@ const focus             = require('postcss-focus');
 const discardComments   = require('postcss-discard-comments');
 const autoprefixer      = require('autoprefixer');
 const flexBugsFixes     = require('postcss-flexbugs-fixes');
-const mqPacker          = require('css-mqpacker');
+const groupMQ           = require('gulp-group-css-media-queries');
 const cssnano           = require('cssnano');
 
 const gutil             = require('gulp-util');
@@ -387,16 +387,14 @@ gulp.task('styles:plugins', (done) => {
 gulp.task('stylus', function() {
 
     let plugins = [
-        discardComments(),
-        focus(),
-        autoprefixer(settings.app.autoprefixer),
-        flexBugsFixes(),
-        mqPacker(),
-        cssnano()
-    ],
-    $data = {
-        beml: settings.app.beml
-    };
+            discardComments(),
+            focus(),
+            autoprefixer(settings.app.autoprefixer),
+            flexBugsFixes()
+        ],
+        $data = {
+            beml: settings.app.beml
+        };
 
     Object.assign($data, database.app.stylus);
 
@@ -406,6 +404,7 @@ gulp.task('stylus', function() {
             'include css': true,
             rawDefine : { $data }
         }))
+        .pipe(groupMQ())
         .pipe(postcss(plugins))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .pipe(bsSP.stream());
