@@ -66,6 +66,7 @@ const requireDir        = require('require-dir');
 const runSequence       = require('run-sequence');
 const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
+const getIconsNamesList = (path) => fs.readdirSync(path).map((iconName) => iconName.replace(/.svg/g, ''));
 
 //let bemlToStyl        = require('../modules/gulp-beml2styl');
 
@@ -142,7 +143,8 @@ gulp.task('handlebars:data', (done) => {
     Object.assign(database.app, {
         package  : pkg,
         settings : settings,
-        storage  : settings.folders.storage
+        storage  : settings.folders.storage,
+        icons    : getIconsNamesList(settings.paths.iconizer.icons)
     });
 
     gutil.log(`database for handlebars templates ${chalk.bold.yellow('refreshed')}`);
@@ -249,6 +251,13 @@ gulp.task('iconizer', (done) => {
         .pipe(gulp.dest('.'));
 
     stream.on('end', function() {
+
+        Object.assign(database, {
+            app : {
+                icons : getIconsNamesList(settings.paths.iconizer.icons)
+            }
+        });
+
         done();
     });
 
