@@ -5,34 +5,28 @@
 const CLI               = require('commander');
 const pkg               = require('../package.json');
 const chalk             = require('chalk');
-const password          = require('generate-password').generate({length: 7, numbers: true});
-const getAuthParams     = (params) => params.split('@');
+const getAuthParams     = (params) => typeof params !== 'string' ? [pkg.name, false] : params.split('@');
 
 /**
  * Установка флагов/параметров для командной строки
  */
 CLI
     .version(pkg.version)
-    .option('-a, --auth [user@password]', `set user@password for authorization [${pkg.name}@${password}]`, `${pkg.name}@${password}`)
+    .option('-a, --auth [user@password]', `set user@password for authorization`)
     .parse(process.argv);
 
 /**
  * Проверка правильности установки логина и пароля для авторизации
  */
-if (CLI.auth && getAuthParams(CLI.auth).length !== 2) {
-    console.log(`\n ${chalk.bold.yellow(pkg.name.toUpperCase())} запущен в режиме авторизации\n неправильно установлены ${chalk.bold.yellow('user@password')}`);
-    console.log(`\n ${chalk.bold.green('наберите:')} ${pkg.name} --help для справки`);
-    process.exit(1);
-} else if (CLI.auth && getAuthParams(CLI.auth).length === 2) {
-    console.log(`\n ${chalk.bold.yellow(pkg.name.toUpperCase())} запущен в режиме авторизации`);
-    console.log(chalk.gray('-------------------------------------'));
-    console.log(` ${chalk.bold.green(' логин:')} ${getAuthParams(CLI.auth)[0]}`);
-    console.log(` ${chalk.bold.green('пароль:')} ${getAuthParams(CLI.auth)[1]}`);
-    console.log(chalk.gray('-------------------------------------\n'));
+if (CLI.auth) {
+
+    bsSP.use(require('bs-auth'), {
+        user: getAuthParams(CLI.auth)[0],
+        pass: getAuthParams(CLI.auth)[1]
+    });
 }
 
 const path              = require('path');
-const basicAuth         = require('basic-auth');
 const fs                = require('fs-extra');
 const bsSP              = require('browser-sync').create();
 const gulp              = require('gulp');
@@ -500,25 +494,6 @@ gulp.task('server:static', (done) => {
 
         }
     ];
-
-    if (CLI.auth) {
-
-        let authMiddleware = function (req, res, next) {
-
-            let auth = basicAuth(req);
-
-            if (auth && auth.name === CLI.user && auth.pass === CLI.pass) {
-                return next();
-            } else {
-                res.statusCode = 401;
-                res.setHeader('WWW-Authenticate', 'Basic realm="Marmelad Static Server"');
-                res.end('Access denied');
-            }
-
-        }
-
-        settings.app.bsSP.server.middleware.push(authMiddleware);
-    }
 
     bsSP.init(settings.app.bsSP, done);
 });
