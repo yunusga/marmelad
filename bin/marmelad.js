@@ -28,9 +28,8 @@ if (CLI.auth) {
 
 const path              = require('path');
 const fs                = require('fs-extra');
-const bsSP              = require('browser-sync').create();
 const gulp              = require('gulp');
-
+const bsSP              = require('browser-sync').create();
 const glogger           = require('../modules/gulp-event-logger')(gulp);
 const iconizer          = require('../modules/gulp-iconizer');
 
@@ -77,9 +76,7 @@ let database = {};
  * plumber onError handler
  */
 let plumberOnError = function(err) {
-
     console.log(`\n[${gutil.colors.red('ERROR')}] ${gutil.colors.bgBlack.red(err.plugin)} : ${err.message}`);
-
     this.emit('end');
 };
 
@@ -231,7 +228,7 @@ gulp.task('handlebars:blocks', function(done) {
 //         .pipe(gulp.dest(function(file) {
 //             return file.base;
 //         }));
-    
+
 //     stream.on('end', function() {
 //         done();
 //     });
@@ -474,13 +471,13 @@ gulp.task('server:static', (done) => {
 
                     hbs.registerPartial(path.basename(partial, '.html'), template);
                 });
-                
+
 
                 let page = path.join(process.cwd(), settings.folders.dist, path.basename(reqUrl, ext));
                 let source = fs.readFileSync(page + ext, 'utf8');
                 let template = hbs.compile(source);
                 let result = template(database);
-                
+
                 res.writeHead(200, {
                     'Content-Type': 'text/html; charset=UTF-8',
                     'Generator': 'marmelad v.' + pkg.version
