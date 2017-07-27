@@ -31,20 +31,17 @@ bsSP.use(require('bs-auth'), {
 });
 
 
+
 const gulp              = require('gulp');
+const tap               = require('gulp-tap');
 const iconizer          = require('../modules/gulp-iconizer');
-const boxen             = require('boxen');
-const clipboardy        = require('clipboardy');
+
 const babel             = require('gulp-babel');
 const jscs              = require('gulp-jscs');
 const uglify            = require('gulp-uglify');
 
-const hbs               = require('handlebars');
-const compileHandlebars = require('gulp-compile-handlebars');
-const hbsLayouts        = require('handlebars-layouts');
-
 const nunjucks          = require('gulp-nunjucks-html');
-const frontMattter      = require('gulp-front-matter');
+const frontMatter       = require('gulp-front-matter');
 
 const beml              = require('gulp-beml');
 const svgSprite         = require('gulp-svg-sprite');
@@ -71,6 +68,8 @@ const requireDir        = require('require-dir');
 const runSequence       = require('run-sequence');
 const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
+const boxen             = require('boxen');
+const clipboardy        = require('clipboardy');
 
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
@@ -99,21 +98,41 @@ const getNunJucksBlocks = (blocksPath) => {
 
 gulp.task('nunjucks', (done) => {
 
+    let templateName = '';
+    let error = false;
+
     let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
         .pipe(plumber())
-        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
-        .pipe(frontMattter())
+        .pipe(tap((file) => {
+            templateName = path.basename(file.path);
+        }))
+        .pipe(frontMatter())
         .pipe(nunjucks({
             searchPaths: getNunJucksBlocks(settings.paths._blocks),
             locals: database,
             ext: '.html'
         }))
-        .pipe(pipeErrorStop())
+        .pipe(pipeErrorStop({
+            errorCallback: (err) => {
+                error = true;
+                console.log(`\n${err.name}: ${err.message.replace(/(unknown path)/, templateName)}\n`);
+            },
+            successCallback: () => {
+                error = false;
+            }
+        }))
+        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
         .pipe(beml(settings.app.beml))
         .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', function() {
-        gutil.log(`NunJucks ${chalk.gray('............................')} ${chalk.bold.green('Done')}`);
+
+        if (error) {
+            gutil.log(`NunJucks ${chalk.gray('............................')} ${chalk.bold.red('ERROR')}\n`);
+        } else {
+            gutil.log(`NunJucks ${chalk.gray('............................')} ${chalk.bold.green('Done')}`);
+        }
+
         bsSP.reload();
         done();
     });
@@ -189,140 +208,6 @@ gulp.task('iconizer', (done) => {
 gulp.task('iconizer:update', (done) => {
     runSequence('iconizer', 'nunjucks', done);
 });
-
-
-
-
-/**
- * list of blocks directories
- *
- * @param blocksPath {String} path to blocks destination
- * @returns {Array} blocks paths
- */
-let getHbsPartialsPaths = (blocksPath) => {
-
-    let folders = fs.readdirSync(blocksPath);
-    let partials = [];
-
-    folders.forEach(function (el) {
-        partials.push(blocksPath + '/' + el);
-    });
-
-    return partials;
-};
-
-/**
- * register handlebars-layouts helpers
- * https://www.npmjs.com/package/handlebars-layouts
- */
-
-function hpsHelperCreate(blockName) {
-
-    const settings = require(path.join(process.cwd(), 'marmelad', 'settings.marmelad'));
-
-    let pathToBlockDir = path.join(settings.paths._blocks, blockName);
-    let pathToBlockFile = path.join(pathToBlockDir, blockName);
-    let tpl_hbs = `<div block="m-${blockName}">${blockName} content</div><!-- b:m-${blockName} -->`;
-    let tpl_styl = `.m-${blockName} {}`;
-
-    if (!fs.existsSync(pathToBlockDir)) {
-
-        fs.ensureDirSync(pathToBlockDir);
-        fs.writeFileSync(`${pathToBlockFile}.hbs`, tpl_hbs, 'utf-8');
-        fs.writeFileSync(`${pathToBlockFile}.styl`, tpl_styl, 'utf-8');
-        fs.writeFileSync(`${pathToBlockFile}.js`, '', 'utf-8');
-
-        console.log(`\n[${gutil.colors.green('CREATE BLOCK')}] ${blockName} ${gutil.colors.green('successfully')}\n`);
-    }
-}
-
-compileHandlebars.Handlebars.registerHelper(hbsLayouts(compileHandlebars.Handlebars));
-compileHandlebars.Handlebars.registerHelper('create', function(blockName) {
-    hpsHelperCreate(blockName);
-});
-
-/**
- * обновление данных для шаблонов
- */
-gulp.task('handlebars:data', (done) => {
-
-    let dataPath = path.join(process.cwd(), 'marmelad', 'data.marmelad.js');
-
-    decache(dataPath);
-
-    database = require(dataPath);
-
-    Object.assign(database.app, {
-        package  : pkg,
-        settings : settings,
-        storage  : settings.folders.storage,
-        icons    : getIconsNamesList(settings.paths.iconizer.icons)
-    });
-
-    gutil.log(`Database for handlebars templates ... ${chalk.bold.yellow('Refreshed')}`);
-
-    done();
-
-});
-
-/**
- * обновление данных для шаблонов
- * пересборка шаблонов с новыми данными
- */
-gulp.task('handlebars:refresh', (done) => {
-    runSequence('handlebars:data', 'handlebars:pages', done);
-});
-
-/**
- * сборка шаблонов handlebars
- * https://www.npmjs.com/package/gulp-compile-handlebars
- */
-gulp.task('handlebars:pages', function(done) {
-
-    let stream = gulp.src(settings.paths._pages + '/**/*.{hbs,handlebars}')
-        .pipe(plumber())
-        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
-        .pipe(beml(settings.app.beml))
-        .pipe(rename({extname: '.html'}))
-        .pipe(gulp.dest(settings.paths.dist));
-
-    stream.on('end', function() {
-        gutil.log(`Handlebars pages .................... ${chalk.bold.green('Done')}`);
-        bsSP.reload();
-        done();
-    });
-
-    stream.on('error', function(err) {
-        done(err);
-    });
-});
-
-gulp.task('handlebars:blocks', function(done) {
-
-    let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
-
-    let stream = gulp.src(settings.paths._blocks + '/**/*.{hbs,handlebars}')
-        .pipe(plumber())
-        .pipe(changed(pathToBlocks))
-        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
-        .pipe(beml(settings.app.beml))
-        .pipe(rename({
-            dirname : '',
-            extname : '.html'
-        }))
-        .pipe(gulp.dest(path.join(settings.paths.dist, 'partials')));
-
-    stream.on('end', function() {
-        gutil.log(`Handlebars blocks ................... ${chalk.bold.green('Done')}`);
-        bsSP.reload();
-        done();
-    });
-
-    stream.on('error', function(err) {
-        done(err);
-    });
-});
-
 
 
 /**
@@ -492,45 +377,6 @@ gulp.task('static', (done) => {
  */
 gulp.task('server:static', (done) => {
 
-    // settings.app.bsSP.server.middleware = [
-    //
-    //     function (req, res, next) {
-    //
-    //         let reqUrl = req.url || req.originalUrl;
-    //         let ext = '.html';
-    //
-    //         if (path.extname(reqUrl) === ext) {
-    //
-    //             let partialsFiles = fs.readdirSync(path.join(settings.paths.dist, 'partials'));
-    //
-    //             partialsFiles.forEach(function (partial) {
-    //
-    //                 let partialPath = path.join(settings.paths.dist, 'partials', partial);
-    //                 let template = fs.readFileSync(partialPath, 'utf8');
-    //
-    //                 hbs.registerPartial(path.basename(partial, '.html'), template);
-    //             });
-    //
-    //
-    //             let page = path.join(process.cwd(), settings.folders.dist, path.basename(reqUrl, ext));
-    //             let source = fs.readFileSync(page + ext, 'utf8');
-    //             let template = hbs.compile(source);
-    //             let result = template(database);
-    //
-    //             res.writeHead(200, {
-    //                 'Content-Type': 'text/html; charset=UTF-8',
-    //                 'Generator': 'marmelad v.' + pkg.version
-    //
-    //             });
-    //             res.end(result);
-    //
-    //         } else {
-    //             next();
-    //         }
-    //
-    //     }
-    // ];
-
     bsSP.init(settings.app.bsSP, () => {
 
         let urls = bsSP.getOption('urls');
@@ -586,22 +432,6 @@ gulp.task('watch', () => {
         gulp.start('scripts:others', done);
     }));
 
-    /* ШАБЛОНЫ */
-    watch(path.join(settings.paths._pages, '**', '*.{hbs,handlebars}'), batch((events, done) => {
-        gulp.start('handlebars:pages', done);
-    }));
-    /* БЛОКИ */
-    watch(path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}'), batch((events, done) => {
-
-        runSequence(
-            'handlebars:blocks',
-            //'handlebars:beml2styl',
-            'handlebars:pages',
-            done
-        );
-    }));
-
-
     /* NunJucks static */
     watch([
         path.join(settings.paths._pages, '**', '*.html'),
@@ -639,9 +469,6 @@ gulp.task('marmelad:start', function(done) {
         'server:static',
         'static',
         'iconizer',
-        // 'handlebars:data',
-        // 'handlebars:blocks',
-        // 'handlebars:pages',
         'db',
         'nunjucks',
         'scripts:vendors',
@@ -690,17 +517,6 @@ fs.exists(path.join('marmelad', 'settings.marmelad.js'), function(exists) {
     if (exists) {
 
         settings = require(path.join(process.cwd(), 'marmelad', 'settings.marmelad'));
-
-        hbs.registerHelper(hbsLayouts(hbs));
-        hbs.registerHelper('create', function(blockName) {
-            hpsHelperCreate(blockName);
-        });
-
-        let helpers = requireDir(path.join(process.cwd(), settings.paths._helpers));
-
-        for(let h in helpers) {
-            hbs.registerHelper(h, helpers[h]);
-        }
 
         gulp.start('marmelad:start');
 
