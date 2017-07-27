@@ -18,13 +18,11 @@ CLI
 /**
  * Проверка правильности установки логина и пароля для авторизации
  */
-if (CLI.auth) {
-
-    bsSP.use(require('bs-auth'), {
-        user: getAuthParams(CLI.auth)[0],
-        pass: getAuthParams(CLI.auth)[1]
-    });
-}
+bsSP.use(require('bs-auth'), {
+    user : getAuthParams(CLI.auth)[0],
+    pass : getAuthParams(CLI.auth)[1],
+    use  : CLI.auth
+});
 
 const path              = require('path');
 const fs                = require('fs-extra');
