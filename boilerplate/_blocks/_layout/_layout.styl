@@ -8,42 +8,30 @@ html
     min-height 100vh
 
 .app
-    @extend .display_flex
-    @extend .flex-direction_column
+    
+    display flex
+    flex-direction column
     height 100%
     height 100vh
 
     &__wrapper
-        @extend .display_flex
-        @extend .flex-direction_column
-        min-height 100%
-        min-height 100vh
+        display flex
+        flex-direction column
+        height 100%
+        height 100vh
 
     &__content
-        @extend .display_flex
+        display flex
         flex 1 0 auto
 
     &__main
         flex 1
 
     &__aside
-        flex : 0 0 $aside.left.width
         
-        &{$data.beml.modPrefix}left
+        &--left
             order -1
-            flex : 0 0 $aside.left.width
+            flex : 0 0 300px
             
-            if ($aside.left.padding)
-                padding : $aside.left.padding
-            
-            if ($aside.left.margin)
-                margin : $aside.left.margin
-
-        &{$data.beml.modPrefix}right
-            flex : 0 0 $aside.right.width
-            
-            if ($aside.right.padding)
-                padding : $aside.right.padding
-            
-            if ($aside.right.margin)
-                margin : $aside.right.margin
+        &--right
+            flex : 0 0 300px

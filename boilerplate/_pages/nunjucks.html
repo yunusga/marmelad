@@ -1,0 +1,14 @@
+---
+pageTitle: Just hack'n
+description: Nothing to see here
+---
+
+{% extends '_layout.html' %}
+
+{% block main %}
+
+    {% for iconName in app.icons %}
+        <icon name="{{ iconName }}" tag="span">
+    {% endfor %}
+
+{% endblock %}

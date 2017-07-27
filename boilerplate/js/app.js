@@ -10,9 +10,7 @@ $(function() {
     /**
      * определение существования элемента на странице
      */
-    $.exists = function(selector) {
-        return ($(selector).length > 0);
-    };
+    $.exists = (selector) => $(selector).length > 0;
 
     /**
      * [^_]*.js - выборка всех файлов, которые не начинаются с подчеркивания

@@ -1,10 +1,4 @@
-fontSize(size = base-font-size, base_size = base-font-size, font_height = base-line-height)
-    //font-size   size px
-    font-size   (size / base_size) rem
-    //line-height unit((size / base_size) * font_height, px)
-    line-height (font_height/base_size) * (size / base_size) rem
-
-fontFace(name, folder, typefaces, path = pathToFonts)
+fontFace(name, folder, typefaces, path = '../assets/fonts')
 
     .font-{folder}
         font-family : name
@@ -36,6 +30,13 @@ fontFace(name, folder, typefaces, path = pathToFonts)
             font-weight : typeface[face][0]
             font-style  : typeface[face][1]
             src : local(name), url(unquote(path) + '/' + folder + '/' + folder + '_' + face + '.otf') format('opentype')
+
+
+fontSize(size = base-font-size, base_size = base-font-size, font_height = base-line-height)
+    //font-size   size px
+    font-size   (size / base_size) rem
+    //line-height unit((size / base_size) * font_height, px)
+    line-height (font_height/base_size) * (size / base_size) rem
 
 elegant_link_underline($distance = 2px)
     background-image : linear-gradient(0deg, transparent, transparent (3 - $distance), currentColor 0, currentColor (4 - $distance), transparent 0)

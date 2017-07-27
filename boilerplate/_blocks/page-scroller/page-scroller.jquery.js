@@ -2,7 +2,7 @@
 
     'use strict';
 
-    var page           = $('html, body');
+    const PAGE         = $('html, body');
     var pageScroller   = $('.page-scroller'),
         pageYOffset    = 0,
         inMemory       = false,
@@ -48,7 +48,7 @@
 
                 pageScroller.addClass(inMemoryClass);
 
-                page.stop().animate({ scrollTop : 0 }, 500, 'swing', function() {
+                PAGE.stop().animate({ scrollTop : 0 }, 500, 'swing', () => {
                     window.addEventListener('scroll', resetPageScroller, window.supportsPassive ? { passive: true } : false);
                 });
 
@@ -56,7 +56,7 @@
 
                 pageScroller.removeClass(inMemoryClass);
 
-                page.stop().animate({ scrollTop : pageYOffset }, 500, 'swing', function() {
+                PAGE.stop().animate({ scrollTop : pageYOffset }, 500, 'swing', () => {
 
                     pageYOffset = 0;
                     window.addEventListener('scroll', resetPageScroller, window.supportsPassive ? { passive: true } : false);

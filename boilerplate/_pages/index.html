@@ -1,15 +1,16 @@
-{{#extend
-    "_layout"
-    pageTitle=(concat 'Marmelad v' app.package.version)
-    bodyMods="demo"
-    bodyClasses=null
-    scrollFixClasses=null
-    contentClasses="m-container"
-    asideLeft=false
-    asideRight=false
-}}
+---
+pageTitle: Main Page
+bodyMods: demo
+bodyClasses: ''
+scrollFixClasses: ''
+contentClasses: m-container
+asideLeft: false
+asideRight: false
+---
 
-{{#content "main"}}
+{% extends '_layout.html' %}
+
+{% block main %}
 
 <style type="text/css">
 
@@ -35,14 +36,4 @@
     </blockquote>
 </div><!-- b:demo-intro -->
 
-{{/content}}
-
-    {{#content 'asideLeft'}}
-        <p>aside left</p>
-    {{/content}}
-
-    {{#content 'asideRight'}}
-        <p>aside right</p>
-    {{/content}}
-
-{{/extend}}
+{% endblock %}

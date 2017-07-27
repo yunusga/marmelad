@@ -29,18 +29,18 @@
         <link rel="icon" href="favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-        <title>{{pageTitle}}</title>
+        <title>{{ pageTitle}} - {{ app.package.name | capitalize}} v{{ app.package.version }}</title>
 
 
         <link rel="stylesheet" href="{{app.storage}}/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{app.storage}}/css/style.css">
 
-        {{!-- <script src="{{app.storage}}/js/vendors/modernizr.js" async></script>
-        <script src="{{app.storage}}/js/vendors/pep-0.4.2.min.js" async></script> --}}
+        {# <script src="{{app.storage}}/js/vendors/modernizr.js" async></script>
+        <script src="{{app.storage}}/js/vendors/pep-0.4.2.min.js" async></script> #}
 
     </head>
 
-    <body block="app" mod="{{bodyMods}}" mix="block:{{bodyClasses}}">
+    <body block="app" mod="{{ bodyMods }}" mix="block:{{bodyClasses}}">
 
         <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
@@ -48,40 +48,39 @@
 
         <div elem="wrapper" mix="block:{{scrollFixClasses}}">
 
-            {{> app-header}}
+        {% include 'app-header.html' %}
 
             <div elem="content" mix="block:{{contentClasses}}">
 
                 <main elem="main">
-                    {{#block 'main'}}{{/block}}
+                    {% block main %}{% endblock %}
+                    {# {{#block 'main'}}{{/block}} #}
                 </main><!-- e:main -->
 
-                {{#if asideLeft}}
+                {# {{#if asideLeft}}
                 <aside elem="aside" mod="left">
                     {{#block 'asideLeft'}}{{/block}}
                 </aside><!-- e:aside m:left -->
-                {{/if}}
+                {{/if}} #}
 
-                {{#if asideRight}}
+                {# {{#if asideRight}}
                 <aside elem="aside" mod="right">
                     {{#block 'asideRight'}}{{/block}}
                 </aside><!-- e:aside m:right -->
-                {{/if}}
+                {{/if}} #}
 
             </div><!-- b:m-content -->
 
-            {{> app-footer}}
+            {% include 'app-footer.html' %}
 
         </div><!-- b:wrapper -->
 
-        {{> page-scroller}}
+        {% include 'page-scroller.html' %}
 
-
-
-        {{!--
-            https://github.com/yunusga/forceFeed
-            https://css-tricks.com/handling-long-unexpected-content-css/
-        --}}
+        
+        {# https://github.com/yunusga/forceFeed
+        https://css-tricks.com/handling-long-unexpected-content-css/ #}
+        
         <script src="{{app.storage}}/js/vendors/forceFeed.js"></script>
         <script>
         window.words = ['БЭМ', 'браузер', 'Сетка', 'CSS-препроцессор', 'методология', 'интерфейс', 'компонент', 'пример', 'вёрстка', 'сайт', 'разработка'];
@@ -107,12 +106,12 @@
         <script src="{{app.storage}}/js/plugins.min.js"></script>
         <script src="{{app.storage}}/js/app.js"></script>
 
-        {{!-- <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+        {# <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
         <script>
             window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
             ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
         </script>
-        <script src="https://www.google-analytics.com/analytics.js" async defer></script> --}}
+        <script src="https://www.google-analytics.com/analytics.js" async defer></script> #}
 
     </body><!-- b:w-page -->
 

@@ -9,7 +9,19 @@
     asideRight=false
 }}
 
-{{#content "main"}}
+---
+pageTitle
+bodyMods: demo
+bodyClasses: marmelad
+scrollFixClasses: null
+contentClasses: m-container
+asideLeft: false
+asideRight: false
+---
+
+{% extends '_layout.html' %}
+
+{% block main %}
 
 <section>
     <h2><a href="https://ru.bem.info/methodology/" target="_blank" rel="noreferrer, nofollow">БЭМ методология</a></h2>
@@ -61,31 +73,31 @@
     <h2>Контролы</h2>
     <div block="grids" mod="demo" mix="block:sm-3">
         <div elem="col">
-            <button block="m-btn" mod="demo">Button</button>
+            <button block="button" mod="demo">Button</button>
             {{#each app.controls}}
             <br>
             <br>
-            <button block="m-btn" mod="{{@this}}, demo">{{@this}}</button>
+            <button block="button" mod="{{@this}}, demo">{{@this}}</button>
             {{/each}}
         </div>
         <div elem="col">
-            <button block="m-btn" mod="demo">Button</button>
+            <button block="button" mod="demo">Button</button>
             {{#each app.controls}}
             <br>
             <br>
-            <button block="m-btn" mod="{{@this}}, demo, ghost">{{@this}}</button>
+            <button block="button" mod="{{@this}}, demo, ghost">{{@this}}</button>
             {{/each}}
         </div>
         <div elem="col">
-            <input type="text" block="m-ctrl" placeholder="simple">
+            <input type="text" block="input" placeholder="simple">
             {{#each app.controls}}
             <br>
             <br>
-            <input type="text" block="m-ctrl" mod="{{@this}}" mix="block:with-focus" placeholder="{{@this}}">
+            <input type="text" block="input" mod="{{@this}}" mix="block:with-focus" placeholder="{{@this}}">
             {{/each}}
         </div>
         <div elem="col" mix="block:w-3">
-            <textarea block="m-ctrl" mod="textarea, default"></textarea>
+            <textarea block="input" mod="textarea, default"></textarea>
         </div><!-- e:col -->
     </div>
 </section>
@@ -124,14 +136,4 @@
     <figure style="width: 320px" class="wp-caption aligncenter"><a href="#"><img class="size-medium wp-image-239" src="{{app.storage}}/img/thumb-demo-3.jpg" alt="Атрибут alt" width="320" height="320"></a><figcaption class="wp-caption-text" data-forcefeed="words|3|5">Подпись к картинке</figcaption></figure>
 </section>
 
-{{/content}}
-
-    {{#content 'asideLeft'}}
-        <p>aside left</p>
-    {{/content}}
-
-    {{#content 'asideRight'}}
-        <p>aside right</p>
-    {{/content}}
-
-{{/extend}}
+{% endblock %}

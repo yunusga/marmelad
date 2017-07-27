@@ -1,7 +1,15 @@
 .gallery
-    @extend .display_flex
-    @extend .flex-direction_row
-    @extend .flex-wrap_wrap
+    
+    $wp = {
+        gallery : {
+            columns : 9,
+            gutter  : 15
+        }
+    }
+
+    display flex
+    flex-direction row
+    flex-wrap wrap
 
     margin : $appGutter 0 0 unit($wp.gallery.gutter * -1, px)
 

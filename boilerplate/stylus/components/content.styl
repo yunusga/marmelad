@@ -8,7 +8,6 @@
     color : $selection.color
     text-shadow : none
 
-
 /* IE 10+ */
 ::-webkit-input-placeholder
     color : $placeholders.normal
@@ -37,7 +36,6 @@ if $placeholders.focus
         color : $placeholders.focus
 
 
-
 *
     min-width 0
     min-height 0
@@ -64,39 +62,30 @@ body
     background-color : inherit
 
 a,
-.m-link
+.link
     
-    $underline_distance = 2px
-
     display : inline
     color : $links.default
     background-color : transparent
     -webkit-text-decoration-skip : objects
     text-decoration : underline
     
-    // elegant_link_underline($underline_distance)
-    // elegant_link_shadow($html.bgc)
-
     &:active,
     &:focus,
     &:hover
         outline 0
-        //text-decoration : none
 
     if $links.hover
         &:hover
             color : $links.hover
-            //elegant_link_underline($underline_distance)
 
     if $links.active
         &:active
             color : $links.active
-            //elegant_link_underline($underline_distance)
 
     if $links.visited
         &:visited
             color : $links.visited
-            //elegant_link_underline($underline_distance)
 
 /*
  * Sizes
@@ -185,3 +174,9 @@ select,
 summary,
 textarea
     touch-action manipulation
+
+
+// font weights
+for $weight, $value in $fontWeight
+    .font-{$weight}
+        font-weight : $value

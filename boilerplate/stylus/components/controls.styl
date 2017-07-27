@@ -1,6 +1,24 @@
-.m-btn,
-.m-ctrl
-    @extend .reset-control
+.ctrl
+    $ctrlRadius = 3px
+    
+    border-radius : $ctrlRadius
+    outline none
+    
+    &:focus
+        box-shadow: 0 0 0 2px rgba($colorPrimary, .35), inset 0 2px 5px rgba($colorPrimary, .125)
+    
+textarea
+    resize vertical
+
+.button,
+.input
+    appearance none
+    outline none
+    text-decoration none
+    margin 0
+    padding 0
+    background none
+    border none
 
     display inline-block
     vertical-align middle
@@ -9,8 +27,10 @@
     padding 5px 15px 7px
     border 1px solid transparent
     border-radius : $controlsRadius
+    
+    @extend .ctrl
 
-.m-btn
+.button
     text-decoration none
     user-select none
     cursor pointer
@@ -43,7 +63,7 @@
             &:active
                 background-color : darken($controls[$mod].bgc, 10%)
 
-            &.m-btn{$modPrefix}ghost
+            &.button{$modPrefix}ghost
                 background-color transparent
                 border-color : $controls[$mod].bgc
 
@@ -64,7 +84,7 @@
                     background-color : darken($controls[$mod].bgc, 10%)
                     color : $controls[$mod].color
 
-.m-ctrl
+.input
     color : $textColor.primary
 
     &{$data.beml.modPrefix}textarea
@@ -102,6 +122,3 @@
                     color : $controls[$mod].bgc
                 &:-ms-input-placeholder
                     color : $controls[$mod].bgc
-
-textarea
-    resize vertical
