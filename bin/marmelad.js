@@ -2,10 +2,15 @@
 
 'use strict';
 
+const fs                = require('fs');
+const path              = require('path');
 const CLI               = require('commander');
 const pkg               = require('../package.json');
 const chalk             = require('chalk');
+const bsSP              = require('browser-sync').create();
 const getAuthParams     = (params) => typeof params !== 'string' ? [pkg.name, false] : params.split('@');
+const getIconsNamesList = (path) => fs.readdirSync(path).map((iconName) => iconName.replace(/.svg/g, ''));
+
 
 /**
  * Установка флагов/параметров для командной строки
@@ -14,6 +19,7 @@ CLI
     .version(pkg.version)
     .option('-a, --auth [user@password]', `set user@password for authorization`)
     .parse(process.argv);
+
 
 /**
  * Проверка правильности установки логина и пароля для авторизации
@@ -24,13 +30,9 @@ bsSP.use(require('bs-auth'), {
     use  : CLI.auth
 });
 
-const path              = require('path');
-const fs                = require('fs-extra');
-const gulp              = require('gulp');
-const bsSP              = require('browser-sync').create();
-const glogger           = require('../modules/gulp-event-logger')(gulp);
-const iconizer          = require('../modules/gulp-iconizer');
 
+const gulp              = require('gulp');
+const iconizer          = require('../modules/gulp-iconizer');
 const boxen             = require('boxen');
 const clipboardy        = require('clipboardy');
 const babel             = require('gulp-babel');
@@ -40,13 +42,16 @@ const uglify            = require('gulp-uglify');
 const hbs               = require('handlebars');
 const compileHandlebars = require('gulp-compile-handlebars');
 const hbsLayouts        = require('handlebars-layouts');
+
+const nunjucks          = require('gulp-nunjucks-html');
+const frontMattter      = require('gulp-front-matter');
+
 const beml              = require('gulp-beml');
 const svgSprite         = require('gulp-svg-sprite');
 
 const stylus            = require('gulp-stylus');
 const postcss           = require('gulp-postcss');
 const focus             = require('postcss-focus');
-const discardComments   = require('postcss-discard-comments');
 const autoprefixer      = require('autoprefixer');
 const flexBugsFixes     = require('postcss-flexbugs-fixes');
 const groupMQ           = require('gulp-group-css-media-queries');
@@ -66,20 +71,127 @@ const requireDir        = require('require-dir');
 const runSequence       = require('run-sequence');
 const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
-const getIconsNamesList = (path) => fs.readdirSync(path).map((iconName) => iconName.replace(/.svg/g, ''));
-
-//let bemlToStyl        = require('../modules/gulp-beml2styl');
 
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
 
 /**
- * plumber onError handler
+ * NUNJUCKS
  */
-let plumberOnError = function(err) {
-    console.log(`\n[${gutil.colors.red('ERROR')}] ${gutil.colors.bgBlack.red(err.plugin)} : ${err.message}`);
-    this.emit('end');
+
+/**
+ * list of blocks directories
+ *
+ * @param blocksPath {String} path to blocks destination
+ * @returns {Array} blocks paths
+ */
+const getNunJucksBlocks = (blocksPath) => {
+
+    let folders = fs.readdirSync(blocksPath);
+    let partials = [];
+
+    folders.forEach(function (el) {
+        partials.push(blocksPath + '/' + el);
+    });
+
+    return partials;
 };
+
+gulp.task('nunjucks', (done) => {
+
+    let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
+        .pipe(plumber())
+        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
+        .pipe(frontMattter())
+        .pipe(nunjucks({
+            searchPaths: getNunJucksBlocks(settings.paths._blocks),
+            locals: database,
+            ext: '.html'
+        }))
+        .pipe(pipeErrorStop())
+        .pipe(beml(settings.app.beml))
+        .pipe(gulp.dest(settings.paths.dist));
+
+    stream.on('end', function() {
+        gutil.log(`NunJucks ${chalk.gray('............................')} ${chalk.bold.green('Done')}`);
+        bsSP.reload();
+        done();
+    });
+
+    stream.on('error', function(err) {
+        done(err);
+    });
+});
+
+/**
+ * DB
+ */
+gulp.task('db', (done) => {
+
+    let dataPath = path.join(process.cwd(), 'marmelad', 'data.marmelad.js');
+
+    decache(dataPath);
+
+    database = require(dataPath);
+
+    Object.assign(database.app, {
+        package  : pkg,
+        settings : settings,
+        storage  : settings.folders.storage,
+        icons    : getIconsNamesList(settings.paths.iconizer.icons)
+    });
+
+    gutil.log(`DB for templates .................... ${chalk.bold.yellow('Refreshed')}`);
+
+    done();
+
+});
+
+/**
+ * DB:update
+ */
+gulp.task('db:update', (done) => {
+    runSequence('db', 'nunjucks', done);
+});
+
+
+
+/**
+ * Iconizer
+ */
+gulp.task('iconizer', (done) => {
+
+    let stream = gulp.src(path.join(settings.paths.iconizer.icons, '*.svg'))
+        .pipe(svgSprite(settings.app.svgSprite))
+        .pipe(gulp.dest('.'));
+
+    stream.on('end', function() {
+
+        Object.assign(database, {
+            app : {
+                icons : getIconsNamesList(settings.paths.iconizer.icons)
+            }
+        });
+
+        gutil.log(`Iconizer ............................ ${chalk.bold.green('Done')}`);
+
+        done();
+    });
+
+    stream.on('error', function(err) {
+        done(err);
+    });
+});
+
+/**
+ * Iconizer update
+ */
+gulp.task('iconizer:update', (done) => {
+    runSequence('iconizer', 'nunjucks', done);
+});
+
+
+
 
 /**
  * list of blocks directories
@@ -147,7 +259,7 @@ gulp.task('handlebars:data', (done) => {
         icons    : getIconsNamesList(settings.paths.iconizer.icons)
     });
 
-    gutil.log(`database for handlebars templates ${chalk.bold.yellow('refreshed')}`);
+    gutil.log(`Database for handlebars templates ... ${chalk.bold.yellow('Refreshed')}`);
 
     done();
 
@@ -168,16 +280,15 @@ gulp.task('handlebars:refresh', (done) => {
 gulp.task('handlebars:pages', function(done) {
 
     let stream = gulp.src(settings.paths._pages + '/**/*.{hbs,handlebars}')
-        .pipe(plumber({errorHandler: plumberOnError}))
+        .pipe(plumber())
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
         .pipe(beml(settings.app.beml))
         .pipe(rename({extname: '.html'}))
         .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', function() {
-
+        gutil.log(`Handlebars pages .................... ${chalk.bold.green('Done')}`);
         bsSP.reload();
-
         done();
     });
 
@@ -191,7 +302,7 @@ gulp.task('handlebars:blocks', function(done) {
     let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
 
     let stream = gulp.src(settings.paths._blocks + '/**/*.{hbs,handlebars}')
-        .pipe(plumber({errorHandler: plumberOnError}))
+        .pipe(plumber())
         .pipe(changed(pathToBlocks))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
         .pipe(beml(settings.app.beml))
@@ -202,9 +313,8 @@ gulp.task('handlebars:blocks', function(done) {
         .pipe(gulp.dest(path.join(settings.paths.dist, 'partials')));
 
     stream.on('end', function() {
-
+        gutil.log(`Handlebars blocks ................... ${chalk.bold.green('Done')}`);
         bsSP.reload();
-
         done();
     });
 
@@ -213,66 +323,7 @@ gulp.task('handlebars:blocks', function(done) {
     });
 });
 
-/**
- * Генерация beml html в шаблон для styl
- */
-// gulp.task('handlebars:beml2styl', function(done) {
 
-//     let pathToBlocks = path.join(settings.paths._blocks, '**', '*.{hbs,handlebars}');
-
-//     let stream = gulp.src(pathToBlocks)
-//         .pipe(changed(pathToBlocks))
-//         .pipe(bemlToStyl({
-//             beml : settings.app.beml,
-//             tabSize : '    '
-//         }))
-//         .pipe(rename({ extname: '.bemlstyl' }))
-//         .pipe(gulp.dest(function(file) {
-//             return file.base;
-//         }));
-
-//     stream.on('end', function() {
-//         done();
-//     });
-
-//     stream.on('error', function(err) {
-//         done(err);
-//     });
-
-// });
-
-/**
- * генерация svg спрайта
- */
-gulp.task('iconizer', (done) => {
-
-    let stream = gulp.src(settings.paths.iconizer.icons + '/*.svg')
-        .pipe(svgSprite(settings.app.svgSprite))
-        .pipe(gulp.dest('.'));
-
-    stream.on('end', function() {
-
-        Object.assign(database, {
-            app : {
-                icons : getIconsNamesList(settings.paths.iconizer.icons)
-            }
-        });
-
-        done();
-    });
-
-    stream.on('error', function(err) {
-        done(err);
-    });
-});
-
-/**
- * обновляет svg спрайт
- * пересборка шаблонов
- */
-gulp.task('iconizer:refresh', (done) => {
-    runSequence('iconizer', 'handlebars:blocks', 'handlebars:pages', done);
-});
 
 /**
  * scripts from blocks
@@ -280,7 +331,7 @@ gulp.task('iconizer:refresh', (done) => {
 gulp.task('scripts:blocks', (done) => {
 
     return gulp.src(path.join(settings.paths._blocks, '**', '*.js'))
-        .pipe(plumber({errorHandler: plumberOnError}))
+        .pipe(plumber())
         .pipe(jscs({ configPath : path.join('marmelad', '.jscsrc') }))
         .pipe(jscs.reporter());
 });
@@ -291,7 +342,7 @@ gulp.task('scripts:blocks', (done) => {
 gulp.task('scripts:others', ['scripts:blocks'], (done) => {
 
     let stream = gulp.src(path.join(settings.paths.js.src, '*.js'))
-        .pipe(plumber({errorHandler: plumberOnError}))
+        .pipe(plumber())
         .pipe(include({
             extensions: 'js',
             hardFail: false
@@ -304,9 +355,8 @@ gulp.task('scripts:others', ['scripts:blocks'], (done) => {
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
     stream.on('end', () => {
-
+        gutil.log(`Scripts others ...................... ${chalk.bold.green('Done')}`);
         bsSP.reload();
-
         done();
     });
 
@@ -328,9 +378,8 @@ gulp.task('scripts:vendors', (done) => {
         .pipe(gulp.dest(vendorsDist));
 
     stream.on('end', function () {
-
+        gutil.log(`Scripts vendors ..................... ${chalk.bold.green('Done')}`);
         bsSP.reload();
-
         done();
     });
 
@@ -352,9 +401,8 @@ gulp.task('scripts:plugins', (done) => {
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
     stream.on('end', function () {
-
+        gutil.log(`Scripts plugins ..................... ${chalk.bold.green('Done')}`);
         bsSP.reload();
-
         done();
     });
 
@@ -369,58 +417,55 @@ gulp.task('scripts:plugins', (done) => {
  */
 gulp.task('styles:plugins', (done) => {
 
-
-    let stream = gulp.src(settings.paths.js.plugins + '/**/*.css')
+    gulp.src(path.join(settings.paths.js.plugins, '**', '*.css'))
         .pipe(plumber())
         .pipe(concat('plugins.min.css'))
-        .pipe(gulp.dest(path.join(settings.paths.storage, 'css')));
+        .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
+        .on('end', () => {
+            gutil.log(`Plugins CSS ......................... ${chalk.bold.green('Done')}`);
+        })
+        .pipe(bsSP.stream());
 
-    stream.on('end', function () {
-
-        bsSP.stream();
-
-        done();
-    });
-
-    stream.on('error', function (err) {
-        done(err);
-    });
+    done();
 
 });
 
 /**
  * сборка стилей блоков, для каждого отдельный css
  */
-gulp.task('stylus', function() {
+gulp.task('stylus', function(done) {
 
-    let plugins = [
-            discardComments(),
-            focus(),
-            autoprefixer(settings.app.autoprefixer),
-            flexBugsFixes()
-        ],
-        $data = {
-            beml: settings.app.beml
-        };
+    let $data = {
+        beml : settings.app.beml
+    };
 
     Object.assign($data, database.app.stylus);
 
-    return gulp.src(path.join(settings.paths.stylus, '*.styl'))
-        .pipe(plumber({errorHandler: plumberOnError}))
+    gulp.src(path.join(settings.paths.stylus, '*.styl'))
+        .pipe(plumber())
         .pipe(stylus({
             'include css': true,
             rawDefine : { $data }
         }))
         .pipe(groupMQ())
-        .pipe(postcss(plugins))
+        .pipe(postcss([
+            focus(),
+            flexBugsFixes(),
+            autoprefixer(settings.app.autoprefixer)
+        ]))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
+        .on('end', () => {
+            gutil.log(`Stylus CSS .......................... ${chalk.bold.green('Done')}`);
+        })
         .pipe(bsSP.stream());
+
+    done();
 });
 
 /**
  * СТАТИКА
  */
-gulp.task('static', function(done) {
+gulp.task('static', (done) => {
 
     let stream = gulp.src([
         settings.paths.static + '/**/*.*',
@@ -431,14 +476,13 @@ gulp.task('static', function(done) {
         .pipe(changed(settings.paths.dist))
         .pipe(gulp.dest(settings.paths.dist));
 
-    stream.on('end', function () {
-
+    stream.on('end', () => {
+        gutil.log(`Static files copy ................... ${chalk.bold.green('Done')}`);
         bsSP.reload();
-
         done();
     });
 
-    stream.on('error', function (err) {
+    stream.on('error', (err) => {
         done(err);
     });
 });
@@ -448,44 +492,44 @@ gulp.task('static', function(done) {
  */
 gulp.task('server:static', (done) => {
 
-    settings.app.bsSP.server.middleware = [
-
-        function (req, res, next) {
-
-            let reqUrl = req.url || req.originalUrl;
-            let ext = '.html';
-
-            if (path.extname(reqUrl) === ext) {
-
-                let partialsFiles = fs.readdirSync(path.join(settings.paths.dist, 'partials'));
-
-                partialsFiles.forEach(function (partial) {
-
-                    let partialPath = path.join(settings.paths.dist, 'partials', partial);
-                    let template = fs.readFileSync(partialPath, 'utf8');
-
-                    hbs.registerPartial(path.basename(partial, '.html'), template);
-                });
-
-
-                let page = path.join(process.cwd(), settings.folders.dist, path.basename(reqUrl, ext));
-                let source = fs.readFileSync(page + ext, 'utf8');
-                let template = hbs.compile(source);
-                let result = template(database);
-
-                res.writeHead(200, {
-                    'Content-Type': 'text/html; charset=UTF-8',
-                    'Generator': 'marmelad v.' + pkg.version
-
-                });
-                res.end(result);
-
-            } else {
-                next();
-            }
-
-        }
-    ];
+    // settings.app.bsSP.server.middleware = [
+    //
+    //     function (req, res, next) {
+    //
+    //         let reqUrl = req.url || req.originalUrl;
+    //         let ext = '.html';
+    //
+    //         if (path.extname(reqUrl) === ext) {
+    //
+    //             let partialsFiles = fs.readdirSync(path.join(settings.paths.dist, 'partials'));
+    //
+    //             partialsFiles.forEach(function (partial) {
+    //
+    //                 let partialPath = path.join(settings.paths.dist, 'partials', partial);
+    //                 let template = fs.readFileSync(partialPath, 'utf8');
+    //
+    //                 hbs.registerPartial(path.basename(partial, '.html'), template);
+    //             });
+    //
+    //
+    //             let page = path.join(process.cwd(), settings.folders.dist, path.basename(reqUrl, ext));
+    //             let source = fs.readFileSync(page + ext, 'utf8');
+    //             let template = hbs.compile(source);
+    //             let result = template(database);
+    //
+    //             res.writeHead(200, {
+    //                 'Content-Type': 'text/html; charset=UTF-8',
+    //                 'Generator': 'marmelad v.' + pkg.version
+    //
+    //             });
+    //             res.end(result);
+    //
+    //         } else {
+    //             next();
+    //         }
+    //
+    //     }
+    // ];
 
     bsSP.init(settings.app.bsSP, () => {
 
@@ -542,16 +586,6 @@ gulp.task('watch', () => {
         gulp.start('scripts:others', done);
     }));
 
-    /* ICONIZER */
-    watch(path.join(settings.paths.iconizer.icons, '*.svg'), batch(function (events, done) {
-        gulp.start('iconizer:refresh', done);
-    }));
-
-    /* ДАННЫЕ ДЛЯ ШАБЛОНОВ */
-    watch(path.join(settings.paths.marmelad, 'data.marmelad.js'), batch((events, done) => {
-        gulp.start('handlebars:refresh', done);
-    }));
-
     /* ШАБЛОНЫ */
     watch(path.join(settings.paths._pages, '**', '*.{hbs,handlebars}'), batch((events, done) => {
         gulp.start('handlebars:pages', done);
@@ -565,6 +599,27 @@ gulp.task('watch', () => {
             'handlebars:pages',
             done
         );
+    }));
+
+
+    /* NunJucks static */
+    watch([
+        path.join(settings.paths._pages, '**', '*.html'),
+        path.join(settings.paths._blocks, '**', '*.html')
+    ], batch((events, done) => {
+        gulp.start('nunjucks', done);
+    }));
+
+
+    /* NunJucks database */
+    watch(path.join(settings.paths.marmelad, 'data.marmelad.js'), batch((events, done) => {
+        gulp.start('db:update', done);
+    }));
+
+
+    /* Iconizer */
+    watch(path.join(settings.paths.iconizer.icons, '*.svg'), batch(function (events, done) {
+        gulp.start('iconizer:update', done);
     }));
 
 });
@@ -584,16 +639,18 @@ gulp.task('marmelad:start', function(done) {
         'server:static',
         'static',
         'iconizer',
-        'handlebars:data',
-        //'handlebars:beml2styl',
-        'handlebars:blocks',
-        'handlebars:pages',
+        // 'handlebars:data',
+        // 'handlebars:blocks',
+        // 'handlebars:pages',
+        'db',
+        'nunjucks',
         'scripts:vendors',
         'scripts:plugins',
         'scripts:others',
-        'stylus',
         'styles:plugins',
+        'stylus',
         'watch',
+
         done);
 
 });
