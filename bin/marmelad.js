@@ -31,6 +31,8 @@ const bsSP              = require('browser-sync').create();
 const glogger           = require('../modules/gulp-event-logger')(gulp);
 const iconizer          = require('../modules/gulp-iconizer');
 
+const boxen             = require('boxen');
+const clipboardy        = require('clipboardy');
 const babel             = require('gulp-babel');
 const jscs              = require('gulp-jscs');
 const uglify            = require('gulp-uglify');
@@ -485,7 +487,21 @@ gulp.task('server:static', (done) => {
         }
     ];
 
-    bsSP.init(settings.app.bsSP, done);
+    bsSP.init(settings.app.bsSP, () => {
+
+        let urls = bsSP.getOption('urls');
+
+        console.log(boxen(`${chalk.bold.yellow(pkg.name.toUpperCase())} v${pkg.version} is Started!\n\n${chalk.bold.green(urls.get('local'))} сopied to clipboard!`, {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'double',
+            borderColor: 'green'
+        }));
+
+        clipboardy.writeSync(urls.get('local'));
+
+        done();
+    });
 });
 
 gulp.task('watch', () => {
@@ -595,6 +611,14 @@ gulp.task('marmelad:init', function(done) {
         .pipe(gulp.dest(path.join(process.cwd(), 'marmelad')));
 
     stream.on('end', function () {
+
+        console.log(boxen(`${pkg.name.toUpperCase()} v${pkg.version}\nBoilerplate successfully copied\n\ntype ${pkg.name} --help for CLI help`, {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'double',
+            borderColor: 'yellow'
+        }));
+
         done();
     });
 
