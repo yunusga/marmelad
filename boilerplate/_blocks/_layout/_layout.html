@@ -101,12 +101,14 @@
         <script src="{{app.storage}}/js/plugins.min.js"></script>
         <script src="{{app.storage}}/js/app.js"></script>
 
-        {# <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+        {% if app.GA %}
+        <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
         <script>
             window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
-            ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+            ga('create','{{ app.GA }}','auto');ga('send','pageview')
         </script>
-        <script src="https://www.google-analytics.com/analytics.js" async defer></script> #}
+        <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+        {% endif %}
 
     </body><!-- b:w-page -->
 
