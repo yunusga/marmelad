@@ -30,7 +30,6 @@ bsSP.use(require('bs-auth'), {
 });
 
 
-
 const gulp              = require('gulp');
 const tap               = require('gulp-tap');
 const iconizer          = require('../modules/gulp-iconizer');
@@ -50,11 +49,12 @@ const postcss           = require('gulp-postcss');
 const focus             = require('postcss-focus');
 const autoprefixer      = require('autoprefixer');
 const flexBugsFixes     = require('postcss-flexbugs-fixes');
-const groupMQ           = require('gulp-group-css-media-queries');
 const cssnano           = require('cssnano');
 
+const gif               = require('gulp-if');
 const gutil             = require('gulp-util');
 const plumber           = require('gulp-plumber');
+const groupMQ           = require('gulp-group-css-media-queries');
 const rename            = require('gulp-rename');
 const header            = require('gulp-header');
 const changed           = require('gulp-changed');
@@ -62,12 +62,6 @@ const concat            = require('gulp-concat');
 const include           = require('gulp-include');
 const watch             = require('gulp-watch');
 const batch             = require('gulp-batch');
-const decache           = require('decache');
-const runSequence       = require('run-sequence');
-const pipeErrorStop     = require('pipe-error-stop');
-const del               = require('del');
-const boxen             = require('boxen');
-const clipboardy        = require('clipboardy');
 
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
