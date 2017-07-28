@@ -8,7 +8,6 @@ let folders = {
     marmelad: 'marmelad',
     _blocks : '_blocks',
     _pages  : '_pages',
-    _helpers: '_helpers',
     iconizer: {
         src  : 'iconizer',
         icons: 'icons'
@@ -28,7 +27,6 @@ let paths = {
     marmelad : path.join(folders.marmelad),
     _blocks : path.join(folders.marmelad, folders._blocks),
     _pages  : path.join(folders.marmelad, folders._pages),
-    _helpers: path.join(folders.marmelad, folders._helpers),
     iconizer: {
         src  : path.join(folders.marmelad, folders.iconizer.src),
         icons: path.join(folders.marmelad, folders.iconizer.src, folders.iconizer.icons),
