@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta http-equiv="cleartype" content="on">
 
-        <meta name="theme-color" content="{{app.stylus.theme_color}}">
+        <meta name="theme-color" content="{{ app.stylus.theme_color }}">
 
         <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
         <meta name="format-detection" content="telephone=no">
@@ -21,9 +21,6 @@
 
         <meta name="MobileOptimized" content="320">
         <meta name="HandheldFriendly" content="True">
-
-        <link rel="yandex-tableau-widget" href="yandex-tableau.json" />
-        <meta name="msapplication-config" content="browserconfig.xml" />
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -54,20 +51,19 @@
 
                 <main elem="main">
                     {% block main %}{% endblock %}
-                    {# {{#block 'main'}}{{/block}} #}
                 </main><!-- e:main -->
-
-                {# {{#if asideLeft}}
+                
+                {% if asideLeft %}
                 <aside elem="aside" mod="left">
-                    {{#block 'asideLeft'}}{{/block}}
+                    {% block asideLeft %}{% endblock %}
                 </aside><!-- e:aside m:left -->
-                {{/if}} #}
+                {% endif %}
 
-                {# {{#if asideRight}}
+                {% if asideRight %}
                 <aside elem="aside" mod="right">
-                    {{#block 'asideRight'}}{{/block}}
+                    {% block asideRight %}{% endblock %}
                 </aside><!-- e:aside m:right -->
-                {{/if}} #}
+                {% endif %}
 
             </div><!-- b:m-content -->
 
@@ -77,7 +73,6 @@
 
         {% include 'page-scroller.html' %}
 
-        
         {# https://github.com/yunusga/forceFeed
         https://css-tricks.com/handling-long-unexpected-content-css/ #}
         

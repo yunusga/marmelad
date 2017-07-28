@@ -1,16 +1,5 @@
-{{#extend
-    "_layout"
-    pageTitle=(concat 'UI Preview - Marmelad v' app.package.version)
-    bodyMods="demo"
-    bodyClasses='marmelad'
-    scrollFixClasses=null
-    contentClasses="m-container"
-    asideLeft=false
-    asideRight=false
-}}
-
 ---
-pageTitle
+pageTitle: Marmelad Demo
 bodyMods: demo
 bodyClasses: marmelad
 scrollFixClasses: null
@@ -18,7 +7,6 @@ contentClasses: m-container
 asideLeft: false
 asideRight: false
 ---
-
 {% extends '_layout.html' %}
 
 {% block main %}
@@ -41,11 +29,11 @@ asideRight: false
     <h2>Сетка</h2>
     <p>Измените размер окна браузера, чтобы увидеть поведение сетки.</p>
     <div block="grids" mod="demo" mix="block:lg-2 hd-4 sm-6">
-        {{#times 12}}
+        {% for index in range(0, 12) -%}
         <div elem="col">
-            <div class="demo-box" data-forcefeed="words|2|3">{{index}}</div>
-        </div>
-        {{/times}}
+            <div class="demo-box" data-forcefeed="words|2|3">{{ index }}</div>
+        </div>    
+        {%- endfor %}
     </div>
 </section>
 <hr>
@@ -55,9 +43,9 @@ asideRight: false
     <div block="grids" mod="demo" mix="block:sm-6">
         <div elem="col">
             <h3>Статичные</h3>
-            {{#each app.icons}}
-            <icon name="{{this}}">
-            {{/each}}
+            {% for icon in app.icons -%}
+            <icon name="{{ icon }}">
+            {%- endfor %}
         </div>
         <div elem="col">
             <h3>Вращающиеся</h3>
@@ -74,27 +62,27 @@ asideRight: false
     <div block="grids" mod="demo" mix="block:sm-3">
         <div elem="col">
             <button block="button" mod="demo">Button</button>
-            {{#each app.controls}}
+            {% for mod in app.controls -%}
             <br>
             <br>
-            <button block="button" mod="{{@this}}, demo">{{@this}}</button>
-            {{/each}}
+            <button block="button" mod="{{ mod }}, demo">{{ mod }}</button>
+            {%- endfor %}
         </div>
         <div elem="col">
             <button block="button" mod="demo">Button</button>
-            {{#each app.controls}}
+            {% for mod in app.controls -%}
             <br>
             <br>
-            <button block="button" mod="{{@this}}, demo, ghost">{{@this}}</button>
-            {{/each}}
+            <button block="button" mod="{{ mod }}, demo, ghost">{{ mod }}</button>
+            {%- endfor %}
         </div>
         <div elem="col">
             <input type="text" block="input" placeholder="simple">
-            {{#each app.controls}}
+            {% for mod in app.controls -%}
             <br>
             <br>
-            <input type="text" block="input" mod="{{@this}}" mix="block:with-focus" placeholder="{{@this}}">
-            {{/each}}
+            <input type="text" block="input" mod="{{ mod }}" mix="block:with-focus" placeholder="{{ mod }}">
+            {%- endfor %}
         </div>
         <div elem="col" mix="block:w-3">
             <textarea block="input" mod="textarea, default"></textarea>
@@ -106,14 +94,14 @@ asideRight: false
 
 <h2>WordPress галерея</h2>
 <div class="gallery gallery-columns-5">
-    {{#times 10}}
+    {% for index in range(0, 10) -%}
     <figure class="gallery-item">
         <div class="gallery-icon landscape">
-            <a href="{{../app.storage}}/img/thumb-demo-{{index}}.jpg" target="_blank" rel="nofollow, noreferrer"><img width="150" height="150" src="{{../app.storage}}/img/thumb-demo-{{index}}.jpg" class="attachment-thumbnail" alt="alt text"></a>
+            <a href="{{ app.storage }}/img/thumb-demo-{{ index }}.jpg" target="_blank" rel="nofollow, noreferrer"><img width="150" height="150" src="{{ app.storage }}/img/thumb-demo-{{ index }}.jpg" class="attachment-thumbnail" alt="alt text"></a>
         </div>
         <figcaption class="wp-caption-text gallery-caption" data-forcefeed="words|3|5">Подпись картинки</figcaption>
     </figure>
-    {{/times}}
+    {%- endfor %}
 </div>
 <hr>
 <section>
