@@ -101,6 +101,7 @@ gulp.task('nunjucks', (done) => {
 
     let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
         .pipe(plumber())
+        .pipe(changed(settings.paths.dist))
         .pipe(tap((file) => {
             templateName = path.basename(file.path);
         }))
