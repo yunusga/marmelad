@@ -127,11 +127,7 @@ gulp.task('nunjucks', (done) => {
 
     stream.on('end', function() {
 
-        if (error) {
-            gutil.log(`NunJucks ${chalk.gray('............................')} ${chalk.bold.red('ERROR')}\n`);
-        } else {
-            gutil.log(`NunJucks ${chalk.gray('............................')} ${chalk.bold.green('Done')}`);
-        }
+        gutil.log(`NunJucks ${chalk.gray('............................')} ${error ? chalk.bold.red('ERROR\n') : chalk.bold.green('Done')}`);
 
         bsSP.reload();
         done();
