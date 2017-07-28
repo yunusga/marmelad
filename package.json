@@ -89,8 +89,6 @@
     "postcss-discard-comments": "2.0.4",
     "postcss-flexbugs-fixes": "3.0.0",
     "postcss-focus": "2.0.0",
-    "pretty-hrtime": "1.0.3",
-    "require-dir": "0.3.2",
     "run-sequence": "2.1.0"
   }
 }
