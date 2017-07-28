@@ -71,6 +71,7 @@ const clipboardy        = require('clipboardy');
 
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
+let isNunJucksUpdate = false;
 
 /**
  * NUNJUCKS
@@ -92,7 +93,7 @@ gulp.task('nunjucks', (done) => {
 
     let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
         .pipe(plumber())
-        .pipe(changed(settings.paths.dist))
+        .pipe(gif(!isNunJucksUpdate, changed(settings.paths.dist)))
         .pipe(tap((file) => {
             templateName = path.basename(file.path);
         }))
@@ -109,6 +110,7 @@ gulp.task('nunjucks', (done) => {
             },
             successCallback: () => {
                 error = false;
+                isNunJucksUpdate = false;
             }
         }))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
@@ -418,14 +420,16 @@ gulp.task('watch', () => {
         gulp.start('scripts:others', done);
     }));
 
-    /* NunJucks static */
-    watch([
-        path.join(settings.paths._pages, '**', '*.html'),
-        path.join(settings.paths._blocks, '**', '*.html')
-    ], batch((events, done) => {
+    /* NunJucks Pages */
+    watch(path.join(settings.paths._pages, '**', '*.html'), batch((events, done) => {
         gulp.start('nunjucks', done);
     }));
 
+    /* NunJucks Blocks */
+    watch([path.join(settings.paths._blocks, '**', '*.html')], batch((events, done) => {
+        isNunJucksUpdate = true;
+        gulp.start('nunjucks', done);
+    }));
 
     /* NunJucks database */
     watch(path.join(settings.paths.marmelad, 'data.marmelad.js'), batch((events, done) => {
