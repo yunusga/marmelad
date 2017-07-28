@@ -20,7 +20,6 @@ CLI
     .option('-a, --auth [user@password]', `set user@password for authorization`)
     .parse(process.argv);
 
-
 /**
  * Проверка правильности установки логина и пароля для авторизации
  */
@@ -64,7 +63,6 @@ const include           = require('gulp-include');
 const watch             = require('gulp-watch');
 const batch             = require('gulp-batch');
 const decache           = require('decache');
-const requireDir        = require('require-dir');
 const runSequence       = require('run-sequence');
 const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
