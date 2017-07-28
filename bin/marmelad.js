@@ -87,7 +87,7 @@ const getNunJucksBlocks = (blocksPath) => {
     let folders = fs.readdirSync(blocksPath);
     let partials = [];
 
-    folders.forEach(function (el) {
+    folders.forEach((el) => {
         partials.push(blocksPath + '/' + el);
     });
 
@@ -124,7 +124,7 @@ gulp.task('nunjucks', (done) => {
         .pipe(beml(settings.app.beml))
         .pipe(gulp.dest(settings.paths.dist));
 
-    stream.on('end', function() {
+    stream.on('end', () => {
 
         gutil.log(`NunJucks ${chalk.gray('............................')} ${error ? chalk.bold.red('ERROR\n') : chalk.bold.green('Done')}`);
 
@@ -132,7 +132,7 @@ gulp.task('nunjucks', (done) => {
         done();
     });
 
-    stream.on('error', function(err) {
+    stream.on('error', (err) => {
         done(err);
     });
 });
@@ -179,7 +179,7 @@ gulp.task('iconizer', (done) => {
         .pipe(svgSprite(settings.app.svgSprite))
         .pipe(gulp.dest('.'));
 
-    stream.on('end', function() {
+    stream.on('end', () => {
 
         Object.assign(database, {
             app : {
@@ -192,7 +192,7 @@ gulp.task('iconizer', (done) => {
         done();
     });
 
-    stream.on('error', function(err) {
+    stream.on('error', (err) => {
         done(err);
     });
 });
@@ -257,13 +257,13 @@ gulp.task('scripts:vendors', (done) => {
         .pipe(changed(vendorsDist))
         .pipe(gulp.dest(vendorsDist));
 
-    stream.on('end', function () {
+    stream.on('end', () => {
         gutil.log(`Scripts vendors ..................... ${chalk.bold.green('Done')}`);
         bsSP.reload();
         done();
     });
 
-    stream.on('error', function (err) {
+    stream.on('error', (err) => {
         done(err);
     });
 
@@ -280,13 +280,13 @@ gulp.task('scripts:plugins', (done) => {
         .pipe(uglify())
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
-    stream.on('end', function () {
+    stream.on('end', () => {
         gutil.log(`Scripts plugins ..................... ${chalk.bold.green('Done')}`);
         bsSP.reload();
         done();
     });
 
-    stream.on('error', function (err) {
+    stream.on('error', (err) => {
         done(err);
     });
 
@@ -313,7 +313,7 @@ gulp.task('styles:plugins', (done) => {
 /**
  * сборка стилей блоков, для каждого отдельный css
  */
-gulp.task('stylus', function(done) {
+gulp.task('stylus', (done) => {
 
     let $data = {
         beml : settings.app.beml
@@ -404,7 +404,7 @@ gulp.task('watch', () => {
     watch([
         path.join(settings.paths._blocks, '**', '*.styl'),
         path.join(settings.paths.stylus, '**', '*.styl')
-    ], batch(function (events, done) {
+    ], batch((events, done) => {
         gulp.start('stylus', done);
     }));
 
@@ -420,10 +420,10 @@ gulp.task('watch', () => {
         gulp.start('styles:plugins', done);
     }));
 
-    watch(path.join(settings.paths._blocks, '**', '*.js'), batch(function (events, done) {
+    watch(path.join(settings.paths._blocks, '**', '*.js'), batch((events, done) => {
         gulp.start('scripts:others', done);
     }));
-    watch(path.join(settings.paths.js.src, '*.js'), batch(function (events, done) {
+    watch(path.join(settings.paths.js.src, '*.js'), batch((events, done) => {
         gulp.start('scripts:others', done);
     }));
 
@@ -443,7 +443,7 @@ gulp.task('watch', () => {
 
 
     /* Iconizer */
-    watch(path.join(settings.paths.iconizer.icons, '*.svg'), batch(function (events, done) {
+    watch(path.join(settings.paths.iconizer.icons, '*.svg'), batch((events, done) => {
         gulp.start('iconizer:update', done);
     }));
 
@@ -457,7 +457,7 @@ gulp.task('clean', (done) => {
     done();
 });
 
-gulp.task('marmelad:start', function(done) {
+gulp.task('marmelad:start', (done) => {
 
     runSequence(
         'clean',
@@ -480,7 +480,7 @@ gulp.task('marmelad:start', function(done) {
 /**
  * project init
  */
-gulp.task('marmelad:init', function(done) {
+gulp.task('marmelad:init', (done) => {
 
     let stream = gulp.src(
         [path.join(__dirname.replace('bin', ''), 'boilerplate', '**', '*.*')],
@@ -489,7 +489,7 @@ gulp.task('marmelad:init', function(done) {
         })
         .pipe(gulp.dest(path.join(process.cwd(), 'marmelad')));
 
-    stream.on('end', function () {
+    stream.on('end', () => {
 
         console.log(boxen(`${pkg.name.toUpperCase()} v${pkg.version}\nBoilerplate successfully copied\n\ntype ${pkg.name} --help for CLI help`, {
             padding: 1,
@@ -501,13 +501,13 @@ gulp.task('marmelad:init', function(done) {
         done();
     });
 
-    stream.on('error', function (err) {
+    stream.on('error', (err) => {
         done(err);
     });
 
 });
 
-fs.exists(path.join('marmelad', 'settings.marmelad.js'), function(exists) {
+fs.exists(path.join('marmelad', 'settings.marmelad.js'), (exists) => {
 
     if (exists) {
 
