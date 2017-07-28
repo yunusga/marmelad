@@ -63,6 +63,13 @@ const include           = require('gulp-include');
 const watch             = require('gulp-watch');
 const batch             = require('gulp-batch');
 
+const decache           = require('decache');
+const runSequence       = require('run-sequence');
+const pipeErrorStop     = require('pipe-error-stop');
+const del               = require('del');
+const boxen             = require('boxen');
+const clipboardy        = require('clipboardy');
+
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
 let isNunJucksUpdate = false;
