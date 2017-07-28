@@ -82,17 +82,8 @@ let database = {};
  * @param blocksPath {String} path to blocks destination
  * @returns {Array} blocks paths
  */
-const getNunJucksBlocks = (blocksPath) => {
+const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) => blocksPath + '/' + el);
 
-    let folders = fs.readdirSync(blocksPath);
-    let partials = [];
-
-    folders.forEach((el) => {
-        partials.push(blocksPath + '/' + el);
-    });
-
-    return partials;
-};
 
 gulp.task('nunjucks', (done) => {
 
