@@ -12,15 +12,15 @@ asideRight: false
 {% block main %}
 
 <section>
-    <h2><a href="https://ru.bem.info/methodology/" target="_blank" rel="noreferrer, nofollow">БЭМ методология</a></h2>
+    <h2><a href="https://ru.bem.info/methodology/" target="_blank" rel="noopener">БЭМ методология</a></h2>
     <p>Методология БЭМ создана в Яндексе для разработки сайтов, которые надо делать быстро, а поддерживать долгие годы. Она позволяет создавать расширяемые и повторно используемые компоненты интерфейса.</p>
 </section>
 <section>
-    <h2><a href="http://nicothin.github.io/idiomatic-pre-CSS/" target="_blank" rel="noreferrer, nofollow">Как работать с CSS-препроцессорами и БЭМ</a></h2>
+    <h2><a href="http://nicothin.github.io/idiomatic-pre-CSS/" target="_blank" rel="noopener">Как работать с CSS-препроцессорами и БЭМ</a></h2>
     <p>Список рекомендаций по неусложнению жизни себе и другим участникам проекта по вёрстке.</p>
 </section>
 <section>
-    <h2><a href="https://github.com/yoksel/common-words" target="_blank" rel="noreferrer, nofollow">Слова, часто используемые в CSS-классах</a></h2>
+    <h2><a href="https://github.com/yoksel/common-words" target="_blank" rel="noopener">Слова, часто используемые в CSS-классах</a></h2>
     <p>Подборка часто используемых названий CSS-классов с примерами</p>
 </section>
 
@@ -97,7 +97,7 @@ asideRight: false
     {% for index in range(0, 10) -%}
     <figure class="gallery-item">
         <div class="gallery-icon landscape">
-            <a href="{{ app.storage }}/img/thumb-demo-{{ index }}.jpg" target="_blank" rel="nofollow, noreferrer"><img width="150" height="150" src="{{ app.storage }}/img/thumb-demo-{{ index }}.jpg" class="attachment-thumbnail" alt="alt text"></a>
+            <a href="{{ app.storage }}/img/thumb-demo-{{ index }}.jpg" target="_blank" rel="noopener"><img width="150" height="150" src="{{ app.storage }}/img/thumb-demo-{{ index }}.jpg" class="attachment-thumbnail" alt="alt text"></a>
         </div>
         <figcaption class="wp-caption-text gallery-caption" data-forcefeed="words|3|5">Подпись картинки</figcaption>
     </figure>
