@@ -8,28 +8,6 @@ const CLI               = require('commander');
 const pkg               = require('../package.json');
 const chalk             = require('chalk');
 const bsSP              = require('browser-sync').create();
-const getAuthParams     = (params) => typeof params !== 'string' ? [pkg.name, false] : params.split('@');
-const getIconsNamesList = (path) => fs.readdirSync(path).map((iconName) => iconName.replace(/.svg/g, ''));
-
-
-/**
- * Установка флагов/параметров для командной строки
- */
-CLI
-    .version(pkg.version)
-    .option('-a, --auth [user@password]', `set user@password for authorization`)
-    .parse(process.argv);
-
-/**
- * Проверка правильности установки логина и пароля для авторизации
- */
-bsSP.use(require('bs-auth'), {
-    user : getAuthParams(CLI.auth)[0],
-    pass : getAuthParams(CLI.auth)[1],
-    use  : CLI.auth
-});
-
-
 const gulp              = require('gulp');
 const tap               = require('gulp-tap');
 const iconizer          = require('../modules/gulp-iconizer');
@@ -69,6 +47,26 @@ const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
 const boxen             = require('boxen');
 const clipboardy        = require('clipboardy');
+const getAuthParams     = (params) => typeof params !== 'string' ? [pkg.name, false] : params.split('@');
+const getIconsNamesList = (path) => fs.readdirSync(path).map((iconName) => iconName.replace(/.svg/g, ''));
+const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) => blocksPath + '/' + el);
+
+/**
+ * Установка флагов/параметров для командной строки
+ */
+CLI
+    .version(pkg.version)
+    .option('-a, --auth [user@password]', `set user@password for authorization`)
+    .parse(process.argv);
+
+/**
+ * Проверка правильности установки логина и пароля для авторизации
+ */
+bsSP.use(require('bs-auth'), {
+    user : getAuthParams(CLI.auth)[0],
+    pass : getAuthParams(CLI.auth)[1],
+    use  : CLI.auth
+});
 
 let settings = require(path.join('..', 'boilerplate', 'settings.marmelad'));
 let database = {};
@@ -77,16 +75,6 @@ let isNunJucksUpdate = false;
 /**
  * NUNJUCKS
  */
-
-/**
- * list of blocks directories
- *
- * @param blocksPath {String} path to blocks destination
- * @returns {Array} blocks paths
- */
-const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) => blocksPath + '/' + el);
-
-
 gulp.task('nunjucks', (done) => {
 
     let templateName = '';
