@@ -1,9 +1,9 @@
-fontFace(name, folder, typefaces, path = '../assets/fonts')
+fontFace($name, $folder, $typefaces, $display, $path = '../assets/fonts')
 
-    .font-{folder}
-        font-family : name
+    .font-{$folder}
+        font-family : $name
 
-    typeface = {
+    $typeface = {
         t     : (200 normal), // thin
         t-i   : (200 italic), // thin italic
         l     : (300 normal), // light
@@ -23,13 +23,16 @@ fontFace(name, folder, typefaces, path = '../assets/fonts')
         bl-i  : (900 italic)  // black italic (mega bold italic)
     }
 
-    for face in typefaces
+    for $face in $typefaces
 
         @font-face
-            font-family : name
-            font-weight : typeface[face][0]
-            font-style  : typeface[face][1]
-            src : local(name), url(unquote(path) + '/' + folder + '/' + folder + '_' + face + '.otf') format('opentype')
+            font-family : $name
+            font-weight : $typeface[$face][0]
+            font-style  : $typeface[$face][1]
+            src : local($name), url(unquote($path) + '/' + $folder + '/' + $folder + '_' + $face + '.otf') format('opentype')
+
+            if $display
+                font-display: unquote($display)
 
 
 fontSize(size = base-font-size, base_size = base-font-size, font_height = base-line-height)
@@ -54,4 +57,4 @@ elegant_link_shadow(shadow_color)
                 -0.12em 0 shadow_color,
                 0.15em 0 shadow_color,
                 -0.15em 0 shadow_color
-    
+
