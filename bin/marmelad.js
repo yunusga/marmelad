@@ -356,9 +356,15 @@ gulp.task('server:static', (done) => {
 
     bsSP.init(settings.app.bsSP, () => {
 
-        let urls = bsSP.getOption('urls');
+        let urls = bsSP.getOption('urls'),
+            bsAuth = bsSP.getOption('bsAuth'),
+            authString = '';
 
-        console.log(boxen(`${chalk.bold.yellow(pkg.name.toUpperCase())} v${pkg.version} is Started!\n\n${chalk.bold.green(urls.get('local'))} сopied to clipboard!`, {
+        if (bsAuth && bsAuth.use) {
+            authString = `\n\nuser: ${bsAuth.user}\npass: ${bsAuth.pass}`;
+        }
+
+        console.log(boxen(`${chalk.bold.yellow(pkg.name.toUpperCase())} v${pkg.version} is Started!\n\n${chalk.bold.green(urls.get('local'))} сopied to clipboard!${authString}`, {
             padding: 1,
             margin: 1,
             borderStyle: 'double',
