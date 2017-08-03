@@ -282,6 +282,12 @@ gulp.task('styles:plugins', (done) => {
     gulp.src(path.join(settings.paths.js.plugins, '**', '*.css'))
         .pipe(plumber())
         .pipe(concat('plugins.min.css'))
+        .pipe(groupMQ())
+        .pipe(postcss([
+            focus(),
+            flexBugsFixes(),
+            cssnano({ zindex:false })
+        ]))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .on('end', () => {
             gutil.log(`Plugins CSS ......................... ${chalk.bold.green('Done')}`);
