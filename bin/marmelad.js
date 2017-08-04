@@ -341,8 +341,8 @@ gulp.task('static', (done) => {
         '!' + settings.paths.static + '/**/*tmp*'
     ])
         .pipe(plumber())
-        .pipe(changed(settings.paths.dist))
-        .pipe(gulp.dest(settings.paths.dist));
+        .pipe(changed(settings.paths.storage))
+        .pipe(gulp.dest(settings.paths.storage));
 
     stream.on('end', () => {
         gutil.log(`Static files copy ................... ${chalk.bold.green('Done')}`);
