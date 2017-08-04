@@ -321,6 +321,9 @@ gulp.task('stylus', (done) => {
             flexBugsFixes(),
             autoprefixer(settings.app.autoprefixer)
         ]))
+        .pipe(gif('*.min.css', postcss([
+            cssnano(settings.app.cssnano)
+        ])))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .on('end', () => {
             gutil.log(`Stylus CSS .......................... ${chalk.bold.green('Done')}`);
