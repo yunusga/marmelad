@@ -102,7 +102,7 @@ gulp.task('nunjucks', (done) => {
                 isNunJucksUpdate = false;
             }
         }))
-        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg')}))
+        .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg'), _beml : settings.app.beml}))
         .pipe(beml(settings.app.beml))
         .pipe(gulp.dest(settings.paths.dist));
 
