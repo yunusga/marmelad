@@ -137,6 +137,8 @@ gulp.task('db', (done) => {
         icons    : getIconsNamesList(settings.paths.iconizer.icons)
     });
 
+    isNunJucksUpdate = true;
+
     gutil.log(`DB for templates .................... ${chalk.bold.yellow('Refreshed')}`);
 
     done();
@@ -147,7 +149,7 @@ gulp.task('db', (done) => {
  * DB:update
  */
 gulp.task('db:update', (done) => {
-    runSequence('db', 'nunjucks', done);
+    runSequence('db', 'stylus', 'nunjucks', done);
 });
 
 
@@ -183,6 +185,9 @@ gulp.task('iconizer', (done) => {
  * Iconizer update
  */
 gulp.task('iconizer:update', (done) => {
+
+    isNunJucksUpdate = true;
+    
     runSequence('iconizer', 'nunjucks', done);
 });
 
