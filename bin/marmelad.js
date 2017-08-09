@@ -188,7 +188,7 @@ gulp.task('iconizer:update', (done) => {
 
     isNunJucksUpdate = true;
     
-    runSequence('iconizer', 'nunjucks', done);
+    runSequence('iconizer', 'db:update', done);
 });
 
 
