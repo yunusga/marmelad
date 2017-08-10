@@ -89,6 +89,8 @@
     "postcss-discard-comments": "2.0.4",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-focus": "2.0.0",
-    "run-sequence": "2.1.0"
+    "run-sequence": "2.1.0",
+    "translit": "0.0.1",
+    "translit-russian": "0.0.2"
   }
 }

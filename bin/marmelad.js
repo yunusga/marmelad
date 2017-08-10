@@ -18,6 +18,7 @@ const uglify            = require('gulp-uglify');
 
 const nunjucks          = require('gulp-nunjucks-html');
 const frontMatter       = require('gulp-front-matter');
+const translit          = require('translit')(require('translit-russian'));
 
 const beml              = require('gulp-beml');
 const svgSprite         = require('gulp-svg-sprite');
@@ -90,7 +91,13 @@ gulp.task('nunjucks', (done) => {
         .pipe(nunjucks({
             searchPaths: getNunJucksBlocks(settings.paths._blocks),
             locals: database,
-            ext: '.html'
+            ext: '.html',
+            setUp: function(env) {
+            
+                env.addFilter('translit', (str) => translit(str).replace(/ /, '_').toLowerCase());
+                
+                return env;
+            }
         }))
         .pipe(pipeErrorStop({
             errorCallback: (err) => {
