@@ -1,33 +1,31 @@
 @require 'components/_variables';
-@require 'components/_utils';
-@require 'components/normalize';
+@require 'components/_functions';
 @require 'components/content';
 @require 'components/controls';
-@require 'components/grid';
+@require 'components/grids';
 @require 'components/iconizer';
-@require 'components/keyframes';
 @require 'components/wordpress';
 
 /* ==========================================================================
    Browser Upgrade Prompt
    ========================================================================== */
 .browserupgrade
-    margin : base-gutter 0
+    margin : $appGutter 0
     background : #ccc
     color : #000
-    padding : base-gutter 0
+    padding : $appGutter 0
 
 
 .demo-box
     background-color : #009688
     color #fff
     text-align : center
-    padding : base-gutter
+    padding : $appGutter
 
-.w-container
+.m-container
     width 100%
-    max-width : base-content-width
-    padding : 0 base-gutter
+    max-width : $appWidth
+    padding : 0 $appGutter
     margin : 0 auto
 
 @require '../_blocks/**/*';

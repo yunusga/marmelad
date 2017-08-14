@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="{{app.lang}}">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="cleartype" content="on">
+
+        <meta name="theme-color" content="{{ app.stylus.theme_color }}">
+
+        <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
+        <meta name="format-detection" content="telephone=no">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="msapplication-tap-highlight" content="no">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <meta name="MobileOptimized" content="320">
+        <meta name="HandheldFriendly" content="True">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+        <title>{{ pageTitle}} - {{ app.package.name | capitalize}} v{{ app.package.version }}</title>
+
+
+        <link rel="stylesheet" href="{{app.storage}}/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{app.storage}}/css/style.css">
+
+        {# <script src="{{app.storage}}/js/vendors/modernizr.js" async></script>
+        <script src="{{app.storage}}/js/vendors/pep-0.4.2.min.js" async></script> #}
+
+    </head>
+
+    <body block="app" mod="{{ bodyMods }}" mix="block:{{bodyClasses}}">
+
+        <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+        <div elem="wrapper" mix="block:{{scrollFixClasses}}">
+
+            {% include 'app-header.html' %}
+
+            <div elem="content" mix="block:{{contentClasses}}">
+
+                <main elem="main">
+                    {% block main %}{% endblock %}
+                </main><!-- e:main -->
+                
+                {% if asideLeft %}
+                <aside elem="aside" mod="left">
+                    {% block asideLeft %}{% endblock %}
+                </aside><!-- e:aside m:left -->
+                {% endif %}
+
+                {% if asideRight %}
+                <aside elem="aside" mod="right">
+                    {% block asideRight %}{% endblock %}
+                </aside><!-- e:aside m:right -->
+                {% endif %}
+
+            </div><!-- b:m-content -->
+
+            {% include 'app-footer.html' %}
+
+        </div><!-- b:wrapper -->
+
+        {% include 'page-scroller.html' %}
+
+        {# https://github.com/yunusga/forceFeed
+        https://css-tricks.com/handling-long-unexpected-content-css/ #}
+        
+        <script src="{{app.storage}}/js/vendors/forceFeed.js"></script>
+        <script>
+        window.words = ['БЭМ', 'браузер', 'Сетка', 'CSS-препроцессор', 'методология', 'интерфейс', 'компонент', 'пример', 'вёрстка', 'сайт', 'разработка'];
+        window.sentences = [
+            'Если у вас есть что дополнить или вы хотите принять участие в разработке, пожалуйста, <a href="https://github.com/yunusga/marmelad/issues">создайте issue на GitHub</a> или форкните <a href="https://github.com/yunusga/marmelad">репозиторий</a> и пришлите pull request.',
+                'Cоблюдайте предложенные здесь или свои собственные соглашения.',
+                'Есть ситуации, когда правила нужно нарушить. Причина должна быть действительно серьезной, не предположительной.',
+                'Само понятие БЭМ — не только метод именования селекторов, но парадигма восприятия проекта как набора сущностей (блоки, элементы, модификаторы).',
+                'Полный стек БЭМ подразумевает двойную шаблонизацию и имеет относительно высокий порог входа. Используйте БЭМ хотя бы как способ именования селекторов.',
+                'Элемент можно использовать вне его блока только в исключительных случаях.',
+                'Элемент — часть блока, но, поскольку, БЭМ-дерево независимо от HTML-дерева, элемент можно использовать и вне его блока в некоторых исключительных условиях (сам блок должен быть на странице).',
+                'Пример: расположение попапа-элемента не внутри блока-родителя, а в самом конце DOM (дабы показывать попап независимо от ограничения видимости родителей).',
+                'Если Вы используете БЭМ только как метод именования селекторов, при написании разметки никогда не используйте элемент вне блока.',
+                'Не у всех блоков должны быть элементы: кнопка — всегда БЭМ-блок, но БЭМ-элементы у неё внутри встречаются относительно редко.',
+                'Просто задайте себе вопрос: «Эта сущность может потребоваться мне отдельно, сама по себе? Или она нужна только внутри её родителя?» Если нужна отдельно — это БЭМ-блок, если мыслима только внутри родителя — это БЭМ-элемент.',
+                'В действительно сомнительных случаях делайте выбор в пользу БЭМ-блока.',
+                'Не забывайте о миксовании (возможности иметь на одном теге и класс уровня БЭМ-элемента какого-то родительского блока, и свой класс уровня БЭМ-блока).',
+        ];
+        forceFeed({words: window.words, sentences: window.sentences});
+        </script>
+
+        <script src="{{app.storage}}/js/vendors/jquery-2.2.0.min.js"></script>
+        <script src="{{app.storage}}/js/plugins.min.js"></script>
+        <script src="{{app.storage}}/js/app.js"></script>
+
+        {% if app.GA %}
+        <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+        <script>
+            window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+            ga('create','{{ app.GA }}','auto');ga('send','pageview')
+        </script>
+        <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+        {% endif %}
+
+    </body><!-- b:w-page -->
+
+</html>

@@ -10,27 +10,27 @@ const through     = require('through2');
 const gutil       = require('gulp-util');
 const PluginError = gutil.PluginError;
 
-function icon(name, options) {
+function icon(name, opts) {
 
-    options = options || {};
+    opts = opts || {};
 
-    let size    = options.size ? `svg-icon_${options.size}` : '';
-    let classes = `svg-icon svg-icon_${name} ${size} ${(options.class || '')}`;
+    let size    = opts.size ? `svg-icon${opts._beml.modPrefix}${opts.size}` : '';
+    let classes = `svg-icon svg-icon${opts._beml.modPrefix}${name} ${size} ${(opts.class || '')}`;
 
     classes     = classes.trim();
 
-    options.tag = (typeof options.tag == 'undefined') ? 'div' : options.tag;
+    opts.tag = (typeof opts.tag === 'undefined') ? 'div' : opts.tag;
 
-    let icon = `<svg class="svg-icon__link"><use xlink:href="#${name}" /></svg>`;
+    let icon = `<svg class="svg-icon${opts._beml.elemPrefix}link"><use xlink:href="#${name}" /></svg>`;
 
-    return `<${options.tag} class="${classes}">${wrapSpinner(icon, classes)}</${options.tag}>`;
+    return `<${opts.tag} class="${classes}">${wrapSpinner(icon, classes, opts)}</${opts.tag}>`;
 
 }
 
-function wrapSpinner(html, klass) {
+function wrapSpinner(html, klass, opts) {
 
     if (klass.indexOf('spinner') > -1) {
-        return `<div class="svg-icon__spinner">${html}</div>`;
+        return `<${opts.tag} class="svg-icon${opts._beml.elemPrefix}spinner">${html}</${opts.tag}>`;
     } else {
         return html;
     }
@@ -51,11 +51,11 @@ function buildParamsFromString(string) {
     return params;
 }
 
-function replaceIconTags(src) {
+function replaceIconTags(src, opts) {
 
     let match, tag, params, name;
     let html = src.toString();
-    let iconRegexp = /<icon\s+([-=\w\d'"\s]+)\s*\/?>(<\/icon>)?/gi;
+    let iconRegexp = /<icon\s+([-=\w\d\c{}'"\s]+)\s*\/?>|<\/icon>/gi;
 
     while (match = iconRegexp.exec(html)) {
         tag     = match[0];
@@ -64,19 +64,21 @@ function replaceIconTags(src) {
 
         delete params.name;
 
+        Object.assign(params, opts);
+
         html = html.replace(tag, icon(name, params));
     }
 
     return html;
 }
 
-function iconizeHtml(src, options) {
+function iconizeHtml(src, opts) {
 
-    let sprite = fs.readFileSync(options.path).toString();
+    let sprite = fs.readFileSync(opts.path).toString();
 
     let html = src.toString();
 
-    if (html.indexOf(sprite) == -1) {
+    if (html.indexOf(sprite) === -1) {
         sprite = sprite.replace(/\n/g,'');
         sprite = sprite.replace(/<defs[\s\S]*?\/defs><path[\s\S]*?\s+?d=/g, '<path d=');
         sprite = sprite.replace(/<style[\s\S]*?\/style><path[\s\S]*?\s+?d=/g, '<path d=');
@@ -85,18 +87,24 @@ function iconizeHtml(src, options) {
         html = html.replace(/<body.*?>/, function(match) { return `${match}\n\n    ${sprite}\n` });
     }
 
-    return replaceIconTags(html);
+    return replaceIconTags(html, opts);
 }
 
-module.exports = function(options) {
+module.exports = function(opts) {
 
     return through.obj(function(file, enc, cb) {
+
+        Object.assign({
+            elemPrefix: '__',
+            modPrefix : '--',
+            modDlmtr  : '-'
+        }, opts);
 
         if (file.isNull()) {
             cb(null, file);
         }
 
-        let html = iconizeHtml(file.contents, options);
+        let html = iconizeHtml(file.contents, opts);
 
         if (file.isBuffer()) {
             file.contents = new Buffer(html);

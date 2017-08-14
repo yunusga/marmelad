@@ -1,15 +1,12 @@
 {
   "name": "marmelad",
-  "version": "2.0.0",
+  "version": "4.0.0",
   "description": "Сборщик статичных сайтов на базе Gulp",
   "preferGlobal": true,
   "engines": {
-    "node": ">=7.0.0"
+    "node": ">=7.4.0"
   },
-  "author": {
-    "email": "yunusga@yandex.ru",
-    "name": "Yunus Gaziev"
-  },
+  "author": "Yunus Gaziev <yunusga@yandex.ru> (https://github.com/yunusga)",
   "bin": {
     "marmelad": "bin/marmelad.js"
   },
@@ -39,48 +36,62 @@
       "email": "nikelamigo@gmail.com"
     }
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yunusga/marmelad.git"
+  },
+  "homepage": "https://github.com/yunusga/marmelad",
+  "bugs": {
+    "url": "https://github.com/yunusga/marmelad/issues",
+    "email": "yunusga@yandex.ru"
+  },
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
+    "autoprefixer": "7.1.2",
+    "babel-core": "^6.25.0",
     "babel-plugin-transform-object-assign": "6.22.0",
-    "babel-preset-es2015": "6.24.0",
-    "basic-auth": "1.1.0",
-    "browser-sync": "2.18.7",
-    "chalk": "1.1.3",
-    "commander": "2.9.0",
+    "babel-preset-es2015": "6.24.1",
+    "boxen": "^1.2.1",
+    "browser-sync": "2.18.13",
+    "bs-auth": "1.1.5",
+    "chalk": "2.1.0",
+    "clipboardy": "^1.1.4",
+    "commander": "2.11.0",
+    "cssnano": "3.10.0",
     "decache": "4.1.0",
-    "del": "2.2.2",
-    "eslint-config-jquery": "1.0.0",
-    "eslint-config-wordpress": "1.1.0",
-    "fs-extra": "2.0.0",
+    "del": "3.0.0",
     "gulp": "3.9.1",
-    "gulp-autoprefixer": "3.1.1",
-    "gulp-babel": "6.1.2",
+    "gulp-autoprefixer": "4.0.0",
+    "gulp-babel": "7.0.0",
     "gulp-batch": "1.0.5",
     "gulp-beml": "1.0.0",
-    "gulp-changed": "1.3.2",
-    "gulp-compile-handlebars": "0.6.1",
+    "gulp-changed": "3.1.0",
     "gulp-concat": "2.6.1",
-    "gulp-csslint": "1.0.0",
-    "gulp-csso": "2.0.0",
-    "gulp-eslint": "3.0.1",
+    "gulp-front-matter": "^1.3.0",
     "gulp-group-css-media-queries": "1.2.0",
-    "gulp-header": "1.8.8",
+    "gulp-header": "1.8.9",
     "gulp-if": "2.0.2",
     "gulp-include": "2.3.1",
-    "gulp-less": "3.3.0",
+    "gulp-jscs": "4.0.0",
+    "gulp-less": "3.3.2",
     "gulp-load-plugins": "1.5.0",
+    "gulp-nunjucks-html": "^2.0.0",
     "gulp-plumber": "1.1.0",
+    "gulp-postcss": "7.0.0",
     "gulp-rename": "1.2.2",
     "gulp-stylus": "2.6.0",
-    "gulp-svg-sprite": "1.3.6",
-    "gulp-uglify": "2.0.1",
+    "gulp-svg-sprite": "1.3.7",
+    "gulp-tap": "^1.0.1",
+    "gulp-uglify": "3.0.0",
     "gulp-util": "3.0.8",
     "gulp-watch": "4.3.11",
     "gulp-wrap": "0.13.0",
-    "handlebars-layouts": "3.1.4",
     "pipe-error-stop": "0.0.11",
-    "pretty-hrtime": "1.0.3",
-    "require-dir": "0.3.1",
-    "run-sequence": "1.2.2"
+    "postcss-discard-comments": "2.0.4",
+    "postcss-flexbugs-fixes": "3.2.0",
+    "postcss-focus": "2.0.0",
+    "run-sequence": "2.1.0",
+    "translit": "0.0.1",
+    "translit-russian": "0.0.2"
   }
 }

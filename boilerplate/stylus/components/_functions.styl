@@ -1,0 +1,60 @@
+fontFace($name, $folder, $typefaces, $display, $path = '../assets/fonts')
+
+    .font-{$folder}
+        font-family : $name
+
+    $typeface = {
+        t     : (200 normal), // thin
+        t-i   : (200 italic), // thin italic
+        l     : (300 normal), // light
+        l-i   : (300 italic), // light italic
+        book  : (350 normal), // book normal
+        r     : (400 normal), // regular
+        i     : (400 italic), // regular italic
+        m     : (500 normal), // medium
+        m-i   : (500 italic), // medium italic
+        s-b   : (600 normal), // semi bold
+        s-b-i : (600 italic), // semi bold italic
+        b     : (700 normal), // bold
+        b-i   : (700 italic), // bold italic
+        e-b   : (800 normal), // extra bold
+        e-b-i : (800 italic), // extra bold italic
+        bl    : (900 normal), // black (mega bold)
+        bl-i  : (900 italic)  // black italic (mega bold italic)
+    }
+
+    for $face in $typefaces
+
+        @font-face
+            font-family : $name
+            font-weight : $typeface[$face][0]
+            font-style  : $typeface[$face][1]
+            src : local($name), url(unquote($path) + '/' + $folder + '/' + $folder + '_' + $face + '.otf') format('opentype')
+
+            if $display
+                font-display: unquote($display)
+
+
+fontSize(size = base-font-size, base_size = base-font-size, font_height = base-line-height)
+    //font-size   size px
+    font-size   (size / base_size) rem
+    //line-height unit((size / base_size) * font_height, px)
+    line-height (font_height/base_size) * (size / base_size) rem
+
+elegant_link_underline($distance = 2px)
+    background-image : linear-gradient(0deg, transparent, transparent (3 - $distance), currentColor 0, currentColor (4 - $distance), transparent 0)
+
+elegant_link_shadow(shadow_color)
+    text-shadow: 0.03em 0 shadow_color,
+                -0.03em 0 shadow_color,
+                0 0.03em shadow_color,
+                0 -0.03em shadow_color,
+                0.06em 0 shadow_color,
+                -0.06em 0 shadow_color,
+                0.09em 0 shadow_color,
+                -0.09em 0 shadow_color,
+                0.12em 0 shadow_color,
+                -0.12em 0 shadow_color,
+                0.15em 0 shadow_color,
+                -0.15em 0 shadow_color
+

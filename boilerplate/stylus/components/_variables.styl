@@ -1,40 +1,132 @@
-theme-color_primary   = #00bcd4
-theme-color_secondary = #c00
+$system-ui = unquote('-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue')
 
-aside-width-left  = 300px
-aside-width-right = aside-width-left
+$elemPrefix = $data.beml.elemPrefix
+$modPrefix = $data.beml.modPrefix
+$modDlmtr = $data.beml.modDlmtr
 
-base-gutter          = 15px
-base-content-width   = 960px
-base-controls-height = 36px
+$colorPrimary = convert($data.theme_color)
+$colorAccent  = #FF3F80
 
-base-font-family =  'Ubuntu, Roboto, "Segoe UI", Arial, Helvetica, sans-serif'
-base-font-size   = 16px
-base-font-small  = (base-font-size / 100 * 80)
-base-font-weight = 400
-base-line-height = 24
-base-text-color  = #333
+$textDarkColor  = #000
+$textLightColor = #fff
 
-pathToFonts = '../assets/fonts'
+$theme = 'light' // dark
 
-ff-pre      = 'Consolas, sans-serif'
-ff-code     = ff-pre
+$appGutter = 20px
+$appWidth  = 1000px
 
-selection = {
-    bgc   : theme-color_primary,
+$controlsHeight = 36px
+$controlsRadius = 3px
+
+$colors = {
+    primary : $colorPrimary,
+    accent  : $colorAccent,
+    bgc     : #fff,
+    txtDark : {
+        primary   : rgba($textDarkColor, .87),
+        secondary : rgba($textDarkColor, .54),
+        hint      : rgba($textDarkColor, .38),
+        divider   : rgba($textDarkColor, .12)
+    },
+    txtLight : {
+        primary   : rgba($textLightColor, 1),
+        secondary : rgba($textLightColor, .7),
+        hint      : rgba($textLightColor, .5),
+        divider   : rgba($textLightColor, .12)
+    }
+}
+
+$textColor = $colors.txtDark;
+
+$links = {
+    default : #0054b9,
+    hover   : #c00,
+    active  : false,
+    visited : false
+}
+
+$selection = {
+    bgc   : $colors.primary,
     color : #fff
 }
 
-html = {
-    family     : unquote(base-font-family),
-    weight     : base-font-weight,
-    color      : base-text-color,
-    fontSize   : base-font-size,
-    lineHeight : base-line-height,
-    bgc        : #f4f4f4
+$placeholders = {
+    normal : $textColor.primary,
+    focus  : transparent
 }
 
-breakpoints = {
+$fonts = {
+    base     : $system-ui,
+    headings : $system-ui
+}
+
+$fontWeight = {
+    thin    : 100,
+    light   : 300,
+    regular : 400,
+    medium  : 500,
+    bold    : 700,
+    black   : 900
+}
+
+$html = {
+    family     : $fonts.base,
+    weight     : 400,
+    color      : $textColor.primary,
+    fontSize   : 17px,
+    lineHeight : 1.2,
+    bgc        : $colors.bgc
+}
+
+$headings = {
+    gutter    : $appGutter,
+    family    : $fonts.headings,
+    weight    : 700,
+    color     : $textColor.primary,
+    transform : none,
+    size      : 34
+}
+
+$blockquote = {
+    gutter : $appGutter,
+    border : {
+        size  : 5px,
+        color : $colors.primary
+    },
+    font : {
+        size  : base-font-size,
+        style : normal
+    }
+}
+
+$controls = {
+    default : {
+        bgc : #eee,
+        color : $textColor.primary
+    },
+    brand : {
+        bgc : $colors.primary,
+        color : #fff
+    },
+    success : {
+        bgc : #66bb6a,
+        color : #fff
+    },
+    info : {
+        bgc : #26c6da,
+        color : #fff
+    },
+    warning : {
+        bgc : #ffca28,
+        color : #fff
+    },
+    danger : {
+        bgc : #ff7043,
+        color : #fff
+    }
+}
+
+$breakpoints = {
     xs  : 480px,
     sm  : 600px,
     md  : 840px,
@@ -44,113 +136,17 @@ breakpoints = {
     fhd : 1600px
 }
 
-grid = {
-    block   : w-grid,
-    elem    : col,
-    columns : 12,
-    gutter  : 0,
+$grids = {
+    block      : grids,
+    col        : col,
+    mq         : 'min',
+    columns    : 12,
+    gutter     : 0,
+    colGutters : 0,
     mods    : {
         demo : {
-            gutter : 15
+            gutter : 0 0 0 -15px,
+            colGutters : 0 0 15px 15px
         }
     }
 }
-
-wp = {
-    gallery : {
-        columns : 9,
-        gutter  : 5
-    }
-}
-
-iconizer = {
-    width  : 24px,
-    height : 24px,
-    fill   : #333
-}
-
-controls = {
-    placeholder : {
-        normal : rgba(#333, .7),
-        focus  : transparent
-    },
-    padding : base-gutter,
-    height  : base-controls-height,
-    border  : {
-        width  : 1px,
-        radius : 2px
-    }
-}
-
-text-weight = {
-    thin    : 100,
-    light   : 300,
-    regular : 400,
-    medium  : 500,
-    bold    : 700,
-    black   : 900
-}
-
-
-headings-size = base-font-size
-
-headings = {
-    gutter    : base-gutter,
-    family    : unquote(base-font-family),
-    weight    : 700,
-    color     : base-text-color,
-    transform : none,
-    h1 : {
-        size : headings-size * 2
-    },
-    h2 : {
-        size : headings-size * 1.5
-    },
-    h3 : {
-        size : headings-size * 1.12
-    },
-    h4 : {
-        size : headings-size
-    },
-    h5 : {
-        size : headings-size * 0.87
-    },
-    h6 : {
-        size : headings-size * 0.63
-    }
-}
-
-links = {
-    default : #0054b9,
-    hover   : #c00,
-    active  : false,
-    visited : false
-
-}
-
-blockquote = {
-    gutter : base-gutter,
-    border : {
-        size  : 5px,
-        color : theme-color_primary
-    },
-    font : {
-        size  : base-font-size,
-        style : normal
-    }
-}
-
-em-color    = base-text-color
-
-pre-color   = base-text-color
-pre-bgc     = rgba(base-text-color, .05)
-
-ins-color   = base-text-color
-ins-bgc     = #ffa
-
-mark-color  = base-text-color
-mark-bgc    = #ffa
-
-quote_style = italic
-
-list-padding-left = base-gutter

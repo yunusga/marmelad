@@ -1,0 +1,39 @@
+---
+pageTitle: Main Page
+bodyMods: demo
+bodyClasses: ''
+scrollFixClasses: ''
+contentClasses: m-container
+asideLeft: false
+asideRight: false
+---
+
+{% extends '_layout.html' %}
+
+{% block main %}
+
+<style type="text/css">
+
+    .demo-intro {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-pack: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+</style>
+
+<div block="demo-intro">
+    <blockquote>
+        Все эти инновации, о которых сейчас трубят на каждом углу — чушь собачья. Кто угодно может заниматься инновациями. <span class="m-link">«Думать иначе»</span> и всё такое… к чёрту. Это бессмысленно. 99 процентов успеха — это проделанная работа.
+
+        <footer>
+            Конференция <a rel="noreferrer, nofollow" target="_blank" href="https://www.theregister.co.uk/2017/02/14/the_government_is_coming_for_your_code/">Open Source Leadership Summit</a> <cite title="Линус Торвальдс">Линус Торвальдс</cite>
+        </footer>
+    </blockquote>
+</div><!-- b:demo-intro -->
+
+{% endblock %}

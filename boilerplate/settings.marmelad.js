@@ -4,22 +4,21 @@ let path = require('path');
 
 let folders = {
     dist    : 'static',
-    storage : 'images',
-    marmelad : 'marmelad',
+    storage : '',
+    marmelad: 'marmelad',
     _blocks : '_blocks',
-    _helpers: '_helpers',
     _pages  : '_pages',
     iconizer: {
         src  : 'iconizer',
         icons: 'icons'
     },
-    js      : {
+    js: {
         src    : 'js',
         vendors: 'vendors',
         plugins: 'plugins'
     },
-    stylus  : 'stylus',
-    static  : 'static'
+    stylus: 'stylus',
+    static: 'static'
 };
 
 let paths = {
@@ -28,7 +27,6 @@ let paths = {
     marmelad : path.join(folders.marmelad),
     _blocks : path.join(folders.marmelad, folders._blocks),
     _pages  : path.join(folders.marmelad, folders._pages),
-    _helpers: path.join(folders.marmelad, folders._helpers),
     iconizer: {
         src  : path.join(folders.marmelad, folders.iconizer.src),
         icons: path.join(folders.marmelad, folders.iconizer.src, folders.iconizer.icons),
@@ -44,10 +42,12 @@ let paths = {
 
 
 let app = {
-
+    cssnano : {
+        zindex: false
+    },
     beml        : {
         elemPrefix: '__',
-        modPrefix : '_',
+        modPrefix : '--',
         modDlmtr  : '-'
     },
     autoprefixer: {
@@ -59,15 +59,11 @@ let app = {
             "Safari >= 6"
         ]
     },
-    babel : {
-        presets: ['es2015'],
-        plugins: ["transform-object-assign"]
-    },
     bsSP        : {
         server        : {
             baseDir: paths.dist
         },
-        port          : 8863,
+        port          : 8967,
         open          : false,
         directory     : true,
         ghostMode     : false,
