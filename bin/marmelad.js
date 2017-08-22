@@ -21,6 +21,7 @@ const frontMatter       = require('gulp-front-matter');
 const translit          = require('translit')(require('translit-russian'));
 
 const beml              = require('gulp-beml');
+const pretty            = require('../modules/gulp-pretty');
 const svgSprite         = require('gulp-svg-sprite');
 
 const stylus            = require('gulp-stylus');
@@ -111,6 +112,7 @@ gulp.task('nunjucks', (done) => {
         }))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg'), _beml : settings.app.beml}))
         .pipe(beml(settings.app.beml))
+        .pipe(pretty(settings.app.formatHtml))
         .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
