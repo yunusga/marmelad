@@ -50,6 +50,14 @@ let app = {
         modPrefix : '--',
         modDlmtr  : '-'
     },
+    formatHtml : {
+        unformatted: ['code', 'pre', 'em', 'strong', 'span', 'svg'],
+        indent_inner_html: true,
+        indent_char: ' ',
+        indent_size: 2,
+        sep: '\n',
+        ocd: true
+    },
     autoprefixer: {
         browsers: [
             "last 2 version",
