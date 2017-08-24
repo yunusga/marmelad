@@ -1,5 +1,7 @@
 # marmelad <sup>[4.4.3](https://github.com/yunusga/marmelad/blob/feature/back-to-future/CHANGELOG.md#443-22082017)</sup>
 
+[![GitHub tag](https://img.shields.io/github/tag/yunusga/marmelad.svg)](https://github.com/yunusga/marmelad/releases/tag/v4.4.3) [![license](https://img.shields.io/github/license/yunusga/marmelad.svg)](https://github.com/yunusga/marmelad/blob/master/LICENSE)
+
 > Сборщик статичных сайтов на базе Gulp
 
 ## Содержание
