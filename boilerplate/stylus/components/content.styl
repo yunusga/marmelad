@@ -41,24 +41,24 @@ if $placeholders.focus
     -webkit-tap-highlight-color rgba(0, 0, 0, 0)
     box-sizing border-box
 
-// html
-//     font-size : $html.fontSize
-//     font-family : $html.family
-//     font-weight : $html.weight
-//     color : $html.color
-//     background-color : $html.bgc
+html
+    font-size : $html.fontSize
+    font-family : $html.family
+    font-weight : $html.weight
+    color : $html.color
+    background-color : $html.bgc
 
-//     font-feature-settings : kern, liga, onum
-//     -webkit-font-smoothing : antialiased
-//     -webkit-text-size-adjust : 100%
-//     -ms-text-size-adjust : 100%
+    font-feature-settings : kern, liga, onum
+    -webkit-font-smoothing : antialiased
+    -webkit-text-size-adjust : 100%
+    -ms-text-size-adjust : 100%
 
-// body
-//     font-size : inherit
-//     font-family : inherit
-//     font-weight : inherit
-//     color : inherit
-//     background-color : inherit
+body
+    font-size : inherit
+    font-family : inherit
+    font-weight : inherit
+    color : inherit
+    background-color : inherit
 
 blockquote
     font-style       : $blockquote.font.style
@@ -66,7 +66,28 @@ blockquote
     padding-left     : $blockquote.gutter
     border-left      : $blockquote.border.size solid $blockquote.border.color
     background-color : rgba($blockquote.border.color, .03)
-        
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6
+    font-family    : $headings.family
+    font-weight    : $headings.weight
+    color          : $headings.color
+    text-transform : $headings.transform
+    
+    &::-moz-selection
+        background : $selection.bgc
+        color : $selection.color
+        text-shadow : none
+
+    &::selection
+        background : $selection.bgc
+        color : $selection.color
+        text-shadow : none
+
 template, /* 1 */
 [hidden]
     display none

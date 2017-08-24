@@ -1,4 +1,4 @@
-$system-ui = unquote('-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue')
+$system-ui = unquote('-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif')
 
 $elemPrefix = $data.beml.elemPrefix
 $modPrefix = $data.beml.modPrefix
@@ -96,57 +96,5 @@ $blockquote = {
     font : {
         size  : base-font-size,
         style : normal
-    }
-}
-
-$controls = {
-    default : {
-        bgc : #eee,
-        color : $textColor.primary
-    },
-    brand : {
-        bgc : $colors.primary,
-        color : #fff
-    },
-    success : {
-        bgc : #66bb6a,
-        color : #fff
-    },
-    info : {
-        bgc : #26c6da,
-        color : #fff
-    },
-    warning : {
-        bgc : #ffca28,
-        color : #fff
-    },
-    danger : {
-        bgc : #ff7043,
-        color : #fff
-    }
-}
-
-$breakpoints = {
-    xs  : 0px,
-    sm  : 576px,
-    md  : 768px,
-    lg  : 992px,
-    xl  : 1200px,
-    lg  : 1280px,
-    xlg : 1440px
-}
-
-$grids = {
-    block      : grids,
-    col        : col,
-    mq         : 'min',
-    columns    : 12,
-    gutter     : 0,
-    colGutters : 0,
-    mods    : {
-        demo : {
-            gutter : 0 0 0 -15px,
-            colGutters : 0 0 15px 15px
-        }
     }
 }
