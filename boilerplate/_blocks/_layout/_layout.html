@@ -29,7 +29,7 @@
         <title>{{ pageTitle}} - {{ app.package.name | capitalize}} v{{ app.package.version }}</title>
 
 
-        <link rel="stylesheet" href="{{app.storage}}/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{app.storage}}/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="{{app.storage}}/css/style.css">
 
         {# <script src="{{app.storage}}/js/vendors/modernizr.js" async></script>
@@ -44,8 +44,10 @@
         <![endif]-->
 
         <div elem="wrapper" mix="block:{{scrollFixClasses}}">
-
+            
+            {% if layout.header %}
             {% include 'app-header.html' %}
+            {% endif %}
 
             <div elem="content" mix="block:{{contentClasses}}">
 
@@ -53,21 +55,23 @@
                     {% block main %}{% endblock %}
                 </main><!-- e:main -->
                 
-                {% if asideLeft %}
+                {% if layout.left %}
                 <aside elem="aside" mod="left">
                     {% block asideLeft %}{% endblock %}
                 </aside><!-- e:aside m:left -->
                 {% endif %}
 
-                {% if asideRight %}
+                {% if layout.right %}
                 <aside elem="aside" mod="right">
                     {% block asideRight %}{% endblock %}
                 </aside><!-- e:aside m:right -->
                 {% endif %}
 
             </div><!-- b:m-content -->
-
+            
+            {% if layout.footer %}
             {% include 'app-footer.html' %}
+            {% endif %}
 
         </div><!-- b:wrapper -->
 
@@ -97,7 +101,9 @@
         forceFeed({words: window.words, sentences: window.sentences});
         </script>
 
-        <script src="{{app.storage}}/js/vendors/jquery-2.2.0.min.js"></script>
+        <script src="{{app.storage}}/bootstrap/js/jquery-3.2.1.slim.min.js"></script>
+        <script src="{{app.storage}}/bootstrap/js/popper.min.js"></script>
+        <script src="{{app.storage}}/bootstrap/js/bootstrap.min.js"></script>
         <script src="{{app.storage}}/js/plugins.min.js"></script>
         <script src="{{app.storage}}/js/app.js"></script>
 

@@ -30,7 +30,9 @@ const focus             = require('postcss-focus');
 const flexBugsFixes     = require('postcss-flexbugs-fixes');
 const autoprefixer      = require('autoprefixer');
 const cssnano           = require('cssnano');
+const sass              = require('gulp-sass');
 
+const sourcemaps        = require('gulp-sourcemaps');
 const gif               = require('gulp-if');
 const gutil             = require('gulp-util');
 const plumber           = require('gulp-plumber');
@@ -400,6 +402,66 @@ gulp.task('server:static', (done) => {
     });
 });
 
+/** ^^^
+ * Bootstrap 4.0.0-beta tasks
+ ==================================================================== */
+gulp.task('bts4', (done) => {
+
+    runSequence(
+        'bts4:sass',
+        'bts4:js',
+        done
+    );
+
+    /* SCSS */
+    watch(path.join(settings.app.bts['4'].src.css, '**', '*.scss'), batch((events, done) => {
+        gulp.start('bts4:sass', done);
+    }));
+
+    /* JS */
+    watch(path.join(settings.app.bts['4'].src.js, '**', '*.js'), batch((events, done) => {
+        gulp.start('bts4:js', done);
+    }));
+
+});
+
+gulp.task('bts4:sass', (done) => {
+
+    gulp.src(path.join(settings.app.bts['4'].src.css, '[^_]*.scss'))
+        .pipe(sourcemaps.init())
+        .pipe(sass(settings.app.bts['4'].sass))
+        .pipe(postcss([
+            autoprefixer(settings.app.bts['4'].autoprefixer)
+        ]))
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(settings.app.bts['4'].dest.css))
+        .on('end', () => {
+            gutil.log(`Bootstrap ${settings.app.bts['4'].code} SASS ........... ${chalk.bold.green('Done')}`);
+        })
+        .pipe(bsSP.stream());
+
+        done();
+});
+
+gulp.task('bts4:js', (done) => {
+
+    let stream = gulp.src(path.join(settings.app.bts['4'].src.js, '**', '*.js'))
+        .pipe(plumber())
+        .pipe(changed(path.join(settings.app.bts['4'].dest.js)))
+        .pipe(gulp.dest(settings.app.bts['4'].dest.js));
+
+    stream.on('end', () => {
+        gutil.log(`Bootstrap ${settings.app.bts['4'].code} JS ............. ${chalk.bold.green('Done')}`);
+        bsSP.reload();
+        done();
+    });
+
+    stream.on('error', (err) => {
+        done(err);
+    });
+
+});
+
 gulp.task('watch', () => {
 
     /* СТАТИКА */
@@ -484,8 +546,8 @@ gulp.task('marmelad:start', (done) => {
         'scripts:others',
         'styles:plugins',
         'stylus',
+        'bts' + settings.app.bts.use,
         'watch',
-
         done);
 
 });
@@ -504,7 +566,7 @@ gulp.task('marmelad:init', (done) => {
 
     stream.on('end', () => {
 
-        console.log(boxen(`${pkg.name.toUpperCase()} v${pkg.version}\nBoilerplate successfully copied\n\ntype ${pkg.name} --help for CLI help`, {
+        console.log(boxen(`${chalk.bold.yellow(pkg.name.toUpperCase())} v${pkg.version}\nBoilerplate successfully copied\n\ntype ${pkg.name} --help for CLI help`, {
             padding: 1,
             margin: 1,
             borderStyle: 'double',

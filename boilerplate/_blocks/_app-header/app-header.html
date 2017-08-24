@@ -1,6 +1,9 @@
-<header block="app-header">
-    <div elem="content" mix="block:m-container">
-        <h1>{{ app.package.name | capitalize}} v{{ app.package.version }}</h1>
+<header block="app-header" mix="block:mt-4">
+    <div elem="content" mix="block:container">
+        <h1 class="display-4">
+            {{ app.package.name | capitalize}} v{{ app.package.version }}
+        </h1>
+        <p class="lead">Bootstrap {{ app.settings.app.bts[app.settings.app.bts.use].code }}</p>
         <hr>
     </div>
 </header><!-- b:app-header -->

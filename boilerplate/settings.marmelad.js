@@ -60,11 +60,14 @@ let app = {
     },
     autoprefixer: {
         browsers: [
-            "last 2 version",
-            "ie >= 10",
-            "Android >= 4",
-            "iOS >= 6",
-            "Safari >= 6"
+            'Chrome >= 45',
+            'Firefox ESR',
+            'Edge >= 12',
+            'Explorer >= 10',
+            'iOS >= 9',
+            'Safari >= 9',
+            'Android >= 4.4',
+            'Opera >= 30'
         ]
     },
     bsSP        : {
@@ -92,6 +95,46 @@ let app = {
         svg : {
             xmlDeclaration    : false, // strip out the XML attribute
             doctypeDeclaration: false // don't include the !DOCTYPE declaration
+        }
+    },
+    bts : {
+        use: 4,
+        4: {
+            code: '4.0.0-beta',
+            src : {
+                css: path.join(paths.marmelad, 'bootstrap', '4.0.0-beta'),
+                js: path.join(paths.marmelad, 'bootstrap', '4.0.0-beta'),
+            },
+            dest: {
+                css: path.join(paths.storage, 'bootstrap', 'css'),
+                js: path.join(paths.storage, 'bootstrap')
+            },
+            sass: {
+                precision  : 6,
+                outputStyle: 'expanded'
+            },
+            autoprefixer: {
+                browsers: [
+                    //
+                    // Official browser support policy:
+                    // https://v4-alpha.getbootstrap.com/getting-started/browsers-devices/#supported-browsers
+                    //
+                    'Chrome >= 45', // Exact version number here is kinda arbitrary
+                    'Firefox ESR',
+                    // Note: Edge versions in Autoprefixer & Can I Use refer to the EdgeHTML rendering engine version,
+                    // NOT the Edge app version shown in Edge's "About" screen.
+                    // For example, at the time of writing, Edge 20 on an up-to-date system uses EdgeHTML 12.
+                    // See also https://github.com/Fyrd/caniuse/issues/1928
+                    'Edge >= 12',
+                    'Explorer >= 10',
+                    // Out of leniency, we prefix these 1 version further back than the official policy.
+                    'iOS >= 9',
+                    'Safari >= 9',
+                    // The following remain NOT officially supported, but we're lenient and include their prefixes to avoid severely breaking in them.
+                    'Android >= 4.4',
+                    'Opera >= 30'
+                ]
+            }
         }
     }
 };
