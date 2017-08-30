@@ -43,7 +43,7 @@ let paths = {
 
 let app = {
     cssnano : {
-        zindex: false
+        zIndex: false
     },
     beml        : {
         elemPrefix: '__',
