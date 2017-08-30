@@ -84,7 +84,11 @@ gulp.task('nunjucks', (done) => {
     let templateName = '',
         error = false,
         htmlPlugins = [
-            require('posthtml-bem')(settings.app.beml)
+            require('posthtml-bem')(settings.app.beml),
+            require('posthtml-postcss')([
+                    require('autoprefixer')(settings.app.autoprefixer),
+                    require('cssnano')(settings.app.cssnano)
+                ], {}, /^text\/css$/)
         ];
 
     let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
