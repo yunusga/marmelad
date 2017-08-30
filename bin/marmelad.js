@@ -120,8 +120,8 @@ gulp.task('nunjucks', (done) => {
             }
         }))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg'), _beml : settings.app.beml}))
-        .pipe(postHTML(htmlPlugins))
         .pipe(pretty(settings.app.formatHtml))
+        .pipe(postHTML(htmlPlugins))
         .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
