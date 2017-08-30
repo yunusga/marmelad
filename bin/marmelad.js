@@ -102,6 +102,9 @@ gulp.task('nunjucks', (done) => {
             searchPaths: getNunJucksBlocks(settings.paths._blocks),
             locals: database,
             ext: '.html',
+
+            // TODO: https://gist.github.com/yunusga/1c5236331ddb6caa41a2a71928ac408a
+            
             setUp: function(env) {
             
                 env.addFilter('translit', (str) => translit(str).replace(/ /, '_').toLowerCase());
