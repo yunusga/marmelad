@@ -20,7 +20,7 @@ const nunjucks          = require('gulp-nunjucks-html');
 const frontMatter       = require('gulp-front-matter');
 const translit          = require('translit')(require('translit-russian'));
 
-const beml              = require('gulp-beml');
+const postHTML          = require('gulp-posthtml');
 const pretty            = require('../modules/gulp-pretty');
 const svgSprite         = require('gulp-svg-sprite');
 
@@ -81,8 +81,11 @@ let isNunJucksUpdate = false;
  */
 gulp.task('nunjucks', (done) => {
 
-    let templateName = '';
-    let error = false;
+    let templateName = '',
+        error = false,
+        htmlPlugins = [
+            require('posthtml-bem')(settings.app.beml)
+        ];
 
     let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
         .pipe(plumber())
@@ -113,7 +116,7 @@ gulp.task('nunjucks', (done) => {
             }
         }))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg'), _beml : settings.app.beml}))
-        .pipe(beml(settings.app.beml))
+        .pipe(postHTML(htmlPlugins))
         .pipe(pretty(settings.app.formatHtml))
         .pipe(gulp.dest(settings.paths.dist));
 
