@@ -17,7 +17,14 @@ layout: !!map
 
 {% block main %}
 
-<div class="align-items-center d-flex justify-content-center h-100">
+<style type="text/css">
+    .posthtml-postcss {
+        display: flex;
+        transform: translate3d(0, 0, 0);
+    }
+</style>
+
+<div class="align-items-center justify-content-center h-100" style="display:flex;">
     <div block="demo-intro">
         <h1 class="display-4">{{ app.package.name | capitalize}} v{{ app.package.version }}</h1>
         <p class="lead">Bootstrap {{ app.settings.app.bts[app.settings.app.bts.use].code }}</p>
