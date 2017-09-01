@@ -108,6 +108,8 @@ gulp.task('nunjucks', (done) => {
             setUp: function(env) {
             
                 env.addFilter('translit', (str) => translit(str).replace(/ /, '_').toLowerCase());
+
+                env.addFilter('limitTo', require('../modules/njk-limitTo'));
                 
                 return env;
             }
