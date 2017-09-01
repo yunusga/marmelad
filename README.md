@@ -1,4 +1,4 @@
-# marmelad <sup>[4.8.4](https://github.com/yunusga/marmelad/blob/feature/back-to-future/CHANGELOG.md#484-01092017)</sup>
+# marmelad <sup>[4.8.4](https://github.com/yunusga/marmelad/blob/master/CHANGELOG.md#484-01092017)</sup>
 
 [![GitHub tag](https://img.shields.io/github/tag/yunusga/marmelad.svg)](https://github.com/yunusga/marmelad/releases/tag/v4.8.4) [![license](https://img.shields.io/github/license/yunusga/marmelad.svg)](https://github.com/yunusga/marmelad/blob/master/LICENSE)
 
