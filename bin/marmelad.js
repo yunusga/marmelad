@@ -481,7 +481,12 @@ gulp.task('watch', () => {
         settings.paths.static + '/**/*.*',
         '!' + settings.paths.static + '/**/Thumbs.db',
         '!' + settings.paths.static + '/**/*tmp*'
-    ], batch((events, done) => {
+    ], {
+        awaitWriteFinish: {
+            stabilityThreshold: 1000,
+            pollInterval: 500
+        }
+    }, batch((events, done) => {
         gulp.start('static', done);
     }));
 
