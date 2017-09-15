@@ -37,7 +37,7 @@
 
     </head>
 
-    <body block="app" mod="{{ bodyMods }}" mix="block:{{bodyClasses}}">
+    <body block="app" mods="{{ bodyMods }}" mix="block:{{bodyClasses}}">
 
         <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
@@ -56,13 +56,13 @@
                 </main><!-- e:main -->
                 
                 {% if layout.left %}
-                <aside elem="aside" mod="left">
+                <aside elem="aside" mods="left">
                     {% block asideLeft %}{% endblock %}
                 </aside><!-- e:aside m:left -->
                 {% endif %}
 
                 {% if layout.right %}
-                <aside elem="aside" mod="right">
+                <aside elem="aside" mods="right">
                     {% block asideRight %}{% endblock %}
                 </aside><!-- e:aside m:right -->
                 {% endif %}
