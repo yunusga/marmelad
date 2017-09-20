@@ -61,7 +61,7 @@ const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) =>
 CLI
     .version(pkg.version)
     .option('-a, --auth [user@password]', `set user@password for authorization`)
-    .option('-с, --clipboard', `copy server URL to clipboard on startup`)
+    .option('-c, --clipboard', `copy server URL to clipboard on startup`)
     .parse(process.argv);
 
 /**
