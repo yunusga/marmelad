@@ -61,6 +61,7 @@ const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) =>
 CLI
     .version(pkg.version)
     .option('-a, --auth [user@password]', `set user@password for authorization`)
+    .option('-с, --clipboard', `copy server URL to clipboard on startup`)
     .parse(process.argv);
 
 /**
@@ -401,14 +402,21 @@ gulp.task('server:static', (done) => {
             authString = `\n\nuser: ${bsAuth.user}\npass: ${bsAuth.pass}`;
         }
 
-        console.log(boxen(`${chalk.bold.yellow(pkg.name.toUpperCase())} v${pkg.version} is Started!\n\n${chalk.bold.green(urls.get('local'))} сopied to clipboard!${authString}`, {
+        let clipboardMsg = '';
+
+        if (CLI.clipboard) {
+
+            clipboardMsg = `\n\n${chalk.bold.green(urls.get('local'))} сopied to clipboard!${authString}`;
+            
+            clipboardy.writeSync(urls.get('local'));
+        }
+
+        console.log(boxen(`${chalk.bold.yellow(pkg.name.toUpperCase())} v${pkg.version} is Started!${clipboardMsg}`, {
             padding: 1,
             margin: 1,
             borderStyle: 'double',
             borderColor: 'green'
         }));
-
-        clipboardy.writeSync(urls.get('local'));
 
         done();
     });
