@@ -1,6 +1,6 @@
-# marmelad <sup>[4.8.4](https://github.com/yunusga/marmelad/blob/master/CHANGELOG.md#484-01092017)</sup>
+# marmelad <sup>[4.12.4](https://github.com/yunusga/marmelad/blob/master/CHANGELOG.md#4124-20092017)</sup>
 
-[![GitHub tag](https://img.shields.io/github/tag/yunusga/marmelad.svg)](https://github.com/yunusga/marmelad/releases/tag/v4.8.4) [![license](https://img.shields.io/github/license/yunusga/marmelad.svg)](https://github.com/yunusga/marmelad/blob/master/LICENSE)
+[![GitHub tag](https://img.shields.io/github/tag/yunusga/marmelad.svg)](https://github.com/yunusga/marmelad/releases/tag/v4.12.4) [![license](https://img.shields.io/github/license/yunusga/marmelad.svg)](https://github.com/yunusga/marmelad/blob/master/LICENSE)
 
 > Сборщик статичных сайтов на базе Gulp
 
@@ -28,13 +28,11 @@
 ```
 ../bin/marmelad.js
 
-   ╔════════════════════════════════════════════════╗
-   ║                                                ║
-   ║   MARMELAD v4.8.4 is Started!                  ║
-   ║                                                ║
-   ║   http://localhost:8967 сopied to clipboard!   ║
-   ║                                                ║
-   ╚════════════════════════════════════════════════╝
+   ╔══════════════════════════════════╗
+   ║                                  ║
+   ║   MARMELAD v4.12.4 is Started!   ║
+   ║                                  ║
+   ╚══════════════════════════════════╝
 
 ```
 > И, о Да, он работает :)
