@@ -28,9 +28,11 @@ const stylus            = require('gulp-stylus');
 const postcss           = require('gulp-postcss');
 const focus             = require('postcss-focus');
 const flexBugsFixes     = require('postcss-flexbugs-fixes');
+const momentumScrolling = require('postcss-momentum-scrolling');
 const autoprefixer      = require('autoprefixer');
 const cssnano           = require('cssnano');
 const sass              = require('gulp-sass');
+const sassGlob          = require('gulp-sass-glob');
 
 const sourcemaps        = require('gulp-sourcemaps');
 const gif               = require('gulp-if');
@@ -87,9 +89,10 @@ gulp.task('nunjucks', (done) => {
         htmlPlugins = [
             require('posthtml-bem')(settings.app.beml),
             require('posthtml-postcss')([
+                    require('postcss-momentum-scrolling'),
                     require('autoprefixer')(settings.app.autoprefixer),
                     require('cssnano')(settings.app.cssnano)
-                ], {}, /^text\/css$/)
+                ], { from: undefined }, /^text\/css$/)
         ];
 
     let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
@@ -105,13 +108,13 @@ gulp.task('nunjucks', (done) => {
             ext: '.html',
 
             // TODO: https://gist.github.com/yunusga/1c5236331ddb6caa41a2a71928ac408a
-            
+
             setUp: function(env) {
-            
+
                 env.addFilter('translit', (str) => translit(str).replace(/ /, '_').toLowerCase());
 
                 env.addFilter('limitTo', require('../modules/njk-limitTo'));
-                
+
                 return env;
             }
         }))
@@ -173,7 +176,7 @@ gulp.task('db', (done) => {
  * DB:update
  */
 gulp.task('db:update', (done) => {
-    runSequence('db', 'stylus', 'nunjucks', done);
+    runSequence('db', 'styles', 'nunjucks', done);
 });
 
 
@@ -211,7 +214,7 @@ gulp.task('iconizer', (done) => {
 gulp.task('iconizer:update', (done) => {
 
     isNunJucksUpdate = true;
-    
+
     runSequence('iconizer', 'db:update', done);
 });
 
@@ -314,9 +317,10 @@ gulp.task('styles:plugins', (done) => {
         .pipe(groupMQ())
         .pipe(postcss([
             focus(),
+            momentumScrolling(),
             flexBugsFixes(),
             cssnano({ zindex:false })
-        ]))
+        ], { from: undefined } ))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .on('end', () => {
             gutil.log(`Plugins CSS ......................... ${chalk.bold.green('Done')}`);
@@ -330,7 +334,8 @@ gulp.task('styles:plugins', (done) => {
 /**
  * сборка стилей блоков, для каждого отдельный css
  */
-gulp.task('stylus', (done) => {
+
+gulp.task('styles', (done) => {
 
     let $data = {
         beml : settings.app.beml
@@ -338,24 +343,27 @@ gulp.task('stylus', (done) => {
 
     Object.assign($data, database.app.stylus);
 
-    gulp.src(path.join(settings.paths.stylus, '*.styl'))
+    gulp.src(path.join(settings.paths.styles, '*.{styl,scss}'))
         .pipe(plumber())
-        .pipe(stylus({
-            'include css': true,
-            rawDefine : { $data }
-        }))
+        .pipe(gif('*.styl', stylus({
+          'include css': true,
+          rawDefine : { $data }
+        })))
+        .pipe(gif('*.scss', sassGlob()))
+        .pipe(gif('*.scss', sass()))
         .pipe(groupMQ())
         .pipe(postcss([
             focus(),
+            momentumScrolling(),
             flexBugsFixes(),
             autoprefixer(settings.app.autoprefixer)
-        ]))
+        ], { from: undefined } ))
         .pipe(gif('*.min.css', postcss([
             cssnano(settings.app.cssnano)
         ])))
         .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
         .on('end', () => {
-            gutil.log(`Stylus CSS .......................... ${chalk.bold.green('Done')}`);
+            gutil.log(`Styles CSS .......................... ${chalk.bold.green('Done')}`);
         })
         .pipe(bsSP.stream());
 
@@ -407,7 +415,7 @@ gulp.task('server:static', (done) => {
         if (CLI.clipboard) {
 
             clipboardMsg = `\n\n${chalk.bold.green(urls.get('local'))} сopied to clipboard!${authString}`;
-            
+
             clipboardy.writeSync(urls.get('local'));
         }
 
@@ -447,10 +455,11 @@ gulp.task('bts4', (done) => {
 
 gulp.task('bts4:sass', (done) => {
 
-    gulp.src(path.join(settings.app.bts['4'].src.css, '[^_]*.scss'))
+    gulp.src(path.join(settings.app.bts['4'].src.css, 'scss', '[^_]*.scss'))
         .pipe(sourcemaps.init())
         .pipe(sass(settings.app.bts['4'].sass))
         .pipe(postcss([
+            momentumScrolling(),
             autoprefixer(settings.app.bts['4'].autoprefixer)
         ]))
         .pipe(sourcemaps.write('./'))
@@ -498,12 +507,12 @@ gulp.task('watch', () => {
         gulp.start('static', done);
     }));
 
-    /* STYLUS */
+    /* STYLES */
     watch([
-        path.join(settings.paths._blocks, '**', '*.styl'),
-        path.join(settings.paths.stylus, '**', '*.styl')
+        path.join(settings.paths._blocks, '**', '*.{styl,scss}'),
+        path.join(settings.paths.styles, '**', '*.{styl,scss}'),
     ], batch((events, done) => {
-        gulp.start('stylus', done);
+        gulp.start('styles', done);
     }));
 
     /* СКРИПТЫ */
@@ -570,7 +579,7 @@ gulp.task('marmelad:start', (done) => {
         'scripts:plugins',
         'scripts:others',
         'styles:plugins',
-        'stylus',
+        'styles',
         'bts' + settings.app.bts.use,
         'watch',
         done);
