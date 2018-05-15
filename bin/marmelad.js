@@ -431,26 +431,30 @@ gulp.task('server:static', (done) => {
 });
 
 /** ^^^
- * Bootstrap 4.0.0-beta tasks
+ * Bootstrap 4 tasks
  ==================================================================== */
-gulp.task('bts4', (done) => {
+gulp.task('bootstrap', (done) => {
 
-    runSequence(
-        'bts4:sass',
-        'bts4:js',
-        done
-    );
+    if (settings.app.bts.use) {
 
-    /* SCSS */
-    watch(path.join(settings.app.bts['4'].src.css, '**', '*.scss'), batch((events, done) => {
-        gulp.start('bts4:sass', done);
-    }));
+        runSequence(
+            'bts4:sass',
+            'bts4:js',
+            done
+        );
+    
+        /* SCSS */
+        watch(path.join(settings.app.bts['4'].src.css, '**', '*.scss'), batch((events, done) => {
+            gulp.start('bts4:sass', done);
+        }));
+    
+        /* JS */
+        watch(path.join(settings.app.bts['4'].src.js, '**', '*.js'), batch((events, done) => {
+            gulp.start('bts4:js', done);
+        }));
+    }
 
-    /* JS */
-    watch(path.join(settings.app.bts['4'].src.js, '**', '*.js'), batch((events, done) => {
-        gulp.start('bts4:js', done);
-    }));
-
+    done();
 });
 
 gulp.task('bts4:sass', (done) => {
@@ -580,7 +584,7 @@ gulp.task('marmelad:start', (done) => {
         'scripts:others',
         'styles:plugins',
         'styles',
-        'bts' + settings.app.bts.use,
+        'bootstrap',
         'watch',
         done);
 
