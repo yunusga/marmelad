@@ -8,7 +8,8 @@
   },
   "author": "Yunus Gaziev <yunusga@yandex.ru> (https://github.com/yunusga)",
   "bin": {
-    "marmelad": "bin/marmelad.js"
+    "marmelad": "bin/marmelad.js",
+    "mmd": "bin/marmelad.js"
   },
   "maintainers": [
     {
