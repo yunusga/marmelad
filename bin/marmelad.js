@@ -343,7 +343,7 @@ gulp.task('styles', (done) => {
 
     Object.assign($data, database.app.stylus);
 
-    gulp.src(path.join(settings.paths.styles, '*.{styl,scss}'))
+    gulp.src(path.join(settings.paths.styles, '*.{styl,scss,sass}'))
         .pipe(plumber())
         .pipe(gif('*.styl', stylus({
           'include css': true,
@@ -351,6 +351,9 @@ gulp.task('styles', (done) => {
         })))
         .pipe(gif('*.scss', sassGlob()))
         .pipe(gif('*.scss', sass()))
+        .pipe(gif('*.sass', sass({
+            indentedSyntax: true
+        })))
         .pipe(groupMQ())
         .pipe(postcss([
             focus(),
@@ -513,8 +516,8 @@ gulp.task('watch', () => {
 
     /* STYLES */
     watch([
-        path.join(settings.paths._blocks, '**', '*.{styl,scss}'),
-        path.join(settings.paths.styles, '**', '*.{styl,scss}'),
+        path.join(settings.paths._blocks, '**', '*.{styl,scss,sass}'),
+        path.join(settings.paths.styles, '**', '*.{styl,scss,sass}'),
     ], batch((events, done) => {
         gulp.start('styles', done);
     }));
