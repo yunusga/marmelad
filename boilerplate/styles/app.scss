@@ -1,0 +1,8 @@
+$local_color : #fc0;
+
+@import "../_blocks/**/*.scss";
+
+body {
+    background-color: $local_color;
+    color: $local_color;
+}
