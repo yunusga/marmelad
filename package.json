@@ -11,6 +11,11 @@
     "marmelad": "bin/marmelad.js",
     "mmd": "bin/marmelad.js"
   },
+  "keywords": [
+    "static-site-generator",
+    "bem",
+    "gulp"
+  ],
   "maintainers": [
     {
       "name": "vitaliyryazanov",
