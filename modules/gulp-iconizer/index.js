@@ -74,6 +74,10 @@ function replaceIconTags(src, opts) {
 
 function iconizeHtml(src, opts) {
 
+    if (!fs.existsSync(opts.path)) {
+        return src.toString();
+    }
+    
     let sprite = fs.readFileSync(opts.path).toString();
 
     let html = src.toString();
