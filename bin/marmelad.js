@@ -54,7 +54,15 @@ const del               = require('del');
 const boxen             = require('boxen');
 const clipboardy        = require('clipboardy');
 const getAuthParams     = (params) => typeof params !== 'string' ? [pkg.name, false] : params.split('@');
-const getIconsNamesList = (path) => fs.readdirSync(path).map((iconName) => iconName.replace(/.svg/g, ''));
+const getIconsNamesList = (path) => {
+    let iconsList = [];
+    
+    if (fs.existsSync(path)) {
+        iconsList =  fs.readdirSync(path).map((iconName) => iconName.replace(/.svg/g, ''));
+    }
+
+    return iconsList
+} ;
 const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) => blocksPath + '/' + el);
 
 /**
