@@ -448,11 +448,8 @@ gulp.task('bootstrap', (done) => {
 
     if (settings.app.bts.use) {
 
-        runSequence(
-            'bts4:sass',
-            'bts4:js',
-            done
-        );
+        gulp.start('bts4:sass');
+        gulp.start('bts4:js');
     
         /* SCSS */
         watch(path.join(settings.app.bts['4'].src.css, '**', '*.scss'), batch((events, done) => {
@@ -464,7 +461,7 @@ gulp.task('bootstrap', (done) => {
             gulp.start('bts4:js', done);
         }));
     }
-
+    
     done();
 });
 
