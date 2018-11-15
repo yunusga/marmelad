@@ -38,8 +38,6 @@ const gif               = require('gulp-if');
 const gutil             = require('gulp-util');
 const plumber           = require('gulp-plumber');
 const groupMQ           = require('gulp-group-css-media-queries');
-const rename            = require('gulp-rename');
-const header            = require('gulp-header');
 const changed           = require('gulp-changed');
 const concat            = require('gulp-concat');
 const include           = require('gulp-include');
@@ -50,8 +48,7 @@ const decache           = require('decache');
 const runSequence       = require('run-sequence');
 const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
-const boxen             = require('boxen');
-const clipboardy        = require('clipboardy');
+
 const getAuthParams     = (params) => typeof params !== 'string' ? [pkg.name, false] : params.split('@');
 const getIconsNamesList = (path) => {
     let iconsList = [];
@@ -70,7 +67,6 @@ const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) =>
 CLI
     .version(pkg.version)
     .option('-a, --auth [user@password]', `set user@password for authorization`)
-    .option('-c, --clipboard', `copy server URL to clipboard on startup`)
     .parse(process.argv);
 
 /**
@@ -409,24 +405,10 @@ gulp.task('server:static', (done) => {
             authString = '';
 
         if (bsAuth && bsAuth.use) {
-            authString = `\n\nuser: ${bsAuth.user}\npass: ${bsAuth.pass}`;
+            authString = `\n  user: ${bsAuth.user}\npass: ${bsAuth.pass}`;
         }
 
-        let clipboardMsg = '';
-
-        if (CLI.clipboard) {
-
-            clipboardMsg = `\n\n${chalk.bold.green(urls.get('local'))} сopied to clipboard!${authString}`;
-
-            clipboardy.writeSync(urls.get('local'));
-        }
-
-        console.log(boxen(`${chalk.bold.yellow(pkg.name.toUpperCase())} v${pkg.version} is Started!${clipboardMsg}`, {
-            padding: 1,
-            margin: 1,
-            borderStyle: 'double',
-            borderColor: 'green'
-        }));
+        console.log(authString);
 
         done();
     });
@@ -603,12 +585,7 @@ gulp.task('marmelad:init', (done) => {
 
     stream.on('end', () => {
 
-        console.log(boxen(`${chalk.bold.yellow(pkg.name.toUpperCase())} v${pkg.version}\nBoilerplate successfully copied\n\ntype ${pkg.name} --help for CLI help`, {
-            padding: 1,
-            margin: 1,
-            borderStyle: 'double',
-            borderColor: 'yellow'
-        }));
+        console.log(`\n  Boilerplate successfully copied\n  type ${pkg.name} --help for CLI help`);
 
         done();
     });
