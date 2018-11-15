@@ -1,6 +1,6 @@
-# marmelad <sup>[4.20.9](CHANGELOG.md#4209-15112018)</sup>
+# marmelad <sup>[4.20.9](CHANGELOG.md#4209-15112018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
-<img src="marmelad.svg" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
+<img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
 Сборщик сайтов, предназначенный для подготовки вёрстки для использования в роли реального сайта, либо, для последующего использования в различных CMS, либо в React, Vue, Angular, и т.п. приложениях, ну или там где вам заблагорассудится, дело ваше 🤘.
 
