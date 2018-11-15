@@ -250,9 +250,8 @@ gulp.task('scripts:others', ['scripts:blocks'], (done) => {
             hardFail: false
         })).on('error', gutil.log)
         .pipe(babel({
-            presets: ['babel-preset-es2015'].map(require.resolve),
-            plugins: ['babel-plugin-transform-object-assign'].map(require.resolve),
-            babelrc: false
+            presets: ['@babel/preset-env'].map(require.resolve),
+            plugins: ['@babel/plugin-transform-object-assign'].map(require.resolve),
         }))
         .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
 
