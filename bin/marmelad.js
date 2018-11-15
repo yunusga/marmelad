@@ -13,7 +13,6 @@ const tap               = require('gulp-tap');
 const iconizer          = require('../modules/gulp-iconizer');
 
 const babel             = require('gulp-babel');
-const jscs              = require('gulp-jscs');
 const uglify            = require('gulp-uglify');
 
 const nunjucks          = require('../modules/nunjucks');
@@ -218,18 +217,7 @@ gulp.task('iconizer:update', (done) => {
 /**
  * scripts from blocks
  */
-gulp.task('scripts:blocks', (done) => {
-
-    return gulp.src(path.join(settings.paths._blocks, '**', '*.js'))
-        .pipe(plumber())
-        .pipe(jscs({ configPath : path.join('marmelad', '.jscsrc') }))
-        .pipe(jscs.reporter());
-});
-
-/**
- * scripts from blocks
- */
-gulp.task('scripts:others', ['scripts:blocks'], (done) => {
+gulp.task('scripts:others', (done) => {
 
     let stream = gulp.src(path.join(settings.paths.js.src, '*.js'))
         .pipe(plumber())
