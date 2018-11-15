@@ -21,7 +21,6 @@ const frontMatter       = require('gulp-front-matter');
 const translit          = require('translit')(require('translit-russian'));
 
 const postHTML          = require('gulp-posthtml');
-const pretty            = require('../modules/gulp-pretty');
 const svgSprite         = require('gulp-svg-sprite');
 
 const stylus            = require('gulp-stylus');
@@ -93,15 +92,7 @@ let isNunJucksUpdate = false;
 gulp.task('nunjucks', (done) => {
 
     let templateName = '',
-        error = false,
-        htmlPlugins = [
-            require('posthtml-bem')(settings.app.beml),
-            require('posthtml-postcss')([
-                    require('postcss-momentum-scrolling'),
-                    require('autoprefixer')(settings.app.autoprefixer),
-                    require('cssnano')(settings.app.cssnano)
-                ], { from: undefined }, /^text\/css$/)
-        ];
+        error = false;
 
     let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
         .pipe(plumber())
@@ -137,8 +128,9 @@ gulp.task('nunjucks', (done) => {
             }
         }))
         .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg'), _beml : settings.app.beml}))
-        .pipe(pretty(settings.app.formatHtml))
-        .pipe(postHTML(htmlPlugins))
+        .pipe(postHTML([
+            require('posthtml-bem')(settings.app.beml),
+        ]))
         .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
