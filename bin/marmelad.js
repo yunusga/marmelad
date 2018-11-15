@@ -16,7 +16,7 @@ const babel             = require('gulp-babel');
 const jscs              = require('gulp-jscs');
 const uglify            = require('gulp-uglify');
 
-const nunjucks          = require('gulp-nunjucks-html');
+const nunjucks          = require('../modules/nunjucks');
 const frontMatter       = require('gulp-front-matter');
 const translit          = require('translit')(require('translit-russian'));
 
