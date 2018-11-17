@@ -1,22 +1,10 @@
 const fs = require('fs');
-LOGconsole.log;
+const path = require('path');
+const gulp = require('gulp');
+const LOG = console.log;
+const readlineSync = require('readline-sync');
 
 module.exports = (dir) => {
-  dir = dir || '';
-
-  if (dir.length && fs.existsSync(dir)) {
-    LOG(`\n  ${dir} - directory is already exists`);
-    process.exit();
-  }
-
-  if (!dir.length && fs.existsSync('marmelad')) {
-    LOG('\n  project is already initialized');
-    process.exit();
-  }
-
-  const path = require('path');
-  const PKG = require('../package.json');
-  const gulp = require('gulp');
 
   gulp.task('init:marmelad', (done) => {
     const stream = gulp.src(
@@ -26,10 +14,38 @@ module.exports = (dir) => {
       .pipe(gulp.dest(path.join(process.cwd(), dir, 'marmelad')));
 
     stream.on('end', () => {
-      LOG(`\n  ${PKG.name.toUpperCase()} v${PKG.version} initialized\n  type ${PKG.name} --help for CLI help`);
+      LOG(`\n[marmelad] initialized, type marmelad -h for CLI help`);
       done();
     });
   });
 
-  gulp.start('init:marmelad');
+  dir = dir || '';
+  
+  let isDirExists = dir.length && fs.existsSync(dir);
+  let isNotEmpty = isDirExists ? fs.readdirSync(path.join(process.cwd(), dir)).length : false;
+  let hasMarmelad = fs.existsSync(path.join(dir, 'marmelad'));
+
+  if (hasMarmelad) {
+    LOG('\n[error] project is already initialized');
+    process.exit(0);
+  }
+
+  if (isNotEmpty) {
+    LOG('\n[warn] Directory is not empty. Some files may be overwritten. Continue?');
+
+    let agree = readlineSync.question('(yes|no):');
+
+    switch (agree) {
+      case 'yes':
+        gulp.start('init:marmelad');
+        break;
+    
+      default:
+        LOG('[error] initialization aborted');
+        process.exit(0);
+        break;
+    }
+  } else {
+    gulp.start('init:marmelad');
+  }
 };
