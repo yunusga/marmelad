@@ -11,7 +11,7 @@ CLI
   .version(PKG.version, '-v, --version')
   .description(PKG.description)
   .on('--help', () => {
-    LOG('\nCommands help:\n\n  ' + PKG.name + ' [command] --help\n');
+    LOG(`\nCommands help:\n  ${PKG.name} [command] --help\n  mmd [command] --help`);
   });
 
 
