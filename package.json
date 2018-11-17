@@ -95,6 +95,7 @@
     "postcss-focus": "4.0.0",
     "postcss-momentum-scrolling": "1.4.8",
     "posthtml-bem": "0.2.2",
+    "readline-sync": "1.4.9",
     "replace-ext": "1.0.0",
     "run-sequence": "2.2.1",
     "through2": "3.0.0",

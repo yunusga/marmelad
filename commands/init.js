@@ -3,6 +3,10 @@ const path = require('path');
 const gulp = require('gulp');
 const LOG = console.log;
 const readlineSync = require('readline-sync');
+const CHALK = require('chalk');
+const CERROR = CHALK.bold.red;
+const CWARN = CHALK.bold.yellow;
+const CSUCCESS = CHALK.bold.green;
 
 module.exports = (dir) => {
 
@@ -14,7 +18,7 @@ module.exports = (dir) => {
       .pipe(gulp.dest(path.join(process.cwd(), dir, 'marmelad')));
 
     stream.on('end', () => {
-      LOG(`\n[marmelad] initialized, type marmelad -h for CLI help`);
+      LOG(`${CSUCCESS('[marmelad]')} initialized, type ${CWARN('marmelad -h')} for CLI help`);
       done();
     });
   });
@@ -26,26 +30,20 @@ module.exports = (dir) => {
   let hasMarmelad = fs.existsSync(path.join(dir, 'marmelad'));
 
   if (hasMarmelad) {
-    LOG('\n[error] project is already initialized');
+    LOG(`${CERROR('[error]')} project is already initialized`);
     process.exit(0);
   }
 
   if (isNotEmpty) {
-    LOG('\n[warn] Directory is not empty. Some files may be overwritten. Continue?');
+    LOG(`${CWARN('[warn]')} Directory is not empty. Some files may be overwritten. Continue?`);
 
     let agree = readlineSync.question('(yes|no):');
 
-    switch (agree) {
-      case 'yes':
-        gulp.start('init:marmelad');
-        break;
-    
-      default:
-        LOG('[error] initialization aborted');
-        process.exit(0);
-        break;
+    if ('yes' !== agree) {
+      LOG(`${CERROR('[error]')} initialization aborted`);
+      process.exit(0);
     }
-  } else {
-    gulp.start('init:marmelad');
   }
+  
+  gulp.start('init:marmelad');
 };
