@@ -36,11 +36,8 @@ const groupMQ           = require('gulp-group-css-media-queries');
 const changed           = require('gulp-changed');
 const concat            = require('gulp-concat');
 const include           = require('gulp-include');
-const watch             = require('gulp-watch');
-const batch             = require('gulp-batch');
 
 const decache           = require('decache');
-const runSequence       = require('run-sequence');
 const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
 
@@ -65,7 +62,7 @@ const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) =>
 //     use  : CLI.auth
 // });
 
-let settings = require(path.join(process.cwd(), 'marmelad', 'settings.marmelad'));
+let settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
 let database = {};
 let isNunJucksUpdate = false;
 
@@ -79,7 +76,7 @@ module.exports = (opts) => {
         let templateName = '',
             error = false;
 
-        let stream = gulp.src(path.join(settings.paths._pages,'**', '*.html'))
+        let stream = gulp.src(`${settings.paths._pages}/**/*.html`)
             .pipe(plumber())
             .pipe(gif(!isNunJucksUpdate, changed(settings.paths.dist)))
             .pipe(tap((file) => {
@@ -108,7 +105,10 @@ module.exports = (opts) => {
                     isNunJucksUpdate = false;
                 }
             }))
-            .pipe(iconizer({path: path.join(settings.paths.iconizer.src, 'sprite.svg'), _beml : settings.app.beml}))
+            .pipe(iconizer({
+                path: `${settings.paths.iconizer.src}/sprite.svg`,
+                _beml : settings.app.beml
+            }))
             .pipe(postHTML([
                 require('posthtml-bem')(settings.app.beml),
             ]))
@@ -132,7 +132,7 @@ module.exports = (opts) => {
      */
     gulp.task('db', (done) => {
 
-        let dataPath = path.join(process.cwd(), 'marmelad', 'data.marmelad.js');
+        let dataPath = `${process.cwd()}/marmelad/data.marmelad.js`;
 
         decache(dataPath);
 
@@ -157,7 +157,7 @@ module.exports = (opts) => {
      * DB:update
      */
     gulp.task('db:update', (done) => {
-        runSequence('db', 'styles', 'nunjucks', done);
+        gulp.series('db', 'styles', 'nunjucks')(done);
     });
 
 
@@ -167,7 +167,7 @@ module.exports = (opts) => {
      */
     gulp.task('iconizer', (done) => {
 
-        let stream = gulp.src(path.join(settings.paths.iconizer.icons, '*.svg'))
+        let stream = gulp.src(`${settings.paths.iconizer.icons}/*.svg`)
             .pipe(svgSprite(settings.app.svgSprite))
             .pipe(gulp.dest('.'));
 
@@ -196,7 +196,7 @@ module.exports = (opts) => {
 
         isNunJucksUpdate = true;
 
-        runSequence('iconizer', 'db:update', done);
+        gulp.series('iconizer', 'db:update')(done);
     });
 
 
@@ -205,7 +205,7 @@ module.exports = (opts) => {
      */
     gulp.task('scripts:others', (done) => {
 
-        let stream = gulp.src(path.join(settings.paths.js.src, '*.js'))
+        let stream = gulp.src(`${settings.paths.js.src}/*.js`)
             .pipe(plumber())
             .pipe(include({
                 extensions: 'js',
@@ -215,7 +215,7 @@ module.exports = (opts) => {
                 presets: ['@babel/preset-env'].map(require.resolve),
                 plugins: ['@babel/plugin-transform-object-assign'].map(require.resolve),
             }))
-            .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
+            .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
         stream.on('end', () => {
             gutil.log(`Scripts others ...................... ${chalk.bold.green('Done')}`);
@@ -233,7 +233,7 @@ module.exports = (opts) => {
      */
     gulp.task('scripts:vendors', (done) => {
 
-        let vendorsDist = path.join(settings.paths.storage,  settings.folders.js.src, settings.folders.js.vendors);
+        let vendorsDist = `${settings.paths.storage}/${settings.folders.js.src}/${settings.folders.js.vendors}`;
 
         let stream = gulp.src(settings.paths.js.vendors + '/**/*.js')
             .pipe(plumber())
@@ -261,7 +261,7 @@ module.exports = (opts) => {
             .pipe(plumber())
             .pipe(concat('plugins.min.js'))
             .pipe(uglify())
-            .pipe(gulp.dest(path.join(settings.paths.storage,  settings.folders.js.src)));
+            .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
         stream.on('end', () => {
             gutil.log(`Scripts plugins ..................... ${chalk.bold.green('Done')}`);
@@ -280,7 +280,7 @@ module.exports = (opts) => {
      */
     gulp.task('styles:plugins', (done) => {
 
-        gulp.src(path.join(settings.paths.js.plugins, '**', '*.css'))
+        gulp.src(`${settings.paths.js.plugins}/**/*.css`)
             .pipe(plumber())
             .pipe(concat('plugins.min.css'))
             .pipe(groupMQ())
@@ -290,7 +290,7 @@ module.exports = (opts) => {
                 flexBugsFixes(),
                 cssnano({ zindex:false })
             ], { from: undefined } ))
-            .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
+            .pipe(gulp.dest(`${settings.paths.storage}/css`))
             .on('end', () => {
                 gutil.log(`Plugins CSS ......................... ${chalk.bold.green('Done')}`);
             })
@@ -312,11 +312,11 @@ module.exports = (opts) => {
 
         Object.assign($data, database.app.stylus);
 
-        gulp.src(path.join(settings.paths.styles, '*.{styl,scss,sass}'))
+        gulp.src(`${settings.paths.styles}/*.{styl,scss,sass}`)
             .pipe(plumber())
             .pipe(gif('*.styl', stylus({
-            'include css': true,
-            rawDefine : { $data }
+                'include css': true,
+                rawDefine : { $data }
             })))
             .pipe(gif('*.scss', sassGlob()))
             .pipe(gif('*.scss', sass()))
@@ -333,7 +333,7 @@ module.exports = (opts) => {
             .pipe(gif('*.min.css', postcss([
                 cssnano(settings.app.cssnano)
             ])))
-            .pipe(gulp.dest(path.join(settings.paths.storage, 'css')))
+            .pipe(gulp.dest(`${settings.paths.storage}/css`))
             .on('end', () => {
                 gutil.log(`Styles CSS .......................... ${chalk.bold.green('Done')}`);
             })
@@ -399,14 +399,18 @@ module.exports = (opts) => {
             gulp.start('bts4:js');
         
             /* SCSS */
-            watch(path.join(settings.app.bts['4'].src.css, '**', '*.scss'), batch((events, done) => {
-                gulp.start('bts4:sass', done);
-            }));
+            gulp.watch(
+                `${settings.app.bts['4'].src.css}/**/*.scss`,
+                watchOpts,
+                gulp.parallel('bts4:sass')
+            );
         
             /* JS */
-            watch(path.join(settings.app.bts['4'].src.js, '**', '*.js'), batch((events, done) => {
-                gulp.start('bts4:js', done);
-            }));
+            gulp.watch(
+                `${settings.app.bts['4'].src.js}/**/*.js`,
+                watchOpts,
+                gulp.parallel('bts4:js')
+            );
         }
         
         done();
@@ -414,7 +418,7 @@ module.exports = (opts) => {
 
     gulp.task('bts4:sass', (done) => {
 
-        gulp.src(path.join(settings.app.bts['4'].src.css, 'scss', '[^_]*.scss'))
+        gulp.src(`${settings.app.bts['4'].src.css}/scss/[^_]*.scss`)
             .pipe(sourcemaps.init())
             .pipe(sass(settings.app.bts['4'].sass))
             .pipe(postcss([
@@ -433,9 +437,9 @@ module.exports = (opts) => {
 
     gulp.task('bts4:js', (done) => {
 
-        let stream = gulp.src(path.join(settings.app.bts['4'].src.js, '**', '*.js'))
+        let stream = gulp.src(`${settings.app.bts['4'].src.js}/**/*.js`)
             .pipe(plumber())
-            .pipe(changed(path.join(settings.app.bts['4'].dest.js)))
+            .pipe(changed(settings.app.bts['4'].dest.js))
             .pipe(gulp.dest(settings.app.bts['4'].dest.js));
 
         stream.on('end', () => {
@@ -450,71 +454,93 @@ module.exports = (opts) => {
 
     });
 
-    gulp.task('watch', () => {
+    gulp.task('watch', (done) => {
+
+        const watchOpts = {
+            ignoreInitial: true,
+            ignored: [
+                `${settings.folders.marmelad}/**/*.db`,
+                `${settings.folders.marmelad}/**/*tmp*`,
+            ],
+            usePolling: true,
+            cwd: process.cwd(),
+        };
 
         /* СТАТИКА */
-        watch([
-            settings.paths.static + '/**/*.*',
-            '!' + settings.paths.static + '/**/Thumbs.db',
-            '!' + settings.paths.static + '/**/*tmp*'
-        ], {
-            awaitWriteFinish: {
-                stabilityThreshold: 1000,
-                pollInterval: 500
-            }
-        }, batch((events, done) => {
-            gulp.start('static', done);
-        }));
+        gulp.watch(
+            `${settings.paths.static}/**/*.*`,
+            watchOpts,
+            gulp.parallel('static')
+        );
 
         /* STYLES */
-        watch([
-            path.join(settings.paths._blocks, '**', '*.{styl,scss,sass}'),
-            path.join(settings.paths.styles, '**', '*.{styl,scss,sass}'),
-        ], batch((events, done) => {
-            gulp.start('styles', done);
-        }));
+        gulp.watch([
+                `${settings.paths._blocks}/**/*.{styl,scss,sass}`,
+                `${settings.paths.styles}/**/*.{styl,scss,sass}`,
+            ],
+            watchOpts,
+            gulp.parallel('styles')
+        );
 
         /* СКРИПТЫ */
-        watch(path.join(settings.paths.js.vendors, '**', '*.js'), batch((events, done) => {
-            gulp.start('scripts:vendors', done);
-        }));
+        gulp.watch(
+            `${settings.paths.js.vendors}/**/*.js`,
+            watchOpts,
+            gulp.parallel('scripts:vendors')
+        );
 
-        watch(path.join(settings.paths.js.plugins, '**', '*.js'), batch((events, done) => {
-            gulp.start('scripts:plugins', done);
-        }));
-        watch(path.join(settings.paths.js.plugins, '**', '*.css'), batch((events, done) => {
-            gulp.start('styles:plugins', done);
-        }));
+        gulp.watch(
+            `${settings.paths.js.plugins}/**/*.js`,
+            watchOpts,
+            gulp.parallel('scripts:plugins')
+        );
 
-        watch(path.join(settings.paths._blocks, '**', '*.js'), batch((events, done) => {
-            gulp.start('scripts:others', done);
-        }));
-        watch(path.join(settings.paths.js.src, '*.js'), batch((events, done) => {
-            gulp.start('scripts:others', done);
-        }));
+        gulp.watch([
+                `${settings.paths.js.src}/*.js`,
+                `${settings.paths._blocks}/**/*.js`
+            ],
+            watchOpts,
+            gulp.parallel('scripts:others')
+        );
+
+        gulp.watch(
+            `${settings.paths.js.plugins}/**/*.css`,
+            watchOpts,
+            gulp.parallel('styles:plugins')
+        );
 
         /* NunJucks Pages */
-        watch(path.join(settings.paths._pages, '**', '*.html'), batch((events, done) => {
-            gulp.start('nunjucks', done);
-        }));
+        gulp.watch(
+            `${settings.paths._pages}/**/*.html`,
+            watchOpts,
+            gulp.parallel('nunjucks')
+        );
 
         /* NunJucks Blocks */
-        watch([path.join(settings.paths._blocks, '**', '*.html')], batch((events, done) => {
-            isNunJucksUpdate = true;
-            gulp.start('nunjucks', done);
-        }));
+        gulp.watch([
+                `${settings.paths._blocks}/**/*.html`
+            ], watchOpts, (done) => {
+                isNunJucksUpdate = true;
+                gulp.series('nunjucks')(done);
+            }
+        );
 
         /* NunJucks database */
-        watch(path.join(settings.paths.marmelad, 'data.marmelad.js'), batch((events, done) => {
-            gulp.start('db:update', done);
-        }));
+        gulp.watch(
+            `${settings.paths.marmelad}/data.marmelad.js`,
+            watchOpts,
+            gulp.parallel('db:update')
+        );
 
 
         /* Iconizer */
-        watch(path.join(settings.paths.iconizer.icons, '*.svg'), batch((events, done) => {
-            gulp.start('iconizer:update', done);
-        }));
-
+        gulp.watch(
+            `${settings.paths.iconizer.icons}/*.svg`,
+            watchOpts,
+            gulp.parallel('iconizer:update')
+        );
+        
+        done();
     });
 
     /**
@@ -525,50 +551,26 @@ module.exports = (opts) => {
         done();
     });
 
-    gulp.task('marmelad:start', (done) => {
-
-        runSequence(
+    gulp.task(
+        'develop',
+        gulp.series(
             'clean',
             'server:static',
             'static',
             'iconizer',
             'db',
-            'nunjucks',
-            'scripts:vendors',
-            'scripts:plugins',
-            'scripts:others',
-            'styles:plugins',
-            'styles',
-            'bootstrap',
+            gulp.parallel(
+                'nunjucks',
+                'scripts:vendors',
+                'scripts:plugins',
+                'scripts:others',
+                'styles:plugins',
+                'styles',
+                'bootstrap',
+            ),
             'watch',
-            done);
+        ),
+    );
 
-    });
-
-    /**
-     * project init
-     */
-    gulp.task('marmelad:init', (done) => {
-
-        let stream = gulp.src(
-            [path.join(__dirname.replace('bin', ''), 'boilerplate', '**', '*.*')],
-            {
-                dot: true
-            })
-            .pipe(gulp.dest(path.join(process.cwd(), 'marmelad')));
-
-        stream.on('end', () => {
-
-            console.log(`\n  Boilerplate successfully copied\n  type ${pkg.name} --help for CLI help`);
-
-            done();
-        });
-
-        stream.on('error', (err) => {
-            done(err);
-        });
-
-    });
-
-    gulp.start('marmelad:start');
+    gulp.series('develop')();
 }

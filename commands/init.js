@@ -45,5 +45,5 @@ module.exports = (dir) => {
     }
   }
   
-  gulp.start('init:marmelad');
+  gulp.series('init:marmelad')();
 };
