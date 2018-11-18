@@ -72,6 +72,12 @@ Commands help:
   mmd [command] --help
 ```
 
+## Шаблон
+
+### Модуль TCI
+
+TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb)
+
 ## Лицензия
 [MIT](LICENSE)
 

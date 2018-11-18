@@ -41,6 +41,8 @@ const decache           = require('decache');
 const pipeErrorStop     = require('pipe-error-stop');
 const del               = require('del');
 
+const TCI               = require('../modules/tci');
+
 const getAuthParams     = (params) => typeof params !== 'string' ? [pkg.name, false] : params.split('@');
 const getIconsNamesList = (path) => {
     let iconsList = [];
@@ -67,6 +69,8 @@ let database = {};
 let isNunJucksUpdate = false;
 
 module.exports = (opts) => {
+
+    TCI.run();
 
     /**
      * NUNJUCKS
