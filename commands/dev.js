@@ -94,7 +94,7 @@ module.exports = (opts) => {
                 setUp: function(env) {
 
                     env.addFilter('translit', (str) => translit(str).replace(/ /, '_').toLowerCase());
-                    env.addFilter('limitTo', require('../modules/njk-limitTo'));
+                    env.addFilter('limitto', require('../modules/nunjucks/filters/lomitto'));
 
                     return env;
                 }
