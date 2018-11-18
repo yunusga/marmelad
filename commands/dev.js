@@ -13,7 +13,6 @@ const uglify            = require('gulp-uglify');
 
 const nunjucks          = require('../modules/nunjucks');
 const frontMatter       = require('gulp-front-matter');
-const translit          = require('translit')(require('translit-russian'));
 
 const postHTML          = require('gulp-posthtml');
 const svgSprite         = require('gulp-svg-sprite');
@@ -93,7 +92,7 @@ module.exports = (opts) => {
                 ext: '.html',
                 setUp: function(env) {
 
-                    env.addFilter('translit', (str) => translit(str).replace(/ /, '_').toLowerCase());
+                    env.addFilter('translit', require('../modules/nunjucks/filters/translit'));
                     env.addFilter('limitto', require('../modules/nunjucks/filters/lomitto'));
 
                     return env;

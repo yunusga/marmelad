@@ -96,9 +96,7 @@
     "posthtml-bem": "0.2.2",
     "readline-sync": "1.4.9",
     "replace-ext": "1.0.0",
-    "through2": "3.0.0",
-    "translit": "0.1.0",
-    "translit-russian": "0.0.2"
+    "through2": "3.0.0"
   },
   "scripts": {
     "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm i && npm link"
