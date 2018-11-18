@@ -30,7 +30,7 @@ const sassGlob          = require('gulp-sass-glob');
 
 const sourcemaps        = require('gulp-sourcemaps');
 const gif               = require('gulp-if');
-const gutil             = require('gulp-util');
+const LOG               = require('fancy-log');
 const plumber           = require('gulp-plumber');
 const groupMQ           = require('gulp-group-css-media-queries');
 const changed           = require('gulp-changed');
@@ -120,7 +120,7 @@ module.exports = (opts) => {
 
         stream.on('end', () => {
 
-            gutil.log(`NunJucks ${chalk.gray('............................')} ${error ? chalk.bold.red('ERROR\n') : chalk.bold.green('Done')}`);
+            LOG(`NunJucks ${chalk.gray('............................')} ${error ? chalk.bold.red('ERROR\n') : chalk.bold.green('Done')}`);
 
             bsSP.reload();
             done();
@@ -151,7 +151,7 @@ module.exports = (opts) => {
 
         isNunJucksUpdate = true;
 
-        gutil.log(`DB for templates .................... ${chalk.bold.yellow('Refreshed')}`);
+        LOG(`DB for templates .................... ${chalk.bold.yellow('Refreshed')}`);
 
         done();
 
@@ -183,7 +183,7 @@ module.exports = (opts) => {
                 }
             });
 
-            gutil.log(`Iconizer ............................ ${chalk.bold.green('Done')}`);
+            LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
 
             done();
         });
@@ -214,7 +214,7 @@ module.exports = (opts) => {
             .pipe(include({
                 extensions: 'js',
                 hardFail: false
-            })).on('error', gutil.log)
+            })).on('error', LOG)
             .pipe(babel({
                 presets: ['@babel/preset-env'].map(require.resolve),
                 plugins: ['@babel/plugin-transform-object-assign'].map(require.resolve),
@@ -222,7 +222,7 @@ module.exports = (opts) => {
             .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
         stream.on('end', () => {
-            gutil.log(`Scripts others ...................... ${chalk.bold.green('Done')}`);
+            LOG(`Scripts others ...................... ${chalk.bold.green('Done')}`);
             bsSP.reload();
             done();
         });
@@ -245,7 +245,7 @@ module.exports = (opts) => {
             .pipe(gulp.dest(vendorsDist));
 
         stream.on('end', () => {
-            gutil.log(`Scripts vendors ..................... ${chalk.bold.green('Done')}`);
+            LOG(`Scripts vendors ..................... ${chalk.bold.green('Done')}`);
             bsSP.reload();
             done();
         });
@@ -268,7 +268,7 @@ module.exports = (opts) => {
             .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
         stream.on('end', () => {
-            gutil.log(`Scripts plugins ..................... ${chalk.bold.green('Done')}`);
+            LOG(`Scripts plugins ..................... ${chalk.bold.green('Done')}`);
             bsSP.reload();
             done();
         });
@@ -296,7 +296,7 @@ module.exports = (opts) => {
             ], { from: undefined } ))
             .pipe(gulp.dest(`${settings.paths.storage}/css`))
             .on('end', () => {
-                gutil.log(`Plugins CSS ......................... ${chalk.bold.green('Done')}`);
+                LOG(`Plugins CSS ......................... ${chalk.bold.green('Done')}`);
             })
             .pipe(bsSP.stream());
 
@@ -339,7 +339,7 @@ module.exports = (opts) => {
             ])))
             .pipe(gulp.dest(`${settings.paths.storage}/css`))
             .on('end', () => {
-                gutil.log(`Styles CSS .......................... ${chalk.bold.green('Done')}`);
+                LOG(`Styles CSS .......................... ${chalk.bold.green('Done')}`);
             })
             .pipe(bsSP.stream());
 
@@ -361,7 +361,7 @@ module.exports = (opts) => {
             .pipe(gulp.dest(settings.paths.storage));
 
         stream.on('end', () => {
-            gutil.log(`Static files copy ................... ${chalk.bold.green('Done')}`);
+            LOG(`Static files copy ................... ${chalk.bold.green('Done')}`);
             bsSP.reload();
             done();
         });
@@ -432,7 +432,7 @@ module.exports = (opts) => {
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(settings.app.bts['4'].dest.css))
             .on('end', () => {
-                gutil.log(`Bootstrap ${settings.app.bts['4'].code} SASS ........... ${chalk.bold.green('Done')}`);
+                LOG(`Bootstrap ${settings.app.bts['4'].code} SASS ........... ${chalk.bold.green('Done')}`);
             })
             .pipe(bsSP.stream());
 
@@ -447,7 +447,7 @@ module.exports = (opts) => {
             .pipe(gulp.dest(settings.app.bts['4'].dest.js));
 
         stream.on('end', () => {
-            gutil.log(`Bootstrap ${settings.app.bts['4'].code} JS ............. ${chalk.bold.green('Done')}`);
+            LOG(`Bootstrap ${settings.app.bts['4'].code} JS ............. ${chalk.bold.green('Done')}`);
             bsSP.reload();
             done();
         });
