@@ -1,4 +1,4 @@
-# marmelad <sup>[4.29.13](CHANGELOG.md#42913-18112018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
+# marmelad <sup>[4.30.14](CHANGELOG.md#43014-19112018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
