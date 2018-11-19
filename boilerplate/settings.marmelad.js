@@ -103,7 +103,7 @@ let app = {
     bts : {
         use: false,
         4: {
-            code: '4.1.1',
+            code: '4.1.3',
             src : {
                 css: path.join(paths.marmelad, 'bootstrap', '4.1.1'),
                 js: path.join(paths.marmelad, 'bootstrap', '4.1.1'),
