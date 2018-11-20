@@ -24,9 +24,9 @@ module.exports = (dir, opts) => {
   });
 
   dir = dir || '';
-  
+
   let isDirExists = dir.length && fs.existsSync(dir);
-  let isNotEmpty = isDirExists ? fs.readdirSync(path.join(process.cwd(), dir)).length : false;
+  let isNotEmpty = isDirExists || !dir.length ? fs.readdirSync(path.join(process.cwd(), dir)).length : false;
   let hasMarmelad = fs.existsSync(path.join(dir, 'marmelad'));
 
   if (hasMarmelad) {
