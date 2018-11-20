@@ -21,8 +21,9 @@ CLI
 CLI
 .command('init [dir]')
 .description('initialize new project')
-.action((dir) => {
-  require('../commands/init')(dir);
+.option('-t, --test', 'required for testing')
+.action((dir, opts) => {
+  require('../commands/init')(dir, opts);
 });
 
 /**
