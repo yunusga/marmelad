@@ -99,6 +99,14 @@
     "through2": "3.0.0"
   },
   "scripts": {
-    "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm i && npm link"
+    "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm i && npm link",
+    "test": "jest"
+  },
+  "jest": {
+    "testRegex": "tests/.*\\.(js|jsx)$"
+  },
+  "devDependencies": {
+    "fs-extra": "7.0.1",
+    "jest": "23.6.0"
   }
 }

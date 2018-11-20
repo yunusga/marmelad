@@ -8,7 +8,7 @@ const CERROR = CHALK.bold.red;
 const CWARN = CHALK.bold.yellow;
 const CSUCCESS = CHALK.bold.green;
 
-module.exports = (dir) => {
+module.exports = (dir, opts) => {
 
   gulp.task('init:marmelad', (done) => {
     const stream = gulp.src(
@@ -24,9 +24,9 @@ module.exports = (dir) => {
   });
 
   dir = dir || '';
-  
+
   let isDirExists = dir.length && fs.existsSync(dir);
-  let isNotEmpty = isDirExists ? fs.readdirSync(path.join(process.cwd(), dir)).length : false;
+  let isNotEmpty = isDirExists || !dir.length ? fs.readdirSync(path.join(process.cwd(), dir)).length : false;
   let hasMarmelad = fs.existsSync(path.join(dir, 'marmelad'));
 
   if (hasMarmelad) {
@@ -37,10 +37,16 @@ module.exports = (dir) => {
   if (isNotEmpty) {
     LOG(`${CWARN('[warn]')} Directory is not empty. Some files may be overwritten. Continue?`);
 
-    let agree = readlineSync.question('(yes|no):');
+    if (!opts.test) {
+      let agree = readlineSync.question('(yes|no):');
 
-    if ('yes' !== agree) {
-      LOG(`${CERROR('[error]')} initialization aborted`);
+      if ('yes' !== agree) {
+        LOG(`${CERROR('[error]')} initialization aborted`);
+        process.exit(0);
+      }
+    }
+
+    if (opts.test) {
       process.exit(0);
     }
   }
