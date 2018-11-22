@@ -113,6 +113,9 @@
     "jest": "23.6.0"
   },
   "eslintConfig": {
+    "env": {
+      "jest": true
+    },
     "extends": "airbnb-base",
     "rules": {
       "no-console": 0,
