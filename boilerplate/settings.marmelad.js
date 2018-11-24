@@ -95,8 +95,8 @@ const app = {
     4: {
       code: '4.1.3',
       src: {
-        css: path.join(paths.marmelad, 'bootstrap', '4.1.1'),
-        js: path.join(paths.marmelad, 'bootstrap', '4.1.1'),
+        css: path.join(paths.marmelad, 'bootstrap', '4.1.3'),
+        js: path.join(paths.marmelad, 'bootstrap', '4.1.3'),
       },
       dest: {
         css: path.join(paths.storage, 'bootstrap', 'css'),
