@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
+const gif = require('gulp-if');
+const replace = require('gulp-replace');
 const readlineSync = require('readline-sync');
 const CHALK = require('chalk');
 
@@ -15,6 +17,7 @@ module.exports = (dir, opts) => {
       [path.join(__dirname.replace('commands', ''), 'boilerplate', '**', '*')],
       { dot: true },
     )
+      .pipe(gif('settings.marmelad.js', replace('<%- css %>', opts.css)))
       .pipe(gulp.dest(path.join(process.cwd(), dir, 'marmelad')));
 
     stream.on('end', () => {

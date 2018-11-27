@@ -54,6 +54,7 @@ const autoprefixer = {
 };
 
 const app = {
+  css: '<%- css %>',
   cssnano: {
     zIndex: false,
   },
