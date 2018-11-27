@@ -29,11 +29,13 @@ const include = require('gulp-include');
 const decache = require('decache');
 const pipeErrorStop = require('pipe-error-stop');
 const del = require('del');
+const GLOB = require('glob');
 
 const pkg = require('../package.json');
 const iconizer = require('../modules/gulp-iconizer');
 const nunjucks = require('../modules/nunjucks');
 const TCI = require('../modules/tci');
+const DB = new (require('../modules/database'))();
 
 // const getAuthParams = params => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
 
@@ -80,7 +82,7 @@ module.exports = (/* opts */) => {
       .pipe(frontMatter())
       .pipe(nunjucks({
         searchPaths: getNunJucksBlocks(settings.paths._blocks),
-        locals: database,
+        locals: DB.store,
         ext: '.html',
         setUp(env) {
           env.addFilter('translit', require('../modules/nunjucks/filters/translit'));
@@ -143,6 +145,28 @@ module.exports = (/* opts */) => {
     done();
   });
 
+  gulp.task('database', (done) => {
+    DB.onError = (blockPath, error) => {
+      LOG.error(chalk.bold.red(blockPath));
+      LOG.error(error.message);
+    };
+
+    [`${settings.paths._blocks}/**/*.json`].forEach((paths) => {
+      DB.create(GLOB.sync(paths));
+    });
+
+    DB.combine({
+      package: pkg,
+      storage: settings.folders.storage,
+      icons: getIconsNamesList(settings.paths.iconizer.icons),
+      settings,
+    }, 'app');
+
+    DB.combine(require(`${process.cwd()}/${settings.folders.marmelad}/data.marmelad.js`));
+
+    done();
+  });
+
   /**
      * DB:update
      */
@@ -182,7 +206,7 @@ module.exports = (/* opts */) => {
   gulp.task('iconizer:update', (done) => {
     isNunJucksUpdate = true;
 
-    gulp.series('iconizer', 'db:update')(done);
+    gulp.series('iconizer', 'nunjucks')(done);
   });
 
 
@@ -288,7 +312,7 @@ module.exports = (/* opts */) => {
       beml: settings.app.beml,
     };
 
-    Object.assign($data, database.app.stylus);
+    Object.assign($data, DB.store.app.stylus);
 
     gulp.src(`${settings.paths.styles}/*.{styl,scss,sass}`)
       .pipe(plumber())
@@ -488,19 +512,44 @@ module.exports = (/* opts */) => {
       gulp.series('nunjucks')(complete);
     });
 
-    /* NunJucks database */
+    /* NunJucks Datas */
     gulp.watch(
-      `${settings.paths.marmelad}/data.marmelad.js`,
+      `${settings.paths._blocks}/**/*.json`,
       watchOpts,
-      gulp.parallel('db:update'),
-    );
+    )
+      .on('change', (block) => {
+        DB.update(block);
+        gulp.series('nunjucks')();
+      })
+      .on('unlink', (block) => {
+        DB.delete(block);
+        gulp.series('nunjucks')();
+      });
 
+    try {
+      /* Database */
+      const dataPath = `${process.cwd()}/${settings.folders.marmelad}/data.marmelad.js`;
+
+      gulp.watch(
+        [
+          dataPath,
+        ],
+        watchOpts, (decached) => {
+          decache(dataPath);
+          DB.combine(require(dataPath));
+          gulp.series('nunjucks')(decached);
+        },
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     /* Iconizer */
     gulp.watch(
       `${settings.paths.iconizer.icons}/*.svg`,
-      watchOpts,
-      gulp.parallel('iconizer:update'),
+      watchOpts, () => {
+        gulp.parallel('iconizer:update');
+      },
     );
 
     done();
@@ -521,7 +570,8 @@ module.exports = (/* opts */) => {
       'server:static',
       'static',
       'iconizer',
-      'db',
+      // 'db',
+      'database',
       gulp.parallel(
         'nunjucks',
         'scripts:vendors',
