@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-const PKG = require('../package.json');
 const CLI = require('commander');
+const PKG = require('../package.json');
+
 const LOG = console.log;
 
 /**
@@ -19,12 +20,12 @@ CLI
  * инициализация нового проекта
  */
 CLI
-.command('init [dir]')
-.description('initialize new project')
-.option('-t, --test', 'required for testing')
-.action((dir, opts) => {
-  require('../commands/init')(dir, opts);
-});
+  .command('init [dir]')
+  .description('initialize new project')
+  .option('-t, --test', 'required for testing')
+  .action((dir, opts) => {
+    require('../commands/init')(dir, opts);
+  });
 
 /**
  * старт сервера разработки
@@ -40,7 +41,6 @@ CLI
   .on('--help', () => {
     // console.log();
   });
-
 
 
 /**

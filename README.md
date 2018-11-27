@@ -72,11 +72,24 @@ Commands help:
   mmd [command] --help
 ```
 
-## Шаблон
+## Шаблоны/Блоки
+
+Блок состоит из набора файлов отвечающих за скрипты, данные, стили, разметку.
+
+```bash
+example-block
+  example-block.html  # разметка
+  example-block.styl  # стили (less,scss,sass,styl)
+  example-block.js    # скрипты
+  example-block.json  # данные
+```
+### Данные
+
+Данные для блока доступны в шаблонах по ключу с названием блока (если файл данных для блока создан и хоть чем-то заполнен), либо из `data.marmelad.js` (глобальные данные)
 
 ### Модуль TCI
 
-TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb)
+TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb).
 
 ## Лицензия
 [MIT](LICENSE)

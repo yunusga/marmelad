@@ -1,15 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
-const LOG = console.log;
 const readlineSync = require('readline-sync');
 const CHALK = require('chalk');
+
 const CERROR = CHALK.bold.red;
 const CWARN = CHALK.bold.yellow;
 const CSUCCESS = CHALK.bold.green;
+const LOG = console.log;
 
 module.exports = (dir, opts) => {
-
   gulp.task('init:marmelad', (done) => {
     const stream = gulp.src(
       [path.join(__dirname.replace('commands', ''), 'boilerplate', '**', '*')],
@@ -25,9 +25,9 @@ module.exports = (dir, opts) => {
 
   dir = dir || '';
 
-  let isDirExists = dir.length && fs.existsSync(dir);
-  let isNotEmpty = isDirExists || !dir.length ? fs.readdirSync(path.join(process.cwd(), dir)).length : false;
-  let hasMarmelad = fs.existsSync(path.join(dir, 'marmelad'));
+  const isDirExists = dir.length && fs.existsSync(dir);
+  const isNotEmpty = isDirExists || !dir.length ? fs.readdirSync(path.join(process.cwd(), dir)).length : false;
+  const hasMarmelad = fs.existsSync(path.join(dir, 'marmelad'));
 
   if (hasMarmelad) {
     LOG(`${CERROR('[error]')} project is already initialized`);
@@ -38,9 +38,9 @@ module.exports = (dir, opts) => {
     LOG(`${CWARN('[warn]')} Directory is not empty. Some files may be overwritten. Continue?`);
 
     if (!opts.test) {
-      let agree = readlineSync.question('(yes|no):');
+      const agree = readlineSync.question('(yes|no):');
 
-      if ('yes' !== agree) {
+      if (agree !== 'yes') {
         LOG(`${CERROR('[error]')} initialization aborted`);
         process.exit(0);
       }
@@ -50,6 +50,6 @@ module.exports = (dir, opts) => {
       process.exit(0);
     }
   }
-  
+
   gulp.series('init:marmelad')();
 };

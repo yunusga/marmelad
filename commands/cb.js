@@ -1,5 +1,4 @@
 const fs = require('fs');
-const LOG = console.log;
 
 module.exports = (name, techs) => {
   const blockPath = `marmelad/_blocks/${name}`;

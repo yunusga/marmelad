@@ -1,7 +1,8 @@
 const fs = require('fs');
-const LOG = console.log;
 const chokidar = require('chokidar');
 const CMD = require('cmd-exec').init();
+
+const LOG = console.log;
 
 function run(options) {
   const opts = Object.assign({
