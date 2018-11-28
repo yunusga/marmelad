@@ -86,6 +86,7 @@ module.exports = (/* opts */) => {
         setUp(env) {
           env.addFilter('translit', require('../modules/nunjucks/filters/translit'));
           env.addFilter('limitto', require('../modules/nunjucks/filters/lomitto'));
+          env.addFilter('bodyClass', require('../modules/nunjucks/filters/bodyclass'));
           return env;
         },
       }))
@@ -130,14 +131,14 @@ module.exports = (/* opts */) => {
       DB.create(GLOB.sync(paths));
     });
 
+    DB.combine(require(`${process.cwd()}/${settings.folders.marmelad}/data.marmelad.js`));
+
     DB.combine({
       package: pkg,
       storage: settings.folders.storage,
       icons: getIconsNamesList(settings.paths.iconizer.icons),
       settings,
     }, 'app');
-
-    DB.combine(require(`${process.cwd()}/${settings.folders.marmelad}/data.marmelad.js`));
 
     done();
   });
