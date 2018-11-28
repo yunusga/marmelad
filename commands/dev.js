@@ -60,7 +60,6 @@ const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${
 // });
 
 const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
-let database = {};
 let isNunJucksUpdate = false;
 
 module.exports = (/* opts */) => {
@@ -121,30 +120,6 @@ module.exports = (/* opts */) => {
     });
   });
 
-  /**
-     * DB
-     */
-  gulp.task('db', (done) => {
-    const dataPath = `${process.cwd()}/marmelad/data.marmelad.js`;
-
-    decache(dataPath);
-
-    database = require(dataPath);
-
-    Object.assign(database.app, {
-      package: pkg,
-      settings,
-      storage: settings.folders.storage,
-      icons: getIconsNamesList(settings.paths.iconizer.icons),
-    });
-
-    isNunJucksUpdate = true;
-
-    LOG(`DB for templates .................... ${chalk.bold.yellow('Refreshed')}`);
-
-    done();
-  });
-
   gulp.task('database', (done) => {
     DB.onError = (blockPath, error) => {
       LOG.error(chalk.bold.red(blockPath));
@@ -166,14 +141,6 @@ module.exports = (/* opts */) => {
 
     done();
   });
-
-  /**
-     * DB:update
-     */
-  gulp.task('db:update', (done) => {
-    gulp.series('db', 'styles', 'nunjucks')(done);
-  });
-
 
   /**
      * Iconizer
@@ -570,7 +537,6 @@ module.exports = (/* opts */) => {
       'server:static',
       'static',
       'iconizer',
-      // 'db',
       'database',
       gulp.parallel(
         'nunjucks',
