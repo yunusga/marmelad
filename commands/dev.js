@@ -131,14 +131,14 @@ module.exports = (/* opts */) => {
       DB.create(GLOB.sync(paths));
     });
 
+    DB.combine(require(`${process.cwd()}/${settings.folders.marmelad}/data.marmelad.js`));
+
     DB.combine({
       package: pkg,
       storage: settings.folders.storage,
       icons: getIconsNamesList(settings.paths.iconizer.icons),
       settings,
     }, 'app');
-
-    DB.combine(require(`${process.cwd()}/${settings.folders.marmelad}/data.marmelad.js`));
 
     done();
   });
