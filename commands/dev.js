@@ -86,6 +86,7 @@ module.exports = (/* opts */) => {
         setUp(env) {
           env.addFilter('translit', require('../modules/nunjucks/filters/translit'));
           env.addFilter('limitto', require('../modules/nunjucks/filters/lomitto'));
+          env.addFilter('bodyClass', require('../modules/nunjucks/filters/bodyclass'));
           return env;
         },
       }))
