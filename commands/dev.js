@@ -151,11 +151,9 @@ module.exports = (/* opts */) => {
       .pipe(gulp.dest('.'));
 
     stream.on('end', () => {
-      Object.assign(database, {
-        app: {
-          icons: getIconsNamesList(settings.paths.iconizer.icons),
-        },
-      });
+      DB.combine({
+        icons: getIconsNamesList(settings.paths.iconizer.icons),
+      }, 'app');
 
       LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
 
@@ -504,6 +502,7 @@ module.exports = (/* opts */) => {
         watchOpts, (decached) => {
           decache(dataPath);
           DB.combine(require(dataPath));
+          isNunJucksUpdate = true;
           gulp.series('nunjucks')(decached);
         },
       );
@@ -514,8 +513,8 @@ module.exports = (/* opts */) => {
     /* Iconizer */
     gulp.watch(
       `${settings.paths.iconizer.icons}/*.svg`,
-      watchOpts, () => {
-        gulp.parallel('iconizer:update');
+      watchOpts, (complete) => {
+        gulp.series('iconizer:update')(complete);
       },
     );
 
