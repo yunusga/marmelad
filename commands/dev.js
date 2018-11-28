@@ -30,6 +30,7 @@ const decache = require('decache');
 const pipeErrorStop = require('pipe-error-stop');
 const del = require('del');
 const GLOB = require('glob');
+const PERF = require('execution-time')();
 
 const pkg = require('../package.json');
 const iconizer = require('../modules/gulp-iconizer');
@@ -72,6 +73,8 @@ module.exports = (/* opts */) => {
     let templateName = '';
     let error = false;
 
+    PERF.start('nunjucks');
+
     const stream = gulp.src(`${settings.paths._pages}/**/*.html`)
       .pipe(plumber())
       .pipe(gif(!isNunJucksUpdate, changed(settings.paths.dist)))
@@ -110,7 +113,7 @@ module.exports = (/* opts */) => {
       .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
-      LOG(`NunJucks ${chalk.gray('............................')} ${error ? chalk.bold.red('ERROR\n') : chalk.bold.green('Done')}`);
+      LOG(`[nunjucks] ${error ? chalk.bold.red('ERROR\n') : chalk.bold.green('done')} in ${PERF.stop('nunjucks').time.toFixed(0)}ms`);
 
       bsSP.reload();
       done();
