@@ -1,4 +1,4 @@
-# marmelad <sup>[4.33.15](CHANGELOG.md#43315-27112018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
+# marmelad <sup>[4.37.19](CHANGELOG.md#43719-28112018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
@@ -58,36 +58,52 @@ Usage: marmelad [options] [command]
 # описание из package.json
 
 Options:
-  -v, --version        output the version number
-  -h, --help           output usage information
+  -v, --version         output the version number
+  -h, --help            output usage information
 
 Commands:
-  init [dir]           initialize new project
-  dev                  run development server
-  cp <name>            create new page
-  cb [options] <name>  create new block
+  init [options] [dir]  initialize new project
+  dev                   run development server
+  cp <name>             create new page
+  cb [options] <name>   create new block
 
 Commands help:
   marmelad [command] --help
   mmd [command] --help
 ```
 
+## Инициализация проекта
+
+Для инициализации нового проекта, служит команда `mmd init [options] [dir]`.
+
+В случае, когда не передан параметр для папки инициализации, проект инициализируется в текущей папке открытой в терминале.
+
+### `[options]`
+`-c, --css` - заменяет значение ключа `app.css` в `settings.marmelad.js` при копировании заготовки нового проекта. Далее этот ключ используется для команды создания блока `mmd cb`, для создания файлов для css препроцессоров с расширением установленным в `app.css` в `settings.marmelad.js`. Для добавления поддержки в проект на старом проекте после обновления до актуальной версии **marmelad**, необходимо добавить в `settings.marmelad.js` в объект `app` свойство `css` с значением/расширением требуемого css препроцессора.
+
+`-t, --test` - необходим только для тестирования, в разработке проектов никакого смысла он не имеет.
+
+### `[dir]`
+
+`[dir]` - позволяет инициализировать проект в указанной папке. Например `mmd init new-and-awesome -t scss`.
+
 ## Шаблоны/Блоки
 
 Блок состоит из набора файлов отвечающих за скрипты, данные, стили, разметку.
 
 ```bash
-example-block
-  example-block.html  # разметка
-  example-block.styl  # стили (less,scss,sass,styl)
-  example-block.js    # скрипты
-  example-block.json  # данные
+[example-block]
+  ├ example-block.html  # разметка
+  ├ example-block.styl  # стили (less,scss,sass,styl)
+  ├ example-block.js    # скрипты
+  └ example-block.json  # данные
 ```
-### Данные
 
-Данные для блока доступны в шаблонах по ключу с названием блока (если файл данных для блока создан и хоть чем-то заполнен), либо из `data.marmelad.js` (глобальные данные)
+### Данные для шаблонов/блоков
 
-### Модуль TCI
+Данные для блока доступны в шаблонах по ключу с названием блока (если файл данных для блока создан и хоть чем-то заполнен), либо из `data.marmelad.js` (глобальные данные). Названия/ключи собственных данных блока преобразуются в **camelCase**.
+
+## Модуль TCI
 
 TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb).
 

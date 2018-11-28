@@ -23,6 +23,7 @@ CLI
   .command('init [dir]')
   .description('initialize new project')
   .option('-t, --test', 'required for testing')
+  .option('-c, --css [styl,scss,sass]', 'set stylesheet <engine> support', 'styl')
   .action((dir, opts) => {
     require('../commands/init')(dir, opts);
   });
@@ -60,7 +61,7 @@ CLI
 CLI
   .command('cb <name>')
   .description('create new block')
-  .option('-t, --techs [html,js,styl,json]', 'Files extensions for new block', 'html,js,styl,json')
+  .option('-t, --techs [html,js,css,json]', 'Files extensions for new block')
   .action((pageName, opts) => {
     require('../commands/cb')(pageName, opts.techs);
   });

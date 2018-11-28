@@ -40,8 +40,9 @@ const paths = {
 
 const autoprefixer = {
   browsers: [
-    'last 1 major version',
     '>= 1%',
+    'last 2 major version',
+    'not dead',
     'Chrome >= 45',
     'Firefox >= 38',
     'Edge >= 12',
@@ -54,6 +55,7 @@ const autoprefixer = {
 };
 
 const app = {
+  css: '<%- css %>',
   cssnano: {
     zIndex: false,
   },

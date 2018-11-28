@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const camelCase = require('camelcase');
 
 class Database {
   constructor() {
@@ -13,7 +14,7 @@ class Database {
    * @param {any} data значение для ключа
    */
   set(name, data) {
-    this.store[name] = data;
+    this.store[camelCase(name)] = data;
   }
 
   /**
@@ -73,7 +74,7 @@ class Database {
    * @param {string} block путь до json-файла данных блока
    */
   delete(block) {
-    delete this.store[path.basename(block, '.json')];
+    delete this.store[camelCase(path.basename(block, '.json'))];
   }
 }
 

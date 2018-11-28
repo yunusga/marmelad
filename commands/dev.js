@@ -60,7 +60,6 @@ const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${
 // });
 
 const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
-let database = {};
 let isNunJucksUpdate = false;
 
 module.exports = (/* opts */) => {
@@ -121,30 +120,6 @@ module.exports = (/* opts */) => {
     });
   });
 
-  /**
-     * DB
-     */
-  gulp.task('db', (done) => {
-    const dataPath = `${process.cwd()}/marmelad/data.marmelad.js`;
-
-    decache(dataPath);
-
-    database = require(dataPath);
-
-    Object.assign(database.app, {
-      package: pkg,
-      settings,
-      storage: settings.folders.storage,
-      icons: getIconsNamesList(settings.paths.iconizer.icons),
-    });
-
-    isNunJucksUpdate = true;
-
-    LOG(`DB for templates .................... ${chalk.bold.yellow('Refreshed')}`);
-
-    done();
-  });
-
   gulp.task('database', (done) => {
     DB.onError = (blockPath, error) => {
       LOG.error(chalk.bold.red(blockPath));
@@ -168,14 +143,6 @@ module.exports = (/* opts */) => {
   });
 
   /**
-     * DB:update
-     */
-  gulp.task('db:update', (done) => {
-    gulp.series('db', 'styles', 'nunjucks')(done);
-  });
-
-
-  /**
      * Iconizer
      */
   gulp.task('iconizer', (done) => {
@@ -184,11 +151,9 @@ module.exports = (/* opts */) => {
       .pipe(gulp.dest('.'));
 
     stream.on('end', () => {
-      Object.assign(database, {
-        app: {
-          icons: getIconsNamesList(settings.paths.iconizer.icons),
-        },
-      });
+      DB.combine({
+        icons: getIconsNamesList(settings.paths.iconizer.icons),
+      }, 'app');
 
       LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
 
@@ -537,6 +502,7 @@ module.exports = (/* opts */) => {
         watchOpts, (decached) => {
           decache(dataPath);
           DB.combine(require(dataPath));
+          isNunJucksUpdate = true;
           gulp.series('nunjucks')(decached);
         },
       );
@@ -547,8 +513,8 @@ module.exports = (/* opts */) => {
     /* Iconizer */
     gulp.watch(
       `${settings.paths.iconizer.icons}/*.svg`,
-      watchOpts, () => {
-        gulp.parallel('iconizer:update');
+      watchOpts, (complete) => {
+        gulp.series('iconizer:update')(complete);
       },
     );
 
@@ -570,7 +536,6 @@ module.exports = (/* opts */) => {
       'server:static',
       'static',
       'iconizer',
-      // 'db',
       'database',
       gulp.parallel(
         'nunjucks',
