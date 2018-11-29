@@ -357,7 +357,7 @@ module.exports = (/* opts */) => {
      * Bootstrap 4 tasks
      ==================================================================== */
   gulp.task('bootstrap', (done) => {
-    if (settings.app.bts.use) {
+    if (settings.app.bts.use || settings.app.bts.donor) {
       gulp.series('bts4:sass', 'bts4:js')();
     }
 
@@ -410,12 +410,22 @@ module.exports = (/* opts */) => {
       cwd: process.cwd(),
     };
 
-    if (settings.app.bts.use) {
+    if (settings.app.bts.use || settings.app.bts.donor) {
+      let bsTask = '';
+
+      if (settings.app.bts.use) {
+        bsTask = 'bts4:sass';
+      }
+
+      if (settings.app.bts.donor) {
+        bsTask = 'styles';
+      }
+
       /* SCSS */
       gulp.watch(
         `${settings.app.bts['4'].src.css}/**/*.scss`,
         watchOpts,
-        gulp.parallel('bts4:sass'),
+        gulp.parallel(bsTask),
       );
 
       /* JS */
