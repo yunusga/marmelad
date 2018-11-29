@@ -14,6 +14,7 @@ const postcss = require('gulp-postcss');
 const focus = require('postcss-focus');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
+const inlineSvg = require('postcss-inline-svg');
 const autoprefixer = require('autoprefixer');
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
@@ -297,6 +298,7 @@ module.exports = (/* opts */) => {
         focus(),
         momentumScrolling(),
         flexBugsFixes(),
+        inlineSvg(),
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
