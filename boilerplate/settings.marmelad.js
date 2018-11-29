@@ -94,6 +94,7 @@ const app = {
   },
   bts: {
     use: false,
+    donor: false,
     4: {
       code: '4.1.3',
       src: {
