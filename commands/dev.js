@@ -15,7 +15,6 @@ const focus = require('postcss-focus');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
 const autoprefixer = require('autoprefixer');
-const cssnano = require('cssnano');
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
 const sourcemaps = require('gulp-sourcemaps');
@@ -261,7 +260,6 @@ module.exports = (/* opts */) => {
         focus(),
         momentumScrolling(),
         flexBugsFixes(),
-        cssnano({ zindex: false }),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .on('end', () => {
@@ -301,9 +299,6 @@ module.exports = (/* opts */) => {
         flexBugsFixes(),
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
-      .pipe(gif('*.min.css', postcss([
-        cssnano(settings.app.cssnano),
-      ])))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .on('end', () => {
         LOG(`Styles CSS .......................... ${chalk.bold.green('Done')}`);
