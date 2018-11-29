@@ -495,10 +495,12 @@ module.exports = (/* opts */) => {
     )
       .on('change', (block) => {
         DB.update(block);
+        isNunJucksUpdate = true;
         gulp.series('nunjucks')();
       })
       .on('unlink', (block) => {
         DB.delete(block);
+        isNunJucksUpdate = true;
         gulp.series('nunjucks')();
       });
 
