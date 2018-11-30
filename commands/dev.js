@@ -11,7 +11,6 @@ const postHTML = require('gulp-posthtml');
 const svgSprite = require('gulp-svg-sprite');
 const stylus = require('gulp-stylus');
 const postcss = require('gulp-postcss');
-const focus = require('postcss-focus');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
 const inlineSvg = require('postcss-inline-svg');
@@ -258,7 +257,6 @@ module.exports = (/* opts */) => {
       .pipe(concat('plugins.min.css'))
       .pipe(groupMQ())
       .pipe(postcss([
-        focus(),
         momentumScrolling(),
         flexBugsFixes(),
       ], { from: undefined }))
@@ -295,7 +293,6 @@ module.exports = (/* opts */) => {
       })))
       .pipe(groupMQ())
       .pipe(postcss([
-        focus(),
         momentumScrolling(),
         flexBugsFixes(),
         inlineSvg(),
