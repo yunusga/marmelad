@@ -299,6 +299,7 @@ module.exports = (/* opts */) => {
         momentumScrolling(),
         flexBugsFixes(),
         inlineSvg(),
+        require('postcss-easing-gradients'),
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
