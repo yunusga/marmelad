@@ -13,8 +13,14 @@
   },
   "keywords": [
     "static-site-generator",
+    "gulp",
+    "scss",
+    "sass",
+    "stylus",
     "bem",
-    "gulp"
+    "nunjucks",
+    "bootstrap",
+    "starter-kit"
   ],
   "contributors": [
     {
