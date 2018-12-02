@@ -50,11 +50,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yunusga/marmelad.git"
+    "url": "https://github.com/solversgroup/marmelad.git"
   },
-  "homepage": "https://github.com/yunusga/marmelad",
+  "homepage": "https://github.com/solversgroup/marmelad",
   "bugs": {
-    "url": "https://github.com/yunusga/marmelad/issues",
+    "url": "https://github.com/solversgroup/marmelad/issues",
     "email": "yunusga@yandex.ru"
   },
   "license": "MIT",
