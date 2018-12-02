@@ -1,0 +1,12 @@
+{
+	"BEML element": {
+		"scope": "html,njk,nunjucks",
+		"prefix": "elem",
+		"body": [
+			"<${1:div} elem=\"${2}\" mods=\"${3}\">",
+			"\t${0}",
+			"</${1:div}>"
+		],
+		"description": "Generate BEML element code"
+	}
+}

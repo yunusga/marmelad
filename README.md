@@ -17,7 +17,7 @@ npm i marmelad -g
 
 ### Для разработчиков
 ```bash
-git clone https://github.com/yunusga/marmelad.git
+git clone https://github.com/solversgroup/marmelad.git
 cd marmelad
 npm i . -g
 npm link
@@ -29,7 +29,7 @@ npm link
 Такой тип установки подходит, когда заказчик требует определённую структуру размещения файлов проекта, либо работа сборщика нуждается в переделке под требования заказчика. Там может быть всё что угодно.
 
 ```bash
-git clone https://github.com/yunusga/marmelad.git && cd marmelad && npm i
+git clone https://github.com/solversgroup/marmelad.git && cd marmelad && npm i
 ```
 
 Далее, инициализируея/запуская **marmelad** указывая NodeJs путь до исполняемого файла **marmelad**.
