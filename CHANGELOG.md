@@ -1,5 +1,12 @@
 # История изменений
 
+## 4.44.27 <sup>02.12.2018</sup>
+ - Добавлен postcss-easing-gradients
+ - Удалён postcss-focus
+ - Исправлены BEML сниппеты для sublime-text (mods атрибут модификатора)
+ - Добавлены BEML сниппеты для VS Code
+ - Обновлены `keywords` в `package.json`
+
 ## 4.42.24 <sup>30.11.2018</sup>
  - Вернул bootstrap как донора
  - Фикс. живое обновление данных для блоков
