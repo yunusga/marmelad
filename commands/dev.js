@@ -512,7 +512,15 @@ module.exports = (/* opts */) => {
         ],
         watchOpts, (decached) => {
           decache(dataPath);
+
           DB.combine(require(dataPath));
+          DB.combine({
+            package: pkg,
+            storage: settings.folders.storage,
+            icons: getIconsNamesList(settings.paths.iconizer.icons),
+            settings,
+          }, 'app');
+
           isNunJucksUpdate = true;
           gulp.series('nunjucks')(decached);
         },
