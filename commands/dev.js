@@ -398,15 +398,15 @@ module.exports = (/* opts */) => {
   });
 
   gulp.task('watch', (done) => {
-    const watchOpts = {
+    const watchOpts = Object.assign({
       ignoreInitial: true,
       ignored: [
         `${settings.folders.marmelad}/**/*.db`,
         `${settings.folders.marmelad}/**/*tmp*`,
       ],
-      usePolling: true,
+      usePolling: false,
       cwd: process.cwd(),
-    };
+    }, settings.app.watchOpts);
 
     if (settings.app.bts.use || settings.app.bts.donor) {
       let bsTask = '';

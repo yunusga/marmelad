@@ -56,6 +56,15 @@ const autoprefixer = {
 
 const app = {
   css: '<%- css %>',
+  watchOpts: {
+    ignoreInitial: true,
+    ignored: [
+      `${folders.marmelad}/**/*.db`,
+      `${folders.marmelad}/**/*tmp*`,
+    ],
+    usePolling: false,
+    cwd: process.cwd(),
+  },
   cssnano: {
     zIndex: false,
   },
