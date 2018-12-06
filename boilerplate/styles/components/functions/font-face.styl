@@ -1,0 +1,35 @@
+fontFace($name, $folder, $typefaces = (r i b b-i), $display = 'swap', $path = '../fonts')
+
+  .font-{$folder}
+    font-family : $name
+
+  $typeface = {
+    t     : (200 normal), // thin
+    t-i   : (200 italic), // thin italic
+    l     : (300 normal), // light
+    l-i   : (300 italic), // light italic
+    book  : (350 normal), // book normal
+    r     : (400 normal), // regular
+    i     : (400 italic), // regular italic
+    m     : (500 normal), // medium
+    m-i   : (500 italic), // medium italic
+    s-b   : (600 normal), // semi bold
+    s-b-i : (600 italic), // semi bold italic
+    b     : (700 normal), // bold
+    b-i   : (700 italic), // bold italic
+    e-b   : (800 normal), // extra bold
+    e-b-i : (800 italic), // extra bold italic
+    bl    : (900 normal), // black (mega bold)
+    bl-i  : (900 italic)  // black italic (mega bold italic)
+  }
+
+  for $face in $typefaces
+
+    @font-face
+      font-family : $name
+      font-weight : $typeface[$face][0]
+      font-style  : $typeface[$face][1]
+      src : local($name), url(unquote($path) + '/' + $folder + '/' + $folder + '_' + $face + '.otf') format('opentype')
+
+      if $display
+        font-display: unquote($display)
