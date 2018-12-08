@@ -128,8 +128,24 @@ Commands help:
 TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb).
 
 ## Описание сборки стилей
+
+### Сборка основных стилей
 ```bash
-Тест
+
+Сборка стилей осуществляется **Gulp.js**.
+Для стилей используется препроцессор **Stylus**. 
+**Marmelad** компилирует все файлы стилей с расширениями **(.sass, .scss,.styl)** в **.css** файл.
+К примеру мы создали стили для шапки в папке мармелада **(firstStep/marmelad/boilerplate/_blocks/_app-header/_app-header.styl)**, 
+**Marmelad** компилирует файл стилей из текущей папки в папку статик в файл **(firstStep/static/css/style.css)**.
+
+```
+
+### Сборка стилей плагинов
+```bash
+
+Плагины храняться в папке **(firstStep/marmelad/js/plugins/).**
+Так же стили плагинов компилируются из этой папки в папку **(firstStep/static/css/plugins.min.css)**.
+
 ```
 
 ## Лицензия
