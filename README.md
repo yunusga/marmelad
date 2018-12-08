@@ -127,8 +127,10 @@ Commands help:
 
 TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb).
 
-## Описание сборки стилей 
+## Описание сборки стилей
+```bash
 Тест
+```
 
 ## Лицензия
 [MIT](LICENSE)
