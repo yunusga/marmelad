@@ -138,14 +138,14 @@ Marmelad компилирует все файлы стилей с расшире
 **Marmelad** компилирует файл стилей из текущей папки в папку статик в файл **(projectFolder/static/css/style.css)**.
 
 ```bash
-[projectFolder]
-  ├[marmelad]
-  ├----[_blocks]
-  ├--------[youblock]
-  ├-----------youstyl.styl // все файлы с расширением styl из папки _blocks собираются в папку static > css
-  ├[static]
-  ├---[css]
-  └-------youstyl.css // все файлы с расширение  styl из папки _blocks собираются в папку static > css
+[`projectFolder`]
+  ├[`marmelad`]
+  ├-[_blocks]
+  ├--[yourblock]
+  ├---yourstyl.styl // все файлы с расширением styl из папки _blocks собираются в папке static > css
+  ├[`static`]
+  ├-[css]
+  └--style.css // все файлы с расширением  styl из папки _blocks собираются в папке static > css
 ```
 
 ### Сборка стилей плагинов
@@ -153,6 +153,16 @@ Marmelad компилирует все файлы стилей с расшире
 Плагины храняться в папке **(projectFolder/marmelad/js/plugins/)**.
 Так же стили плагинов компилируются из этой папки в папку **(projectFolder/static/css/plugins.min.css)**.
 
+```bash
+[`projectFolder`]
+  ├[`marmelad`]
+  ├--[js]
+  ├---[plugins]
+  ├----yourstyl.styl // все файлы с расширением styl из папки plugins собираются в папке static > css > plugins.min.css
+  ├[`static`]
+  ├--[css]
+  └---plugins.min.css // все файлы с расширением  styl из папки _blocks собираются в папке static > css > plugins.min.css
+```
 
 ## Лицензия
 [MIT](LICENSE)
