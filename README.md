@@ -127,22 +127,26 @@ Commands help:
 
 TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb).
 
-## Описание сборки стилей 
-### Поддержка нескольких препроцессоров и полезных плагинов.
 
-**Список поддерживаемых препроцессоров:**
+**Описание сборки стилей**
 
-**[gulp-stylus](https://www.npmjs.com/package/gulp-stylus)** - препроцессор для CSS, он позволяет писать более аккуратный и красивый код.<br />
-**[gulp-postcss](https://github.com/postcss/gulp-postcss)** - программа, которая автоматизирует рутинные операции с CSS.<br />
-**[gulp-sass](https://www.npmjs.com/package/gulp-sass)** - препроцессор для CSS, он позволяет писать более аккуратный и красивый код. У него есть поддержка scss и sass.<br />
 
-**Список дополнительных плагинов:**
+**Поддержка нескольких препроцессоров и полезных плагинов.**
 
-**[autoprefixer](https://www.npmjs.com/package/autoprefixer)** - для добавления префиксов к экспериментальным свойствам из CSS.<br />
-**[postcss-momentum-scrolling](https://www.npmjs.com/package/postcss-momentum-scrolling)** - добавляет поведение прокрутки стиля.<br />
-**[postcss-inline-svg](https://www.npmjs.com/package/postcss-inline-svg)** - для управления атрибутами svg-файлов с помощью CSS.<br />
-**[postcss-flexbugs-fixes](https://www.npmjs.com/package/postcss-flexbugs-fixes)** - исправляет все баги с flex.<br />
-**[gulp-group-css-media-queries](https://www.npmjs.com/package/gulp-group-css-media-queries)** - группирует все медия-запросы в самом конце таблицы стилей.<br />
+
+### Список поддерживаемых препроцессоров:
+
+* **[gulp-stylus](https://www.npmjs.com/package/gulp-stylus)** - препроцессор CSS, использующий SASS-подобный синтаксис.
+* **[gulp-postcss](https://github.com/postcss/gulp-postcss)** - инструмент для преобразования стилей с помощью плагинов JS.
+* **[gulp-sass](https://www.npmjs.com/package/gulp-sass)** - препроцессор CSS, позволяющий компилировать scss и sass файлы в css.
+
+### Список дополнительных плагинов:
+
+* **[autoprefixer](https://www.npmjs.com/package/autoprefixer)** - для добавления префиксов к экспериментальным свойствам из CSS.
+* **[postcss-momentum-scrolling](https://www.npmjs.com/package/postcss-momentum-scrolling)** - добавляет плавную прокрутку на iOS.
+* **[postcss-inline-svg](https://www.npmjs.com/package/postcss-inline-svg)** - подключает svg и управляет его атрибутами.
+* **[postcss-flexbugs-fixes](https://www.npmjs.com/package/postcss-flexbugs-fixes)** - исправляет все баги с flex.
+* **[gulp-group-css-media-queries](https://www.npmjs.com/package/gulp-group-css-media-queries)** - группирует все медия-запросы в самом конце таблицы стилей.
 
 ## Лицензия
 [MIT](LICENSE)
