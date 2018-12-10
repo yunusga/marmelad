@@ -127,22 +127,22 @@ Commands help:
 
 TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb).
 
-## Описание сборки стилей
+## Описание сборки стилей 
+### Поддержка нескольких препроцессоров и полезных плагинов.
 
 **Список поддерживаемых препроцессоров:**
 
-1) **[gulp-stylus](https://www.npmjs.com/package/gulp-stylus)** - Препроцессор для CSS. Он позволяет писать более аккуратный и красивый код.
-2) **[gulp-postcss](https://github.com/postcss/gulp-postcss)** - программа, которая автоматизирует рутинные операции с CSS.
-3) **[gulp-sass](https://www.npmjs.com/package/gulp-sass)** - Препроцессор для CSS. Он позволяет писать более аккуратный и красивый код.
+**[gulp-stylus](https://www.npmjs.com/package/gulp-stylus)** - препроцессор для CSS, он позволяет писать более аккуратный и красивый код.<br />
+**[gulp-postcss](https://github.com/postcss/gulp-postcss)** - программа, которая автоматизирует рутинные операции с CSS.<br />
+**[gulp-sass](https://www.npmjs.com/package/gulp-sass)** - препроцессор для CSS, он позволяет писать более аккуратный и красивый код. У него есть поддержка scss и sass.<br />
 
 **Список дополнительных плагинов:**
 
-1) **[autoprefixer](https://www.npmjs.com/package/autoprefixer)** - Это плагин для добавления префиксов к экспериментальным свойствам из CSS.
-2) **[postcss-momentum-scrolling](https://www.npmjs.com/package/postcss-momentum-scrolling)** - Это плагин postcss, добавляет поведение прокрутки стиля.
-3) **[postcss-inline-svg](https://www.npmjs.com/package/postcss-inline-svg)** - Это плагин postcss для svg-файла и управления его атрибутами с помощью CSS. 
-4) **[postcss-flexbugs-fixes](https://www.npmjs.com/package/postcss-flexbugs-fixes)** - Это плагин postcss, исправляет все баги с flex.
-5) **[gulp-svg-sprite](https://www.npmjs.com/package/gulp-svg-sprite)** - Это плагин Gulp, который берёт все SVG-файлы и оптимизирует их и объединяет в SVG-спрайты.
-6) **[gulp-group-css-media-queries](https://www.npmjs.com/package/gulp-group-css-media-queries)** - Это плагин который группирует все медия-запросы в самом конце таблицы стилей. 
+**[autoprefixer](https://www.npmjs.com/package/autoprefixer)** - для добавления префиксов к экспериментальным свойствам из CSS.<br />
+**[postcss-momentum-scrolling](https://www.npmjs.com/package/postcss-momentum-scrolling)** - добавляет поведение прокрутки стиля.<br />
+**[postcss-inline-svg](https://www.npmjs.com/package/postcss-inline-svg)** - для управления атрибутами svg-файлов с помощью CSS.<br />
+**[postcss-flexbugs-fixes](https://www.npmjs.com/package/postcss-flexbugs-fixes)** - исправляет все баги с flex.<br />
+**[gulp-group-css-media-queries](https://www.npmjs.com/package/gulp-group-css-media-queries)** - группирует все медия-запросы в самом конце таблицы стилей.<br />
 
 ## Лицензия
 [MIT](LICENSE)
