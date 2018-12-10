@@ -1,7 +1,7 @@
 [ci-img]:  https://travis-ci.org/solversgroup/marmelad.svg
 [ci]:      https://travis-ci.org/solversgroup/marmelad
 
-# marmelad <sup>[4.46.29](CHANGELOG.md#44629-04122018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad) [![Build Status][ci-img]][ci]
+# marmelad <sup>[4.46.29](CHANGELOG.md#44629-04122018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
@@ -128,10 +128,10 @@ Commands help:
 TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb).
 
 
-**Описание сборки стилей**
+## Описание сборки стилей
 
 
-**Поддержка нескольких препроцессоров и полезных плагинов.**
+Поддержка нескольких препроцессоров и полезных плагинов.
 
 
 ### Список поддерживаемых препроцессоров:
