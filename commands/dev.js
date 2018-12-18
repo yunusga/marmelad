@@ -6,6 +6,7 @@ const bsSP = require('browser-sync').create();
 const tap = require('gulp-tap');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
+const rename = require('gulp-rename');
 const frontMatter = require('gulp-front-matter');
 const postHTML = require('gulp-posthtml');
 const svgSprite = require('gulp-svg-sprite');
@@ -356,7 +357,12 @@ module.exports = (/* opts */) => {
      ==================================================================== */
   gulp.task('bootstrap', (done) => {
     if (settings.app.bts.use || settings.app.bts.donor) {
-      gulp.series('bts4:sass', 'bts4:js')();
+      if (settings.app.bts.donor) {
+        settings.app.bts['4'].dest.js = `${settings.paths.storage}/${settings.folders.js.src}/${settings.folders.js.vendors}`;
+        gulp.series('bts4:js')();
+      } else {
+        gulp.series('bts4:sass', 'bts4:js')();
+      }
     }
 
     done();
@@ -384,6 +390,7 @@ module.exports = (/* opts */) => {
     const stream = gulp.src(`${settings.app.bts['4'].src.js}/**/*.js`)
       .pipe(plumber())
       .pipe(changed(settings.app.bts['4'].dest.js))
+      .pipe(gif(settings.app.bts.donor, rename({ dirname: '' }))) // rename({ dirname: '' })
       .pipe(gulp.dest(settings.app.bts['4'].dest.js));
 
     stream.on('end', () => {
