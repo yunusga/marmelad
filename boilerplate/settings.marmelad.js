@@ -74,6 +74,10 @@ const app = {
     modDlmtr: '-',
   },
   autoprefixer,
+  postcss: {
+    easingGradients: {},
+    inlineSvg: {},
+  },
   bsSP: {
     server: {
       baseDir: paths.dist,
@@ -118,7 +122,7 @@ const app = {
         precision: 6,
         outputStyle: 'expanded',
       },
-      autoprefixer,
+      autoprefixer
     },
   },
 };
