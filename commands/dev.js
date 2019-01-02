@@ -15,6 +15,7 @@ const postcss = require('gulp-postcss');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
 const inlineSvg = require('postcss-inline-svg');
+const easingGradients = require('postcss-easing-gradients');
 const autoprefixer = require('autoprefixer');
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
@@ -281,6 +282,9 @@ module.exports = (/* opts */) => {
 
     Object.assign($data, DB.store.app.stylus);
 
+    // обратная совместимость с старыми проектами
+    settings.app.postcss = settings.app.postcss || {};
+
     gulp.src(`${settings.paths.styles}/*.{styl,scss,sass}`)
       .pipe(plumber())
       .pipe(gif('*.styl', stylus({
@@ -297,7 +301,7 @@ module.exports = (/* opts */) => {
         momentumScrolling(),
         flexBugsFixes(),
         inlineSvg(settings.app.postcss.inlineSvg),
-        require('postcss-easing-gradients')(settings.app.postcss.easingGradients),
+        easingGradients(settings.app.postcss.easingGradients),
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
