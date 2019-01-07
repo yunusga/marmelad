@@ -1,7 +1,7 @@
 [ci-img]:  https://travis-ci.org/solversgroup/marmelad.svg
 [ci]:      https://travis-ci.org/solversgroup/marmelad
 
-# marmelad <sup>[4.46.29](CHANGELOG.md#44629-04122018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad) [![Build Status][ci-img]][ci]
+# marmelad <sup>[4.46.29](CHANGELOG.md#44629-04122018)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
@@ -9,6 +9,14 @@
 
 ## Для разработчиков
 Разработка ведётся по правилам **git-flow**. Ознакомиться и изучить мо в  [шпаргалке по git-flow](http://danielkummer.github.io/git-flow-cheatsheet/index.ru_RU.html)
+
+### Этапы/соглашение по внесению изменения
+
+ - Форк репозитория к себе
+ - Разработка фичи по правилам git-flow
+ - Завершение разработки фичи
+ - Создание пул-реквеста
+ - Скачивание изменений после одобрения пул-реквеста
 
 ## Установка
 
@@ -118,6 +126,37 @@ Commands help:
 ## Модуль TCI
 
 TCI (text command interface) - добавлен в шаблон вёрстки и дублирует CLI команды **marmelad** (cp, cb).
+
+
+## Описание сборки стилей
+
+
+Поддержка нескольких препроцессоров и полезных плагинов.
+
+
+### Список поддерживаемых препроцессоров:
+
+* **[gulp-stylus](https://www.npmjs.com/package/gulp-stylus)** - препроцессор CSS, использующий SASS-подобный синтаксис.
+* **[gulp-postcss](https://github.com/postcss/gulp-postcss)** - инструмент для преобразования стилей с помощью плагинов JS.
+* **[gulp-sass](https://www.npmjs.com/package/gulp-sass)** - препроцессор CSS, позволяющий компилировать scss и sass файлы в css.
+
+### Список дополнительных плагинов:
+
+* **[autoprefixer](https://www.npmjs.com/package/autoprefixer)** - для добавления префиксов к экспериментальным свойствам из CSS.
+* **[postcss-momentum-scrolling](https://www.npmjs.com/package/postcss-momentum-scrolling)** - добавляет плавную прокрутку на iOS.
+* **[postcss-inline-svg](https://www.npmjs.com/package/postcss-inline-svg)** - подключает svg и управляет его атрибутами.
+* **[postcss-flexbugs-fixes](https://www.npmjs.com/package/postcss-flexbugs-fixes)** - исправляет все баги с flex.
+* **[gulp-group-css-media-queries](https://www.npmjs.com/package/gulp-group-css-media-queries)** - группирует все медия-запросы в самом конце таблицы стилей.
+
+## Bootstrap
+
+Сборка **bootstrap** включается в `settings.marmelad.js` настройкой `app.bts.use: true`, все файлы собираются в корне сборке, в директории   `bootstrap`.
+
+### Bootstrap как донор
+
+Сборка **bootstrap как донор** включается в `settings.marmelad.js` настройкой `app.bts.donor: true`, при этом `app.bts.use` должен быть в `false`.
+
+В случае использования **bootstrap** как **донора** для сборки стилей, файлы скриптов **bootstrap** копируются в директорию сборки `js/vendors`. Файлы стилей уже встраиваются так как вы их настроете, т.е. изменение файлов стилей **bootstrap** запускает сборку основных стилей, не запуская отдельную сборку стилей для **bootstrap**.
 
 ## Лицензия
 [MIT](LICENSE)

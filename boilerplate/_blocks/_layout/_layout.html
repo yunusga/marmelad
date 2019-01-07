@@ -21,19 +21,32 @@
 
         <meta name="MobileOptimized" content="320">
         <meta name="HandheldFriendly" content="True">
+        
+        {# Open Graph #}
+        <!-- Primary Meta Tags -->
+        <meta name="title" content="{{ pageTitle}} - {{ app.package.name | capitalize}} v{{ app.package.version }}">
+        <meta name="description" content="{{ app.package.description }}">
 
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://github.com/solversgroup/marmelad">
+        <meta property="og:title" content="{{ pageTitle}}">
+        <meta property="og:description" content="{{ app.package.description }}">
+        <meta property="og:image" content="https://avatars0.githubusercontent.com/u/41577953?s=200&amp;v=4">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://github.com/solversgroup/marmelad">
+        <meta property="twitter:title" content="{{ pageTitle}}">
+        <meta property="twitter:description" content="{{ app.package.description }}">
+        <meta property="twitter:image" content="https://avatars0.githubusercontent.com/u/41577953?s=200&amp;v=4">
+        {# Open Graph End #}
 
         <title>{{ pageTitle}} - {{ app.package.name | capitalize}} v{{ app.package.version }}</title>
 
 
         <link rel="stylesheet" href="{{app.storage}}/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="{{app.storage}}/css/style.css">
-
-        {# <script src="{{app.storage}}/js/vendors/modernizr.js" async></script>
-        <script src="{{app.storage}}/js/vendors/pep-0.4.2.min.js" async></script> #}
 
     </head>
 

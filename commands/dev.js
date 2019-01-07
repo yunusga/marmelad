@@ -6,6 +6,7 @@ const bsSP = require('browser-sync').create();
 const tap = require('gulp-tap');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
+const rename = require('gulp-rename');
 const frontMatter = require('gulp-front-matter');
 const postHTML = require('gulp-posthtml');
 const svgSprite = require('gulp-svg-sprite');
@@ -14,6 +15,7 @@ const postcss = require('gulp-postcss');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
 const inlineSvg = require('postcss-inline-svg');
+const easingGradients = require('postcss-easing-gradients');
 const autoprefixer = require('autoprefixer');
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
@@ -280,6 +282,9 @@ module.exports = (/* opts */) => {
 
     Object.assign($data, DB.store.app.stylus);
 
+    // обратная совместимость с старыми проектами
+    settings.app.postcss = settings.app.postcss || {};
+
     gulp.src(`${settings.paths.styles}/*.{styl,scss,sass}`)
       .pipe(plumber())
       .pipe(gif('*.styl', stylus({
@@ -295,8 +300,8 @@ module.exports = (/* opts */) => {
       .pipe(postcss([
         momentumScrolling(),
         flexBugsFixes(),
-        inlineSvg(),
-        require('postcss-easing-gradients'),
+        inlineSvg(settings.app.postcss.inlineSvg),
+        easingGradients(settings.app.postcss.easingGradients),
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
@@ -356,7 +361,12 @@ module.exports = (/* opts */) => {
      ==================================================================== */
   gulp.task('bootstrap', (done) => {
     if (settings.app.bts.use || settings.app.bts.donor) {
-      gulp.series('bts4:sass', 'bts4:js')();
+      if (settings.app.bts.donor) {
+        settings.app.bts['4'].dest.js = `${settings.paths.storage}/${settings.folders.js.src}/${settings.folders.js.vendors}`;
+        gulp.series('bts4:js')();
+      } else {
+        gulp.series('bts4:sass', 'bts4:js')();
+      }
     }
 
     done();
@@ -364,6 +374,7 @@ module.exports = (/* opts */) => {
 
   gulp.task('bts4:sass', (done) => {
     gulp.src(`${settings.app.bts['4'].src.css}/scss/[^_]*.scss`)
+      .pipe(plumber())
       .pipe(sourcemaps.init())
       .pipe(sass(settings.app.bts['4'].sass))
       .pipe(postcss([
@@ -384,6 +395,7 @@ module.exports = (/* opts */) => {
     const stream = gulp.src(`${settings.app.bts['4'].src.js}/**/*.js`)
       .pipe(plumber())
       .pipe(changed(settings.app.bts['4'].dest.js))
+      .pipe(gif(settings.app.bts.donor, rename({ dirname: '' }))) // rename({ dirname: '' })
       .pipe(gulp.dest(settings.app.bts['4'].dest.js));
 
     stream.on('end', () => {

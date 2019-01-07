@@ -74,6 +74,10 @@ const app = {
     modDlmtr: '-',
   },
   autoprefixer,
+  postcss: {
+    easingGradients: {},
+    inlineSvg: {},
+  },
   bsSP: {
     server: {
       baseDir: paths.dist,
@@ -105,10 +109,10 @@ const app = {
     use: false,
     donor: false,
     4: {
-      code: '4.1.3',
+      code: '4.2.1',
       src: {
-        css: path.join(paths.marmelad, 'bootstrap', '4.1.3'),
-        js: path.join(paths.marmelad, 'bootstrap', '4.1.3'),
+        css: path.join(paths.marmelad, 'bootstrap', '4.2.1'),
+        js: path.join(paths.marmelad, 'bootstrap', '4.2.1'),
       },
       dest: {
         css: path.join(paths.storage, 'bootstrap', 'css'),
@@ -118,7 +122,7 @@ const app = {
         precision: 6,
         outputStyle: 'expanded',
       },
-      autoprefixer,
+      autoprefixer
     },
   },
 };
