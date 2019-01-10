@@ -1,22 +1,22 @@
-$system-ui = unquote('-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif')
+$system-ui = unquote('-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif');
 
-$elemPrefix = $data.beml.elemPrefix
-$modPrefix = $data.beml.modPrefix
-$modDlmtr = $data.beml.modDlmtr
+$elemPrefix = $data.beml.elemPrefix;
+$modPrefix = $data.beml.modPrefix;
+$modDlmtr = $data.beml.modDlmtr;
 
-$colorPrimary = convert($data.theme_color)
-$colorAccent  = #FF3F80
+$colorPrimary = convert($data.theme_color);
+$colorAccent  = #FF3F80;
 
-$textDarkColor  = #000
-$textLightColor = #fff
+$textDarkColor  = #000;
+$textLightColor = #fff;
 
-$theme = 'light' // dark
+$theme = 'light'; // dark
 
-$appGutter = 20px
-$appWidth  = 1000px
+$appGutter = 20px;
+$appWidth  = 1000px;
 
-$controlsHeight = 36px
-$controlsRadius = 3px
+$controlsHeight = 36px;
+$controlsRadius = 3px;
 
 $colors = {
     primary : $colorPrimary,
