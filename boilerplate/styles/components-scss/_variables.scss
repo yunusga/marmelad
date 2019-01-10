@@ -1,0 +1,100 @@
+$system-ui = unquote('-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif')
+
+$elemPrefix = $data.beml.elemPrefix
+$modPrefix = $data.beml.modPrefix
+$modDlmtr = $data.beml.modDlmtr
+
+$colorPrimary = convert($data.theme_color)
+$colorAccent  = #FF3F80
+
+$textDarkColor  = #000
+$textLightColor = #fff
+
+$theme = 'light' // dark
+
+$appGutter = 20px
+$appWidth  = 1000px
+
+$controlsHeight = 36px
+$controlsRadius = 3px
+
+$colors = {
+    primary : $colorPrimary,
+    accent  : $colorAccent,
+    bgc     : #fff,
+    txtDark : {
+        primary   : rgba($textDarkColor, .87),
+        secondary : rgba($textDarkColor, .54),
+        hint      : rgba($textDarkColor, .38),
+        divider   : rgba($textDarkColor, .12)
+    },
+    txtLight : {
+        primary   : rgba($textLightColor, 1),
+        secondary : rgba($textLightColor, .7),
+        hint      : rgba($textLightColor, .5),
+        divider   : rgba($textLightColor, .12)
+    }
+}
+
+$textColor = $colors.txtDark;
+
+$links = {
+    default : #0054b9,
+    hover   : #c00,
+    active  : false,
+    visited : false
+}
+
+$selection = {
+    bgc   : $colors.primary,
+    color : #fff
+}
+
+$placeholders = {
+    normal : $textColor.primary,
+    focus  : transparent
+}
+
+$fonts = {
+    base     : $system-ui,
+    headings : $system-ui
+}
+
+$fontWeight = {
+    thin    : 100,
+    light   : 300,
+    regular : 400,
+    medium  : 500,
+    bold    : 700,
+    black   : 900
+}
+
+$html = {
+    family     : $fonts.base,
+    weight     : 400,
+    color      : $textColor.primary,
+    fontSize   : 17px,
+    lineHeight : 1.2,
+    bgc        : $colors.bgc
+}
+
+$headings = {
+    gutter    : $appGutter,
+    family    : $fonts.headings,
+    weight    : 700,
+    color     : $textColor.primary,
+    transform : none,
+    size      : 34
+}
+
+$blockquote = {
+    gutter : $appGutter,
+    border : {
+        size  : 5px,
+        color : $colors.primary
+    },
+    font : {
+        size  : base-font-size,
+        style : normal
+    }
+}

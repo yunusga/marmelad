@@ -1,0 +1,30 @@
+.main-svg-sprite
+    display : none
+
+.svg-icon
+    display : inline-block
+    width : 24px
+    height : 24px
+    fill : currentColor
+    font-size: 0
+
+    &__spinner
+        fill : inherit
+        width : inherit
+        height : inherit
+        animation-name : spinner
+        animation-duration : .7s
+        animation-iteration-count : infinite
+        animation-timing-function : linear
+
+    &__link
+        vertical-align : top
+        fill : inherit
+        width : inherit
+        height : inherit
+
+@keyframes spinner
+    from
+        transform : rotate(0deg)
+    to
+        transform : rotate(360deg)

@@ -1,0 +1,51 @@
+$page_scroller_bgc = $colors.primary
+
+.page-scroller
+    opacity 0
+
+    position fixed
+    z-index 1050
+    top 0
+    left 0
+    width 60px
+    height 100%
+    height 100vh
+
+    background-color rgba($page_scroller_bgc, .1)
+
+    user-select none
+    cursor pointer
+
+    backface-visibility hidden
+    transform translateZ(0)
+
+    transition opacity .16s linear
+    pointer-events none
+
+    &__ctrl
+        position absolute
+        top 50%
+        left 50%
+        margin-top -12px
+        margin-left -12px
+        transition transform .25s linear
+        fill #666
+        width 24px
+        height 24px
+
+    &:hover,
+    &:focus
+        background-color rgba($page_scroller_bgc, .12)
+
+    &:active
+        background-color rgba($page_scroller_bgc, .14)
+
+    &{$data.beml.modPrefix}memorized
+
+        .page-scroller__ctrl
+            transform rotate(180deg)
+    
+    &{$data.beml.modPrefix}memorized,
+    &{$data.beml.modPrefix}visible
+        opacity 1
+        pointer-events auto
