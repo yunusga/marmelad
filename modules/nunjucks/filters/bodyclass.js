@@ -6,7 +6,9 @@ function bodyClass(layout, additionalClasses = '', prefix = 'has-', postfix = ''
   }
 
   Object.keys(layout).forEach((key) => {
-    classes.push(`${prefix}${key}${postfix}`);
+  	if (layout[key]) {
+	    classes.push(`${prefix}${key}${postfix}`);
+  	}
   });
 
   return classes.join(' ');
