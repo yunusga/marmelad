@@ -25,10 +25,6 @@ const paths = {
   marmelad: path.join(folders.marmelad),
   _blocks: path.join(folders.marmelad, folders._blocks),
   _pages: path.join(folders.marmelad, folders._pages),
-  iconizer: {
-    src: path.join(folders.marmelad, folders.iconizer.src),
-    icons: path.join(folders.marmelad, folders.iconizer.src, folders.iconizer.icons),
-  },
   js: {
     src: path.join(folders.marmelad, folders.js.src),
     vendors: path.join(folders.marmelad, folders.js.src, folders.js.vendors),
@@ -36,6 +32,54 @@ const paths = {
   },
   styles: path.join(folders.marmelad, folders.styles),
   static: path.join(folders.marmelad, folders.static),
+};
+
+const iconizer = {
+  cssClass: 'main-svg-sprite',
+  mode: 'inline', // external отдельный подключаемый файл спрайта (default:inline)
+  dest: path.join(paths.dist, 'img'), // путь для собираемых спрайтов
+  url: 'img', // путь до подключаемого спрайта iconizer.dest без paths.dist
+  srcIcons: path.join(folders.marmelad, folders.iconizer.src, 'icons'),
+  srcColored: path.join(folders.marmelad, folders.iconizer.src, 'colored'),
+  icon: (name, opts) => {
+    opts = Object.assign({
+      tag: 'div',
+      type: 'icons',
+      class: '',
+    }, opts);
+
+    let external = '';
+    let typeClass = '';
+
+    if (opts.mode === 'external') {
+      external = `${opts.url}/sprite.${opts.type}.svg`;
+    }
+
+    if (opts.type !== 'icons') {
+      typeClass = ` svg-icon--${opts.type}`;
+    }
+
+    opts.class = opts.class ? ` ${opts.class}` : '';
+
+    return `
+      <${opts.tag} class="svg-icon svg-icon--${name}${typeClass}${opts.class}" aria-hidden="true" focusable="false">
+        <svg class="svg-icon__link">
+          <use xlink:href="${external}#${name}"></use>
+        </svg>
+      </${opts.tag}>
+    `;
+  },
+  plugin: {
+    mode: {
+      symbol: { // symbol mode to build the SVG
+        example: false, // Build sample page
+      },
+    },
+    svg: {
+      xmlDeclaration: false, // strip out the XML attribute
+      doctypeDeclaration: false, // don't include the !DOCTYPE declaration
+    },
+  },
 };
 
 const autoprefixer = {
@@ -92,19 +136,6 @@ const app = {
     logFileChanges: false,
     ui: false,
   },
-  svgSprite: {
-    mode: {
-      symbol: { // symbol mode to build the SVG
-        dest: paths.iconizer.src, // destination folder
-        sprite: 'sprite.svg', // sprite name
-        example: false, // Build sample page
-      },
-    },
-    svg: {
-      xmlDeclaration: false, // strip out the XML attribute
-      doctypeDeclaration: false, // don't include the !DOCTYPE declaration
-    },
-  },
   bts: {
     use: false,
     donor: false,
@@ -131,4 +162,5 @@ module.exports = {
   folders,
   app,
   paths,
+  iconizer,
 };

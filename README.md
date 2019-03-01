@@ -158,6 +158,102 @@ TCI (text command interface) - добавлен в шаблон вёрстки �
 
 В случае использования **bootstrap** как **донора** для сборки стилей, файлы скриптов **bootstrap** копируются в директорию сборки `js/vendors`. Файлы стилей уже встраиваются так как вы их настроете, т.е. изменение файлов стилей **bootstrap** запускает сборку основных стилей, не запуская отдельную сборку стилей для **bootstrap**.
 
+## Iconizer
+
+Iconizer претерпел изменения в плане способах его подключения и использования в шаблонах.
+
+### Типы SVG-спрайта
+
+- `icons` - монохромные иконки, вырезаются все лишние атрибуты оформления
+- `colored` - цветные иконоки, вырезается только тег `title`
+
+### Пример использования цветной SVG-иконки
+
+Для подключения цветной иконки необходимо добавить атрибут `type="colored"`
+
+```html
+<icon name="marmelad" type="colored">
+```
+
+### Режимы подключения SVG-спрайта
+
+- `inline` - инлайнится в HTML-код страницы
+- `external` - используется как отдельный файл, через обращение по URL его размещения
+
+### Миграция для Iconizer 5+
+
+В `settings.marmelad.js`, в секции `paths`, необходимо удалить более не требуемые данные, ключ `iconizer`
+
+```js
+const paths = {
+  // удалить
+  iconizer: {
+    ...
+  },
+};
+```
+
+Добавить новый объект в `settings.marmelad.js`
+
+```js
+const iconizer = {
+  cssClass: 'main-svg-sprite',
+  mode: 'inline', // external отдельный подключаемый файл спрайта (default:inline)
+  dest: path.join(paths.dist, 'img'), // путь для собираемых спрайтов
+  url: 'img', // путь до подключаемого спрайта iconizer.dest без paths.dist
+  srcIcons: path.join(folders.marmelad, folders.iconizer.src, 'icons'),
+  srcColored: path.join(folders.marmelad, folders.iconizer.src, 'colored'),
+  icon: (name, opts) => {
+    opts = Object.assign({
+      tag: 'div',
+      type: 'icons',
+      class: '',
+    }, opts);
+
+    let external = '';
+    let typeClass = '';
+
+    if (opts.mode === 'external') {
+      external = `${opts.url}/sprite.${opts.type}.svg`;
+    }
+
+    if (opts.type !== 'icons') {
+      typeClass = ` svg-icon--${opts.type}`;
+    }
+
+    opts.class = opts.class ? ` ${opts.class}` : '';
+
+    return `
+      <${opts.tag} class="svg-icon svg-icon--${name}${typeClass}${opts.class}" aria-hidden="true" focusable="false">
+        <svg class="svg-icon__link">
+          <use xlink:href="${external}#${name}"></use>
+        </svg>
+      </${opts.tag}>
+    `;
+  },
+  plugin: {
+    mode: {
+      symbol: { // symbol mode to build the SVG
+        example: false, // Build sample page
+      },
+    },
+    svg: {
+      xmlDeclaration: false, // strip out the XML attribute
+      doctypeDeclaration: false, // don't include the !DOCTYPE declaration
+    },
+  },
+};
+```
+
+и не забыть добавить его в экспорт настроек
+
+```js
+module.exports = {
+  // добавить
+  iconizer,
+};
+```
+
 ## Лицензия
 [MIT](LICENSE)
 
