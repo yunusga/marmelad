@@ -139,7 +139,10 @@ module.exports = (/* opts */) => {
     DB.combine({
       package: pkg,
       storage: settings.folders.storage,
-      icons: getIconsNamesList(settings.paths.iconizer.icons),
+      sprite: {
+        icons: getIconsNamesList(settings.iconizer.srcIcons),
+        colored: getIconsNamesList(settings.iconizer.srcColored),
+      },
       settings,
     }, 'app');
 
@@ -171,7 +174,10 @@ module.exports = (/* opts */) => {
 
     stream.on('end', () => {
       DB.combine({
-        icons: getIconsNamesList(settings.iconizer.srcIcons),
+        sprite: {
+          icons: getIconsNamesList(settings.iconizer.srcIcons),
+          colored: getIconsNamesList(settings.iconizer.srcColored),
+        },
       }, 'app');
 
       LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
@@ -203,7 +209,10 @@ module.exports = (/* opts */) => {
 
     stream.on('end', () => {
       DB.combine({
-        icons: getIconsNamesList(settings.iconizer.srcIcons),
+        sprite: {
+          icons: getIconsNamesList(settings.iconizer.srcIcons),
+          colored: getIconsNamesList(settings.iconizer.srcColored),
+        },
       }, 'app');
 
       LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
@@ -576,7 +585,10 @@ module.exports = (/* opts */) => {
           DB.combine({
             package: pkg,
             storage: settings.folders.storage,
-            icons: getIconsNamesList(settings.paths.iconizer.icons),
+            sprite: {
+              icons: getIconsNamesList(settings.iconizer.srcIcons),
+              colored: getIconsNamesList(settings.iconizer.srcColored),
+            },
             settings,
           }, 'app');
 
