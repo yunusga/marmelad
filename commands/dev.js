@@ -7,6 +7,7 @@ const tap = require('gulp-tap');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
+const replace = require('gulp-replace');
 const frontMatter = require('gulp-front-matter');
 const postHTML = require('gulp-posthtml');
 const svgSprite = require('gulp-svg-sprite');
@@ -104,23 +105,21 @@ module.exports = (/* opts */) => {
           isNunJucksUpdate = false;
         },
       }))
-      .pipe(iconizer({
-        path: `${settings.paths.iconizer.src}/sprite.svg`,
-        _beml: settings.app.beml,
-      }))
+      .pipe(iconizer(settings.iconizer))
       .pipe(postHTML([
         require('posthtml-bem')(settings.app.beml),
       ]))
       .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
-      LOG(`[nunjucks] ${error ? chalk.bold.red('ERROR\n') : chalk.bold.green('done')} in ${PERF.stop('nunjucks').time.toFixed(0)}ms`);
+      LOG(`[nunjucks] ${error ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${PERF.stop('nunjucks').time.toFixed(0)}ms`);
 
       bsSP.reload();
       done();
     });
 
     stream.on('error', (err) => {
+      console.log(err);
       done(err);
     });
   });
@@ -150,14 +149,29 @@ module.exports = (/* opts */) => {
   /**
      * Iconizer
      */
-  gulp.task('iconizer', (done) => {
-    const stream = gulp.src(`${settings.paths.iconizer.icons}/*.svg`)
-      .pipe(svgSprite(settings.app.svgSprite))
-      .pipe(gulp.dest('.'));
+  gulp.task('iconizer:icons', (done) => {
+    if (settings.iconizer.mode === 'external') {
+      settings.iconizer.plugin.svg.doctypeDeclaration = true;
+    }
+
+    settings.iconizer.plugin.mode.symbol.sprite = 'sprite.icons.svg';
+
+    const stream = gulp.src(`${settings.iconizer.srcIcons}/*.svg`)
+      .pipe(svgSprite(settings.iconizer.plugin))
+      .pipe(replace(/\n/g, ''))
+      .pipe(replace(/<defs[\s\S]*?\/defs><path[\s\S]*?\s+?d=/g, '<path d='))
+      .pipe(replace(/<style[\s\S]*?\/style><path[\s\S]*?\s+?d=/g, '<path d='))
+      .pipe(replace(/\sfill[\s\S]*?(['"])[\s\S]*?\1/g, ''))
+      .pipe(replace(/<title>[\s\S]*?<\/title>/g, ''))
+      .pipe(replace(/<svg /, match => `${match} class="${settings.iconizer.cssClass} ${settings.iconizer.cssClass}--icons" `))
+      .pipe(rename({
+        dirname: '',
+      }))
+      .pipe(gulp.dest(settings.iconizer.dest));
 
     stream.on('end', () => {
       DB.combine({
-        icons: getIconsNamesList(settings.paths.iconizer.icons),
+        icons: getIconsNamesList(settings.iconizer.srcIcons),
       }, 'app');
 
       LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
@@ -166,6 +180,39 @@ module.exports = (/* opts */) => {
     });
 
     stream.on('error', (err) => {
+      console.log(err);
+      done(err);
+    });
+  });
+
+  gulp.task('iconizer:colored', (done) => {
+    if (settings.iconizer.mode === 'external') {
+      settings.iconizer.plugin.svg.doctypeDeclaration = true;
+    }
+
+    settings.iconizer.plugin.mode.symbol.sprite = 'sprite.colored.svg';
+
+    const stream = gulp.src(`${settings.iconizer.srcColored}/*.svg`)
+      .pipe(svgSprite(settings.iconizer.plugin))
+      .pipe(replace(/<title>[\s\S]*?<\/title>/g, ''))
+      .pipe(replace(/<svg /, match => `${match} class="${settings.iconizer.cssClass} ${settings.iconizer.cssClass}--colored" `))
+      .pipe(rename({
+        dirname: '',
+      }))
+      .pipe(gulp.dest(settings.iconizer.dest));
+
+    stream.on('end', () => {
+      DB.combine({
+        icons: getIconsNamesList(settings.iconizer.srcIcons),
+      }, 'app');
+
+      LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
+
+      done();
+    });
+
+    stream.on('error', (err) => {
+      console.log(err);
       done(err);
     });
   });
@@ -176,7 +223,7 @@ module.exports = (/* opts */) => {
   gulp.task('iconizer:update', (done) => {
     isNunJucksUpdate = true;
 
-    gulp.series('iconizer', 'nunjucks')(done);
+    gulp.series('iconizer:icons', 'iconizer:colored', 'nunjucks')(done);
   });
 
 
@@ -542,12 +589,14 @@ module.exports = (/* opts */) => {
     }
 
     /* Iconizer */
-    gulp.watch(
-      `${settings.paths.iconizer.icons}/*.svg`,
-      watchOpts, (complete) => {
-        gulp.series('iconizer:update')(complete);
-      },
-    );
+    gulp.watch([
+      `${settings.iconizer.srcIcons}/*.svg`,
+      `${settings.iconizer.srcColored}/*.svg`,
+    ],
+    watchOpts,
+    (complete) => {
+      gulp.series('iconizer:update')(complete);
+    });
 
     done();
   });
@@ -566,7 +615,8 @@ module.exports = (/* opts */) => {
       'clean',
       'server:static',
       'static',
-      'iconizer',
+      'iconizer:icons',
+      'iconizer:colored',
       'database',
       gulp.parallel(
         'nunjucks',
