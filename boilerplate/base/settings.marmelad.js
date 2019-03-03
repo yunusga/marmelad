@@ -137,8 +137,8 @@ const app = {
     ui: false,
   },
   bts: {
-    use: false,
-    donor: false,
+    use: '<%- btsUse %>',
+    donor: '<%- btsDonor %>',
     4: {
       code: '4.2.1',
       src: {
@@ -153,7 +153,7 @@ const app = {
         precision: 6,
         outputStyle: 'expanded',
       },
-      autoprefixer
+      autoprefixer,
     },
   },
 };

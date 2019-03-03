@@ -57,7 +57,7 @@
         <![endif]-->
 
         <div elem="wrapper" mix="block:{{scrollFixClasses}}">
-            
+
             {% if layout.header %}
             {% include 'app-header.html' %}
             {% endif %}
@@ -67,7 +67,7 @@
                 <main elem="main">
                     {% block main %}{% endblock %}
                 </main><!-- e:main -->
-                
+
                 {% if layout.left %}
                 <aside elem="aside" mods="left">
                     {% block asideLeft %}{% endblock %}
@@ -81,7 +81,7 @@
                 {% endif %}
 
             </div><!-- b:m-content -->
-            
+
             {% if layout.footer %}
             {% include 'app-footer.html' %}
             {% endif %}
