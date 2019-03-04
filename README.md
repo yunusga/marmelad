@@ -212,6 +212,8 @@ const iconizer = {
       tag: 'div',
       type: 'icons',
       class: '',
+      mode: 'inline',
+      url: '',
     }, opts);
 
     let external = '';
