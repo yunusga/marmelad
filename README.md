@@ -186,12 +186,21 @@ Iconizer претерпел изменения в плане способах е
 
 ### Миграция для Iconizer 5+
 
-В `settings.marmelad.js`, в секции `paths`, необходимо удалить более не требуемые данные, ключ `iconizer`
+В `settings.marmelad.js`, необходимо удалить:
+ - `paths.iconizer`
+ - `app.svgSprite`
 
 ```js
 const paths = {
   // удалить
   iconizer: {
+    ...
+  },
+};
+
+const app = {
+  // удалить
+  svgSprite: {
     ...
   },
 };
