@@ -9,7 +9,7 @@ function run(options) {
     usePolling: true,
   }, options);
 
-  const tciFilePath = 'marmelad/tci';
+  const tciFilePath = 'marmelad/.tci';
   const TCIWatcher = chokidar.watch(tciFilePath, opts);
 
   TCIWatcher.on('change', (file) => {
