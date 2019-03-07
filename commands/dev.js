@@ -33,6 +33,7 @@ const pipeErrorStop = require('pipe-error-stop');
 const del = require('del');
 const GLOB = require('glob');
 const PERF = require('execution-time')();
+const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
 const iconizer = require('../modules/gulp-iconizer');
@@ -67,6 +68,12 @@ let isNunJucksUpdate = false;
 
 module.exports = (/* opts */) => {
   TCI.run();
+
+  DB.set('git', {
+    branch: branchName({
+      altPath: __dirname,
+    }),
+  });
 
   /**
      * NUNJUCKS
