@@ -1,0 +1,136 @@
+= yaml =
+pageTitle: Документация
+bodyClasses: page
+layout: !!map
+    header: false
+    footer: false
+    left: false
+    right: false
+= yaml =
+
+{% extends 'app.html' %}
+
+{% block main %}
+
+<style>
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin: 0 0 10px;
+	}
+
+	p {
+		margin: 0 0 20px;
+	}
+	.container {
+		padding: 20px;
+	}
+
+	.icon-marmelad-logo {
+		width: 120px;
+		height: 120px;
+	}
+
+	.mmd-head {
+		display: flex;
+		align-items: center;
+	}
+
+	.mmd-head__logo {
+		flex: 0 0 120px;
+		max-width: 120px;
+		margin-left: 30px;
+	}
+
+	.mmd-head__meta {
+		flex: 1;
+	}
+
+	.mmd-head__title {
+		font-size: 30px;
+		margin: 0 0 10px;
+	}
+
+	.mmd-head__description {
+		font-size: 16px;
+	}
+
+	.info-section {
+		margin: 40px 0;
+		padding: 30px 30px 10px 30px;
+		border: 2px dashed #cdcdcd;
+	}
+
+	@media (min-width: 960px) {
+		.container {
+			width: 100%;
+			max-width: 960px;
+			margin: 0 auto;
+		}
+	}
+</style>
+
+<div class="container">
+	<header class="mmd-head d-flex">
+		<div class="mmd-head__meta flex-fill">
+			<h1 class="mmd-head__title">{{ app.package.name | capitalize }} v{{ app.package.version }} / <code>{{ git.branch }}</code></h1>
+			<p>
+				<img src="https://img.shields.io/npm/v/marmelad.svg" alt="npm" data-canonical-src="https://img.shields.io/npm/v/marmelad.svg" style="max-width:100%;">
+			</p>
+			<p class="mmd-head__description">{{ app.package.description }}</p>
+		</div>
+		<div class="mmd-head__logo">
+			<icon name="marmelad" class="icon-marmelad-logo icon-colored">
+		</div>
+	</header>
+
+	<nav>
+		<a href="{{ app.package.homepage }}" rel="nofollow,noopener" target="_blank">github</a> / <a href="{{ app.package.bugs.url }}" rel="nofollow,noopener" target="_blank">issues</a> / <a href="https://www.npmjs.com/package/marmelad" rel="nofollow,noopener" target="_blank">npm</a>
+	</nav>
+
+	<hr>
+
+	<section class="info-section">
+		<h2>SVG-спрайт</h2>
+		<p>Список всех иконок добавленных в SVG-спрайт.</p>
+		<hr>
+		<h3>Цветные иконки</h3>
+		<p>
+			{% for icon in app.sprite.colored -%}
+				<icon name="{{ icon }}" class="colored" tag="span">
+			{%- endfor %}
+		</p>
+		<hr>
+		<h3>ЧБ иконки</h3>
+		<p>
+			{% for icon in app.sprite.icons -%}
+				<icon name="{{ icon }}" tag="span">
+			{%- endfor %}
+		</p>
+	</section>
+
+	<section class="info-section">
+		<h2>Полезные ссылки</h2>
+		<hr>
+		<h3><a href="https://ru.bem.info/methodology/" target="_blank" rel="noopener">БЭМ методология</a></h3>
+		<p>Методология БЭМ создана в Яндексе для разработки сайтов, которые надо делать быстро, а поддерживать долгие годы. Она позволяет создавать расширяемые и повторно используемые компоненты интерфейса.</p>
+		<hr>
+		<h3><a href="http://nicothin.github.io/idiomatic-pre-CSS/" target="_blank" rel="noopener">Как работать с CSS-препроцессорами и БЭМ</a></h3>
+		<p>Список рекомендаций по неусложнению жизни себе и другим участникам проекта по вёрстке.</p>
+		<hr>
+		<h3><a href="https://github.com/yoksel/common-words" target="_blank" rel="noopener">Слова, часто используемые в CSS-классах</a></h3>
+		<p>Подборка часто используемых названий CSS-классов с примерами.</p>
+		<hr>
+		<h3><a href="https://weblind.ru/" target="_blank" rel="noopener">Как помочь слепым на вашем сайте</a></h3>
+		<p>Рекомендации помогут разработчикам делать сайты для людей с нарушениями зрения.</p>
+		<hr>
+		<h3><a href="https://a11yproject.com/" target="_blank" rel="noopener">The A11Y Project</a></h3>
+		<p>Рекомендации для улучшения доступности ваших интерфейсов.</p>
+	</section>
+
+</div>
+
+{% endblock %}

@@ -1,12 +1,12 @@
 {
-	"BEML block": {
+	"Generate BEML block HTML code": {
 		"scope": "html,njk,nunjucks",
 		"prefix": "block",
 		"body": [
 			"<${1:div} block=\"${2}\" mods=\"${3}\">",
 			"\t${0}",
-			"</${1:div}><!-- b:${2} -->"
+			"</${1:div}><!-- ${2} -->"
 		],
-		"description": "Generate BEML block code"
+		"description": "Generate BEML block HTML code"
 	}
 }

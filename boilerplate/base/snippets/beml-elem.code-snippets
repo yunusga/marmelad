@@ -1,5 +1,5 @@
 {
-	"BEML element": {
+	"Generate BEML element HTML code": {
 		"scope": "html,njk,nunjucks",
 		"prefix": "elem",
 		"body": [
@@ -7,6 +7,6 @@
 			"\t${0}",
 			"</${1:div}>"
 		],
-		"description": "Generate BEML element code"
+		"description": "Generate BEML element HTML code"
 	}
 }

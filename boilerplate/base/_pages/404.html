@@ -1,0 +1,46 @@
+= yaml =
+pageTitle: Ошибка 404 - Страница не найдена
+bodyClasses: error404
+layout: !!map
+    header: false
+    footer: false
+    left: false
+    right: false
+= yaml =
+
+{% extends 'app.html' %}
+
+{% block main %}
+
+<style>
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin: 0 0 10px;
+	}
+
+	p {
+		margin: 0 0 20px;
+	}
+	.container {
+		padding: 20px;
+	}
+
+	@media (min-width: 960px) {
+		.container {
+			width: 100%;
+			max-width: 960px;
+			margin: 0 auto;
+		}
+	}
+</style>
+
+<div class="container">
+	<h1>Ошибка 404</h1>
+	<p>Так уж получилось, что из множества страниц нашего сайта, Вы оказались как раз на той, которая уже не существует.</p>
+</div>
+
+{% endblock %}
