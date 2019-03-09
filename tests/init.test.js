@@ -8,6 +8,8 @@ test('init in new directory', (done) => {
   CMD.exec('node bin/marmelad.js init test/init-test', (err, res) => {
     expect(err).toBe(null);
     expect(res.message).toBe('[marmelad] initialized, type marmelad -h for CLI help\n');
+    expect(FSE.existsSync('test/init-test/marmelad/styles/app.scss')).toBe(false);
+    expect(FSE.existsSync('test/init-test/marmelad/styles/app.styl')).toBe(true);
     done();
   });
 });
@@ -61,6 +63,19 @@ test('init with bootstrap like DONOR in new directory', (done) => {
     expect(FSE.existsSync('test/init-test/create-bootstrap-donor/marmelad/bootstrap')).toBe(true);
     expect(settings.app.bts.use).toBe(false);
     expect(settings.app.bts.donor).toBe(true);
+    done();
+  });
+});
+
+test('init with SCSS in new directory', (done) => {
+  CMD.exec('node bin/marmelad.js init test/init-test/create-scss -c scss', (err, res) => {
+    const settings = require('../test/init-test/create-scss/marmelad/settings.marmelad.js');
+
+    expect(err).toBe(null);
+    expect(res.message).toBe('[marmelad] initialized, type marmelad -h for CLI help\n');
+    expect(FSE.existsSync('test/init-test/create-scss/marmelad/styles/app.scss')).toBe(true);
+    expect(FSE.existsSync('test/init-test/create-scss/marmelad/styles/app.styl')).toBe(false);
+    expect(settings.app.css).toBe('scss');
     done();
   });
 });
