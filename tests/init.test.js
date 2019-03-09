@@ -38,3 +38,29 @@ test('init in non empty directory', (done) => {
     done();
   });
 });
+
+test('init with bootstrap in new directory', (done) => {
+  CMD.exec('node bin/marmelad.js init test/init-test/create-bootstrap --bootstrap', (err, res) => {
+    const settings = require('../test/init-test/create-bootstrap/marmelad/settings.marmelad.js');
+
+    expect(err).toBe(null);
+    expect(res.message).toBe('[marmelad] initialized, type marmelad -h for CLI help\n');
+    expect(FSE.existsSync('test/init-test/create-bootstrap/marmelad/bootstrap')).toBe(true);
+    expect(settings.app.bts.use).toBe(true);
+    expect(settings.app.bts.donor).toBe(false);
+    done();
+  });
+});
+
+test('init with bootstrap like DONOR in new directory', (done) => {
+  CMD.exec('node bin/marmelad.js init test/init-test/create-bootstrap-donor --bootstrap donor', (err, res) => {
+    const settings = require('../test/init-test/create-bootstrap-donor/marmelad/settings.marmelad.js');
+
+    expect(err).toBe(null);
+    expect(res.message).toBe('[marmelad] initialized, type marmelad -h for CLI help\n');
+    expect(FSE.existsSync('test/init-test/create-bootstrap-donor/marmelad/bootstrap')).toBe(true);
+    expect(settings.app.bts.use).toBe(false);
+    expect(settings.app.bts.donor).toBe(true);
+    done();
+  });
+});
