@@ -101,7 +101,7 @@ const autoprefixer = {
 };
 
 const app = {
-  css: 'styl',
+  css: '<%- css %>',
   watchOpts: {
     ignoreInitial: true,
     ignored: [
@@ -139,8 +139,8 @@ const app = {
     ui: false,
   },
   bts: {
-    use: false,
-    donor: false,
+    use: '<%- btsUse %>',
+    donor: '<%- btsDonor %>',
     4: {
       code: '4.2.1',
       src: {
