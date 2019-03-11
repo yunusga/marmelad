@@ -1,7 +1,7 @@
 [ci-img]:  https://travis-ci.org/solversgroup/marmelad.svg
 [ci]:      https://travis-ci.org/solversgroup/marmelad
 
-# marmelad <sup>[4.55.31](CHANGELOG.md#45531-07012019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
+# marmelad <sup>[5.0.0](CHANGELOG.md#500-11032019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
@@ -9,14 +9,6 @@
 
 ## Для разработчиков
 Разработка ведётся по правилам **git-flow**. Ознакомиться и изучить мо в  [шпаргалке по git-flow](http://danielkummer.github.io/git-flow-cheatsheet/index.ru_RU.html)
-
-### Этапы/соглашение по внесению изменения
-
- - Форк репозитория к себе
- - Разработка фичи по правилам git-flow
- - Завершение разработки фичи
- - Создание пул-реквеста
- - Скачивание изменений после одобрения пул-реквеста
 
 ## Установка
 
@@ -105,7 +97,7 @@ Commands help:
 
 `[dir]` - позволяет инициализировать проект в указанной папке. Например `mmd init new-and-awesome -t scss`.
 
-## Запуск на проектах предыдущих версий
+## Запуск на проектах предидущих версий
 
 Необходимо заменить/добавить в `settings.marmelad.js`:
  - объекте `paths`, свойство `stylus` на `styles`
