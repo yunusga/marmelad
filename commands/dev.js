@@ -7,8 +7,10 @@ const tap = require('gulp-tap');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
+const replace = require('gulp-replace');
 const frontMatter = require('gulp-front-matter');
 const postHTML = require('gulp-posthtml');
+const cheerio = require('cheerio');
 const svgSprite = require('gulp-svg-sprite');
 const stylus = require('gulp-stylus');
 const postcss = require('gulp-postcss');
@@ -27,17 +29,20 @@ const groupMQ = require('gulp-group-css-media-queries');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
 const include = require('gulp-include');
+const chokidar = require('chokidar');
 const decache = require('decache');
 const pipeErrorStop = require('pipe-error-stop');
 const del = require('del');
 const GLOB = require('glob');
 const PERF = require('execution-time')();
+const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
 const iconizer = require('../modules/gulp-iconizer');
 const nunjucks = require('../modules/nunjucks');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
+const LAGMAN = new (require('../modules/nunjucks/lagman'))();
 
 // const getAuthParams = params => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
 
@@ -61,11 +66,18 @@ const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${
 //     use  : CLI.auth
 // });
 
-const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
-let isNunJucksUpdate = false;
-
 module.exports = (/* opts */) => {
+  const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
+
   TCI.run();
+
+  DB.set('git', {
+    branch: branchName({
+      altPath: __dirname,
+    }),
+  });
+
+  LAGMAN.init(settings);
 
   /**
      * NUNJUCKS
@@ -76,9 +88,8 @@ module.exports = (/* opts */) => {
 
     PERF.start('nunjucks');
 
-    const stream = gulp.src(`${settings.paths._pages}/**/*.html`)
+    const stream = gulp.src(LAGMAN.store.src)
       .pipe(plumber())
-      .pipe(gif(!isNunJucksUpdate, changed(settings.paths.dist)))
       .pipe(tap((file) => {
         templateName = path.basename(file.path);
       }))
@@ -101,26 +112,40 @@ module.exports = (/* opts */) => {
         },
         successCallback: () => {
           error = false;
-          isNunJucksUpdate = false;
         },
       }))
-      .pipe(iconizer({
-        path: `${settings.paths.iconizer.src}/sprite.svg`,
-        _beml: settings.app.beml,
+      .pipe(tap((file) => {
+        try {
+          const $ = cheerio.load(file.contents.toString());
+          const blocks = $('[block]');
+          const pageName = LAGMAN.getName(file.path);
+          const blocksSet = new Set();
+
+          blocks.each((index, block) => {
+            blocksSet.add($(block).attr('block'));
+          });
+
+          LAGMAN.refresh(pageName, 'pages', blocksSet);
+        } catch (err) {
+          console.log(err);
+        }
       }))
+      .pipe(iconizer(settings.iconizer))
       .pipe(postHTML([
         require('posthtml-bem')(settings.app.beml),
       ]))
       .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
-      LOG(`[nunjucks] ${error ? chalk.bold.red('ERROR\n') : chalk.bold.green('done')} in ${PERF.stop('nunjucks').time.toFixed(0)}ms`);
+      LOG(`[nunjucks] ${error ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${PERF.stop('nunjucks').time.toFixed(0)}ms`);
 
       bsSP.reload();
+
       done();
     });
 
     stream.on('error', (err) => {
+      console.log(err);
       done(err);
     });
   });
@@ -140,7 +165,10 @@ module.exports = (/* opts */) => {
     DB.combine({
       package: pkg,
       storage: settings.folders.storage,
-      icons: getIconsNamesList(settings.paths.iconizer.icons),
+      sprite: {
+        icons: getIconsNamesList(settings.iconizer.srcIcons),
+        colored: getIconsNamesList(settings.iconizer.srcColored),
+      },
       settings,
     }, 'app');
 
@@ -150,14 +178,32 @@ module.exports = (/* opts */) => {
   /**
      * Iconizer
      */
-  gulp.task('iconizer', (done) => {
-    const stream = gulp.src(`${settings.paths.iconizer.icons}/*.svg`)
-      .pipe(svgSprite(settings.app.svgSprite))
-      .pipe(gulp.dest('.'));
+  gulp.task('iconizer:icons', (done) => {
+    if (settings.iconizer.mode === 'external') {
+      settings.iconizer.plugin.svg.doctypeDeclaration = true;
+    }
+
+    settings.iconizer.plugin.mode.symbol.sprite = 'sprite.icons.svg';
+
+    const stream = gulp.src(`${settings.iconizer.srcIcons}/*.svg`)
+      .pipe(svgSprite(settings.iconizer.plugin))
+      .pipe(replace(/\n/g, ''))
+      .pipe(replace(/<defs[\s\S]*?\/defs><path[\s\S]*?\s+?d=/g, '<path d='))
+      .pipe(replace(/<style[\s\S]*?\/style><path[\s\S]*?\s+?d=/g, '<path d='))
+      .pipe(replace(/\sfill[\s\S]*?(['"])[\s\S]*?\1/g, ''))
+      .pipe(replace(/<title>[\s\S]*?<\/title>/g, ''))
+      .pipe(replace(/<svg /, match => `${match} class="${settings.iconizer.cssClass} ${settings.iconizer.cssClass}--icons" `))
+      .pipe(rename({
+        dirname: '',
+      }))
+      .pipe(gulp.dest(settings.iconizer.dest));
 
     stream.on('end', () => {
       DB.combine({
-        icons: getIconsNamesList(settings.paths.iconizer.icons),
+        sprite: {
+          icons: getIconsNamesList(settings.iconizer.srcIcons),
+          colored: getIconsNamesList(settings.iconizer.srcColored),
+        },
       }, 'app');
 
       LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
@@ -166,6 +212,42 @@ module.exports = (/* opts */) => {
     });
 
     stream.on('error', (err) => {
+      console.log(err);
+      done(err);
+    });
+  });
+
+  gulp.task('iconizer:colored', (done) => {
+    if (settings.iconizer.mode === 'external') {
+      settings.iconizer.plugin.svg.doctypeDeclaration = true;
+    }
+
+    settings.iconizer.plugin.mode.symbol.sprite = 'sprite.colored.svg';
+
+    const stream = gulp.src(`${settings.iconizer.srcColored}/*.svg`)
+      .pipe(svgSprite(settings.iconizer.plugin))
+      .pipe(replace(/<title>[\s\S]*?<\/title>/g, ''))
+      .pipe(replace(/<svg /, match => `${match} class="${settings.iconizer.cssClass} ${settings.iconizer.cssClass}--colored" `))
+      .pipe(rename({
+        dirname: '',
+      }))
+      .pipe(gulp.dest(settings.iconizer.dest));
+
+    stream.on('end', () => {
+      DB.combine({
+        sprite: {
+          icons: getIconsNamesList(settings.iconizer.srcIcons),
+          colored: getIconsNamesList(settings.iconizer.srcColored),
+        },
+      }, 'app');
+
+      LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
+
+      done();
+    });
+
+    stream.on('error', (err) => {
+      console.log(err);
       done(err);
     });
   });
@@ -174,9 +256,7 @@ module.exports = (/* opts */) => {
      * Iconizer update
      */
   gulp.task('iconizer:update', (done) => {
-    isNunJucksUpdate = true;
-
-    gulp.series('iconizer', 'nunjucks')(done);
+    gulp.series('iconizer:icons', 'iconizer:colored', 'nunjucks')(done);
   });
 
 
@@ -341,6 +421,55 @@ module.exports = (/* opts */) => {
     * static server
     */
   gulp.task('server:static', (done) => {
+    settings.app.bsSP.middleware = [
+      // (req, res, next) => {
+      //   if (path.extname(req.url) === '.html') {
+      //     const pageName = LAGMAN.getName(req.url);
+
+      //     if (LAGMAN.store.onDemand.has(pageName)) {
+      //       // LAGMAN.store.src = `${settings.paths._pages}${req.url}`;
+      //       LAGMAN.store.onDemand.delete(pageName);
+      //       // LAGMAN.store.isFront = true;
+
+      //       // gulp.series('nunjucks');
+
+      //       // const body = fs.readFileSync(path.join(process.cwd(), settings.paths.dist, req.url)).toString();
+
+      //       // res.writeHead(200, {
+      //       //   'Content-Length': Buffer.byteLength(body),
+      //       //   'Content-Type': 'text/html;charset=UTF-8',
+      //       // });
+
+      //       // res.end(body);
+      //     }
+      //   }
+      //   next();
+      // },
+      {
+        route: '/lagman',
+        handle: (req, res) => {
+          res.setHeader('Content-Type', 'application/json;charset=UTF-8');
+          res.end(JSON.stringify(LAGMAN.store, (key, value) => {
+            if (typeof value === 'object' && value instanceof Set) {
+              return [...value];
+            }
+
+            if (typeof value === 'object' && value instanceof Array) {
+              return Object.keys(value).reduce((result, item) => {
+                if (typeof value[item] === 'object' && value[item] instanceof Set) {
+                  result[item] = value[item];
+                }
+
+                return result;
+              }, {});
+            }
+
+            return value;
+          }));
+        },
+      },
+    ];
+
     bsSP.init(settings.app.bsSP, () => {
       // let urls = bsSP.getOption('urls');
       // let bsAuth = bsSP.getOption('bsAuth');
@@ -484,33 +613,71 @@ module.exports = (/* opts */) => {
     );
 
     /* NunJucks Pages */
-    gulp.watch(
-      `${settings.paths._pages}/**/*.html`,
-      watchOpts,
-      gulp.parallel('nunjucks'),
-    );
+    const watchPages = chokidar.watch(`${settings.paths._pages}/**/*.html`, watchOpts);
+
+    watchPages
+      .on('add', (pagePath) => {
+        watchPages.add(pagePath);
+        LAGMAN.create(pagePath, 'pages');
+      })
+      .on('change', (pagePath) => {
+        LAGMAN.store.src = path.join(process.cwd(), pagePath);
+        gulp.series('nunjucks')();
+      })
+      .on('unlink', (pagePath) => {
+        LAGMAN.delete(LAGMAN.getName(pagePath), 'pages');
+        watchPages.unwatch(pagePath);
+      });
+
+    const watchBlocks = chokidar.watch(`${settings.paths._blocks}/**/*.html`, watchOpts);
 
     /* NunJucks Blocks */
-    gulp.watch([
-      `${settings.paths._blocks}/**/*.html`,
-    ], watchOpts, (complete) => {
-      isNunJucksUpdate = true;
-      gulp.series('nunjucks')(complete);
-    });
+    watchBlocks
+      .on('add', (blockPath) => {
+        LAGMAN.create(blockPath, 'blocks');
+      })
+      .on('change', (blockPath) => {
+        const blockName = LAGMAN.getName(blockPath);
+
+        LAGMAN.store.onDemand = new Set([...LAGMAN.store.onDemand, ...LAGMAN.store.blocks[blockName]]);
+
+        LAGMAN.store.src = [];
+
+        LAGMAN.store.onDemand.forEach((page) => {
+          LAGMAN.store.src.push(`${settings.paths._pages}/**/${page}.html`);
+        });
+
+        gulp.series('nunjucks')();
+      })
+      .on('unlink', (blockPath) => {
+        const blockName = LAGMAN.getName(blockPath);
+
+        LAGMAN.delete(blockName, 'blocks');
+        watchBlocks.unwatch(blockPath);
+      });
 
     /* NunJucks Datas */
     gulp.watch(
       `${settings.paths._blocks}/**/*.json`,
       watchOpts,
     )
-      .on('change', (block) => {
-        DB.update(block);
-        isNunJucksUpdate = true;
+      .on('change', (blockPath) => {
+        const blockName = LAGMAN.getName(blockPath, 'json');
+
+        DB.update(blockPath);
+
+        LAGMAN.store.onDemand = new Set([...LAGMAN.store.onDemand, ...LAGMAN.store.blocks[blockName]]);
+
+        LAGMAN.store.src = [];
+
+        LAGMAN.store.onDemand.forEach((page) => {
+          LAGMAN.store.src.push(`${settings.paths._pages}/**/${page}.html`);
+        });
+
         gulp.series('nunjucks')();
       })
-      .on('unlink', (block) => {
-        DB.delete(block);
-        isNunJucksUpdate = true;
+      .on('unlink', (blockPath) => {
+        DB.delete(blockPath);
         gulp.series('nunjucks')();
       });
 
@@ -529,11 +696,13 @@ module.exports = (/* opts */) => {
           DB.combine({
             package: pkg,
             storage: settings.folders.storage,
-            icons: getIconsNamesList(settings.paths.iconizer.icons),
+            sprite: {
+              icons: getIconsNamesList(settings.iconizer.srcIcons),
+              colored: getIconsNamesList(settings.iconizer.srcColored),
+            },
             settings,
           }, 'app');
 
-          isNunJucksUpdate = true;
           gulp.series('nunjucks')(decached);
         },
       );
@@ -542,12 +711,14 @@ module.exports = (/* opts */) => {
     }
 
     /* Iconizer */
-    gulp.watch(
-      `${settings.paths.iconizer.icons}/*.svg`,
-      watchOpts, (complete) => {
-        gulp.series('iconizer:update')(complete);
-      },
-    );
+    gulp.watch([
+      `${settings.iconizer.srcIcons}/*.svg`,
+      `${settings.iconizer.srcColored}/*.svg`,
+    ],
+    watchOpts,
+    (complete) => {
+      gulp.series('iconizer:update')(complete);
+    });
 
     done();
   });
@@ -566,7 +737,8 @@ module.exports = (/* opts */) => {
       'clean',
       'server:static',
       'static',
-      'iconizer',
+      'iconizer:icons',
+      'iconizer:colored',
       'database',
       gulp.parallel(
         'nunjucks',

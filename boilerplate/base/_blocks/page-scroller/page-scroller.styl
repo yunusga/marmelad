@@ -1,0 +1,51 @@
+$page_scroller_bgc = $colors.theme
+
+.page-scroller
+  opacity 0
+  appearance none
+  border none
+  user-select none
+
+  position fixed
+  z-index 1050
+  right 20px
+  bottom 20px
+  width 60px
+  height 60px
+
+  background-color rgba($page_scroller_bgc, .1)
+
+  cursor pointer
+
+  backface-visibility hidden
+  transform translateZ(0)
+
+  transition opacity .16s linear
+  pointer-events none
+
+  &__ctrl
+    position absolute
+    top 50%
+    left 50%
+    margin-top -12px
+    margin-left -12px
+
+    fill #666
+    width 24px
+    height 24px
+    transition transform .25s ease-in-out
+
+  &:hover,
+  &:focus
+    background-color rgba($page_scroller_bgc, .12)
+
+  &:active
+    background-color rgba($page_scroller_bgc, .14)
+
+  &--memorized .page-scroller__ctrl
+    transform rotate(180deg)
+
+  &--memorized,
+  &--visible
+    opacity 1
+    pointer-events auto

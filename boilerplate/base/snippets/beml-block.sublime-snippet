@@ -1,0 +1,7 @@
+<snippet>
+  <content><![CDATA[
+<${1:div} block="${2:block}" mods="${3:mod}">${4:content}</${1:div}><!-- ${2:block} -->
+]]></content>
+  <description>Generate BEML block HTML code</description>
+  <tabTrigger>block</tabTrigger>
+</snippet>

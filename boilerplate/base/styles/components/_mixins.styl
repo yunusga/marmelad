@@ -1,0 +1,66 @@
+fontFace($name, $fileName $folder, $typefaces = (r i b b-i), $supports = 'modern', $display = 'swap', $gwf = true, $path = '../fonts')
+
+  .font-{$folder}
+    font-family : $name
+
+  $typeface = {
+    t     : (100 normal 100), // thin
+    t-i   : (100 italic 100italic), // thin italic
+    l     : (300 normal 300), // light
+    l-i   : (300 italic 300italic), // light italic
+    book  : (350 normal 350), // book normal
+    r     : (400 normal regular), // regular
+    i     : (400 italic italic), // regular italic
+    m     : (500 normal 500), // medium
+    m-i   : (500 italic 500italic), // medium italic
+    s-b   : (600 normal 600), // semi bold
+    s-b-i : (600 italic 600italic), // semi bold italic
+    b     : (700 normal 700), // bold
+    b-i   : (700 italic 700italic), // bold italic
+    e-b   : (800 normal 800), // extra bold
+    e-b-i : (800 italic 800italic), // extra bold italic
+    bl    : (900 normal 900), // black (mega bold)
+    bl-i  : (900 italic 900italic)  // black italic (mega bold italic)
+  }
+
+  for $face in $typefaces
+
+    $postfix = $typeface[$face][2]
+
+    if $supports != 'modern' && !$gwf
+      $postfix = $face
+
+    .font-{$typeface[$face][0]}
+      font-weight : $typeface[$face][0]
+
+    @font-face
+      font-family : $name
+      font-weight : $typeface[$face][0]
+      font-style  : $typeface[$face][1]
+
+      if $supports != 'modern'
+        src: url(unquote($path) + '/' + $folder '/' + $fileName + '-' + $postfix + '.eot'); /* IE9 Compat Modes */
+        src: local($name),
+          url(unquote($path) + '/' + $folder '/' + $fileName + '-' + $postfix + '.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+          url(unquote($path) + '/' + $folder '/' + $fileName + '-' + $postfix + '.woff2') format('woff2'), /* Super Modern Browsers */
+          url(unquote($path) + '/' + $folder '/' + $fileName + '-' + $postfix + '.woff') format('woff'), /* Modern Browsers */
+          url(unquote($path) + '/' + $folder '/' + $fileName + '-' + $postfix + '.ttf') format('truetype'), /* Safari, Android, iOS */
+          url(unquote($path) + '/' + $folder '/' + $fileName + '-' + $postfix + '.svg#' + $name + '') format("svg"); /* Legacy iOS */
+      else
+        src: local($name),
+          url(unquote($path) + '/' + $folder '/' + $fileName + '-' + $postfix + '.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url(unquote($path) + '/' + $folder '/' + $fileName + '-' + $postfix + '.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+
+      if $display
+        font-display: unquote($display)
+
+
+getColor(color, type)
+  colors = {
+    primary: 1,
+    secondary: .87,
+    hint: .54,
+    divider: .18
+  }
+
+  rgba(color, colors[type])
