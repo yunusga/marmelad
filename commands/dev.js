@@ -44,7 +44,7 @@ const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
 
-// const getAuthParams = params => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
+const getAuthParams = params => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
 
 const getIconsNamesList = (iconPath) => {
   let iconsList = [];
@@ -60,13 +60,8 @@ const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${
 /**
  * Проверка правильности установки логина и пароля для авторизации
  */
-// bsSP.use(require('bs-auth'), {
-//     user : getAuthParams(CLI.auth)[0],
-//     pass : getAuthParams(CLI.auth)[1],
-//     use  : CLI.auth
-// });
 
-module.exports = (/* opts */) => {
+module.exports = (opts) => {
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
 
   TCI.run();
@@ -78,6 +73,12 @@ module.exports = (/* opts */) => {
   });
 
   LAGMAN.init(settings);
+
+  bsSP.use(require('bs-auth'), {
+    user: getAuthParams(opts.auth)[0],
+    pass: getAuthParams(opts.auth)[1],
+    use: opts.auth,
+  });
 
   /**
      * NUNJUCKS
