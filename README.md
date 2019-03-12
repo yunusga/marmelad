@@ -1,7 +1,7 @@
 [ci-img]:  https://travis-ci.org/solversgroup/marmelad.svg
 [ci]:      https://travis-ci.org/solversgroup/marmelad
 
-# marmelad <sup>[5.0.0](CHANGELOG.md#500-11032019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
+# marmelad <sup>[5.2.2](CHANGELOG.md#522-12032019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
