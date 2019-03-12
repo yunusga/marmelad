@@ -137,6 +137,13 @@ const app = {
     logPrefix: 'MARMELAD STATIC',
     logFileChanges: false,
     ui: false,
+    latencyRoutes: [
+      {
+        route: '/api',
+        latency: 3000,
+        active: true,
+      },
+    ],
   },
   bts: {
     use: '<%- btsUse %>',

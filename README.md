@@ -1,7 +1,7 @@
 [ci-img]:  https://travis-ci.org/solversgroup/marmelad.svg
 [ci]:      https://travis-ci.org/solversgroup/marmelad
 
-# marmelad <sup>[5.0.0](CHANGELOG.md#500-11032019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
+# marmelad <sup>[5.2.2](CHANGELOG.md#522-12032019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
@@ -97,11 +97,16 @@ Commands help:
 
 `[dir]` - позволяет инициализировать проект в указанной папке. Например `mmd init new-and-awesome -t scss`.
 
-## Запуск на проектах предидущих версий
+## Запуск на проектах предыдущих версий
 
 Необходимо заменить/добавить в `settings.marmelad.js`:
  - объекте `paths`, свойство `stylus` на `styles`
  - объект `app` свойство `css` с требуемого css препроцессора (scss, styl, sass)
+
+## Параметры запуска `dev [options]`
+- `mmd dev` стандартный запуск
+- `mmd dev -a` запуск сервера с парольной защитой, логин и пароль генерируются автоматически
+- `mmd dev -a <login>@<password>` запуск сервера с парольной защитой, логин и пароль устанавливаются вручную
 
 ## Шаблоны/Блоки
 
@@ -259,6 +264,20 @@ module.exports = {
   // добавить
   iconizer,
 };
+```
+
+## Задержка отдачи контена сервером `latencyRoutes`
+
+В `settings.marmelad.js app.bsSp` необходимо добавить настройки для задержки отдачи сервером контента
+```
+// пример, для новых проектов по умолчанию задержка для /api
+latencyRoutes: [
+  {
+    route: '/css',
+    latency: 3000,
+    active: true,
+  },
+],
 ```
 
 ## Лицензия
