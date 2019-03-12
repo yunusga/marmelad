@@ -261,6 +261,20 @@ module.exports = {
 };
 ```
 
+## Задержка отдачи контена сервером `latencyRoutes`
+
+В `settings.marmelad.js app.bsSp` необходимо добавить настройки для задержки отдачи сервером контента
+```
+// пример, для новых проектов по умолчанию задержка для /api
+latencyRoutes: [
+  {
+    route: '/css',
+    latency: 3000,
+    active: true,
+  },
+],
+```
+
 ## Лицензия
 [MIT](LICENSE)
 

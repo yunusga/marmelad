@@ -445,6 +445,14 @@ module.exports = (/* opts */) => {
       //   }
       //   next();
       // },
+      (req, res, next) => {
+        const match = settings.app.bsSP.latencyRoutes.filter(item => req.url.match(new RegExp(`^${item.route}`)) && item.active);
+        if (match.length && match[0].active) {
+          setTimeout(next, match[0].latency);
+        } else {
+          next();
+        }
+      },
       {
         route: '/lagman',
         handle: (req, res) => {
