@@ -447,7 +447,9 @@ module.exports = (opts) => {
       //   next();
       // },
       (req, res, next) => {
-        const match = settings.app.bsSP.latencyRoutes.filter(item => req.url.match(new RegExp(`^${item.route}`)) && item.active);
+        const latencyRoutes = settings.app.bsSP.latencyRoutes ? settings.app.bsSP.latencyRoutes : [];
+        const match = latencyRoutes.filter(item => req.url.match(new RegExp(`^${item.route}`)) && item.active);
+
         if (match.length && match[0].active) {
           setTimeout(next, match[0].latency);
         } else {
