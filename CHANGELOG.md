@@ -1,6 +1,6 @@
 # История изменений
 
-## 5.2.2 <sup>30.03.2019</sup>
+## 5.3.6 <sup>31.03.2019</sup>
 - фикс отсутствия `latencyRoutes` в `settings.marmelad.js` для старых проектов
 - удалён `<meta http-equiv="cleartype" content="on">` из заготовки
 - удалён `package-lock.json` из git индекса
