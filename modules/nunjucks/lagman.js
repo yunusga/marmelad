@@ -54,7 +54,7 @@ class Lagman {
 
       if (result.addeded.size) {
         [...result.addeded].forEach((block) => {
-          if (typeof this.store.blocks[block] === 'undefined') {
+          if (!(this.store.blocks[block] instanceof Set)) {
             this.store.blocks[block] = new Set();
           }
           this.store.blocks[block].add(name);
