@@ -5,6 +5,7 @@
 const fs = require('fs');
 const through = require('through2');
 const PluginError = require('plugin-error');
+const chalk = require('chalk');
 
 function buildParamsFromString(string) {
   let match;
@@ -38,6 +39,11 @@ function replaceIconTags(src, opts) {
     delete params.name;
 
     Object.assign(params, opts);
+
+    if (typeof name !== 'undefined') {
+      console.log(chalk`\n{bgRed  ICONIZER } иконка: {yellow ${name}}`);
+      console.log(chalk`Тег {yellow <icon name="" ...>} помечен как устаревший и будет удалён в версии marmelad 6+\n`);
+    }
 
     html = html.replace(tag, opts.icon(name, params));
   }
