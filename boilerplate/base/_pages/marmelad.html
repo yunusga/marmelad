@@ -83,7 +83,7 @@ layout: !!map
 			<p class="mmd-head__description">{{ app.package.description }}</p>
 		</div>
 		<div class="mmd-head__logo">
-			<icon name="marmelad" class="icon-marmelad-logo icon-colored">
+			{{ _icon('marmelad', { class:'icon-marmelad-logo icon-colored' }) }}
 		</div>
 	</header>
 
@@ -100,14 +100,14 @@ layout: !!map
 		<h3>Цветные иконки</h3>
 		<p>
 			{% for icon in app.sprite.colored -%}
-				<icon name="{{ icon }}" class="colored" tag="span">
+				{{ _icon(icon, { class: 'colored', tag: 'span' }) }}
 			{%- endfor %}
 		</p>
 		<hr>
 		<h3>ЧБ иконки</h3>
 		<p>
 			{% for icon in app.sprite.icons -%}
-				<icon name="{{ icon }}" tag="span">
+				{{ _icon(icon, { tag: 'span' }) }}
 			{%- endfor %}
 		</p>
 	</section>
