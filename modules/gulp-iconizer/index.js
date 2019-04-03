@@ -41,8 +41,11 @@ function replaceIconTags(src, opts) {
     Object.assign(params, opts);
 
     if (typeof name !== 'undefined') {
-      console.log(chalk`\n{bgRed  ICONIZER } иконка: {yellow ${name}}`);
-      console.log(chalk`Тег {yellow <icon name="" ...>} помечен как устаревший и будет удалён в версии marmelad 6+\n`);
+      console.log(chalk`\n{bgRed  DEPRECATED } иконка: {yellow ${name}}`);
+      console.log(chalk`Тег {yellow <icon name="" ...>} помечен как устаревший и будет удалён в версии marmelad 6+`);
+      console.log('Обновлённое применение: https://github.com/solversgroup/marmelad#iconizer\n');
+
+
     }
 
     html = html.replace(tag, opts.icon(name, params));
