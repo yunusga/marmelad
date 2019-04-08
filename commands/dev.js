@@ -104,6 +104,7 @@ module.exports = (opts) => {
           env.addFilter('limitto', require('../modules/nunjucks/filters/lomitto'));
           env.addFilter('bodyClass', require('../modules/nunjucks/filters/bodyclass'));
           env.addGlobal('_icon', settings.iconizer.icon);
+          env.addGlobal('inlineSvgSprite', require('../modules/nunjucks/globals/inlineSvgSprite'));
 
           return env;
         },
@@ -133,7 +134,6 @@ module.exports = (opts) => {
           console.log(err);
         }
       }))
-      .pipe(iconizer(settings.iconizer))
       .pipe(postHTML([
         require('posthtml-bem')(settings.app.beml),
       ]))
