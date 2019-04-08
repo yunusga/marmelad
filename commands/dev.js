@@ -38,7 +38,6 @@ const PERF = require('execution-time')();
 const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
-const iconizer = require('../modules/gulp-iconizer');
 const nunjucks = require('../modules/nunjucks');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
