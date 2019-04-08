@@ -41,13 +41,13 @@ const iconizer = {
   url: 'img', // путь до подключаемого спрайта iconizer.dest без paths.dist
   srcIcons: path.join(folders.marmelad, folders.iconizer.src, 'icons'),
   srcColored: path.join(folders.marmelad, folders.iconizer.src, 'colored'),
-  icon: (name, opts) => {
+  icon(name, opts) {
     opts = Object.assign({
       tag: 'div',
       type: 'icons',
       class: '',
-      mode: 'inline',
-      url: '',
+      mode: this.ctx.app.settings.iconizer.mode,
+      url: this.ctx.app.settings.iconizer.url,
     }, opts);
 
     let external = '';
