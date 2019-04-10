@@ -46,8 +46,8 @@ const iconizer = {
       tag: 'div',
       type: 'icons',
       class: '',
-      mode: 'inline',
-      url: '',
+      mode: this.ctx.app.settings.iconizer.mode,
+      url: this.ctx.app.settings.iconizer.url,
     }, opts);
 
     let external = '';
