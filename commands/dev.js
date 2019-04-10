@@ -729,7 +729,23 @@ module.exports = (opts) => {
     ],
     watchOpts,
     (complete) => {
-      gulp.series('iconizer:update')(complete);
+      const { srcIcons } = settings.iconizer;
+      let sizeLimitError = false;
+
+      if (fs.existsSync(srcIcons)) {
+        fs.readdirSync(srcIcons).forEach((iconName) => {
+          const iconStats = fs.statSync(`${srcIcons}/${iconName}`);
+
+          if (iconStats.size > 3072) {
+            sizeLimitError = true;
+            console.log(chalk`{bgRed  ERROR } icon {yellow ${iconName}} more than 3kb`);
+          }
+        });
+      }
+
+      if (!sizeLimitError) {
+        gulp.series('iconizer:update')(complete);
+      }
     });
 
     done();
