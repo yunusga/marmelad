@@ -25,8 +25,8 @@ npm i marmelad -g
 ```bash
 git clone https://github.com/solversgroup/marmelad.git
 cd marmelad
-npm i . -g --from-lock-file
-npm link
+npm i
+npm link # sudo npm link для linux
 ```
 Установка произойдёт также, как и через **npm**, только в этом случае появится возможность быстро исправлять/улучшать **marmelad** либо под требования заказчика, либо под собственные нужды.
 
