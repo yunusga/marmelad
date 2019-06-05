@@ -67,6 +67,16 @@ CLI
     require('../commands/cb')(pageName, opts.techs);
   });
 
+/**
+ * линтера сборки
+ */
+CLI
+  .command('lint')
+  .description('lint project')
+  .action((opts) => {
+    require('../commands/lint')(opts.techs);
+  });
+
 
 /**
  * парсим аргументы командной строки
