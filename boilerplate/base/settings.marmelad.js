@@ -85,7 +85,7 @@ const iconizer = {
 };
 
 const autoprefixer = {
-  browsers: [
+  overrideBrowserslist: [
     '>= 1%',
     'last 2 major version',
     'not dead',
