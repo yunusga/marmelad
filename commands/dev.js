@@ -63,7 +63,9 @@ const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${
 module.exports = (opts) => {
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
 
-  TCI.run();
+  if (!opts.build) {
+    TCI.run();
+  }
 
   DB.set('git', {
     branch: branchName({
@@ -781,5 +783,29 @@ module.exports = (opts) => {
     ),
   );
 
-  gulp.series('develop')();
+  gulp.task(
+    'build',
+    gulp.series(
+      'clean',
+      'static',
+      'iconizer:icons',
+      'iconizer:colored',
+      'database',
+      gulp.parallel(
+        'nunjucks',
+        'scripts:vendors',
+        'scripts:plugins',
+        'scripts:others',
+        'styles:plugins',
+        'styles',
+        'bootstrap',
+      ),
+    ),
+  );
+
+  if (opts.build) {
+    gulp.series('build')();
+  } else {
+    gulp.series('develop')();
+  }
 };

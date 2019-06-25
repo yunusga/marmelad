@@ -37,6 +37,7 @@ CLI
   .command('dev')
   .description('run development server')
   .option('-a, --auth [user@password]', 'set user@password for authorization')
+  .option('--build', 'build project once')
   .action((dev) => {
     require('../commands/dev')(dev);
   })
