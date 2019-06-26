@@ -806,8 +806,9 @@ module.exports = (opts) => {
    */
   gulp.task('proxy:copy-sources', (done) => {
     const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
+    const ignored = settings.proxy.sources.ignored.map(ignore => `!${ignore}`);
 
-    const stream = gulp.src(sources, {
+    const stream = gulp.src([...sources, ...ignored], {
       allowEmpty: true,
       base: settings.folders.static,
     })
@@ -831,13 +832,11 @@ module.exports = (opts) => {
   gulp.task('proxy:watch-sources', (done) => {
     const watchOpts = Object.assign({
       ignoreInitial: true,
-      ignored: [
-        `${settings.folders.static}/**/*.db`,
-        `${settings.folders.static}/**/*tmp*`,
-      ],
       usePolling: false,
       cwd: process.cwd(),
     }, settings.app.watchOpts);
+
+    watchOpts.ignored = [...watchOpts.ignored, ...settings.proxy.sources.ignored];
 
     const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
 
