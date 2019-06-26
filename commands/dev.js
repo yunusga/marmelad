@@ -44,8 +44,18 @@ const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
 
+/**
+ * Return default login and password or from CLI argements
+ * @param {string} params <login>@<password>
+ * @returns {array} [0] login [1] password
+ */
 const getAuthParams = params => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
 
+/**
+ * Return array of icon names for svg-sprite
+ * @param {string} iconPath path to icons directory
+ * @returns {array} array of icon names for svg-sprite
+ */
 const getIconsNamesList = (iconPath) => {
   let iconsList = [];
 
@@ -55,11 +65,13 @@ const getIconsNamesList = (iconPath) => {
 
   return iconsList;
 };
-const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${blocksPath}/${el}`);
 
 /**
- * Проверка правильности установки логина и пароля для авторизации
+ * Return array of paths to blocks.
+ * @param {string} blocksPath path to _blocks directory
+ * @returns {array} array of paths to blocks
  */
+const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${blocksPath}/${el}`);
 
 module.exports = (opts) => {
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
@@ -76,6 +88,9 @@ module.exports = (opts) => {
 
   LAGMAN.init(settings);
 
+  /**
+   * Server Auth
+   */
   bsSP.use(require('bs-auth'), {
     user: getAuthParams(opts.auth)[0],
     pass: getAuthParams(opts.auth)[1],
@@ -83,8 +98,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * NUNJUCKS
-     */
+   * Nunjucks
+   */
   gulp.task('nunjucks', (done) => {
     let templateName = '';
     let error = false;
@@ -181,8 +196,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * Iconizer
-     */
+   * Iconizer
+   */
   gulp.task('iconizer:icons', (done) => {
     if (settings.iconizer.mode === 'external') {
       settings.iconizer.plugin.svg.doctypeDeclaration = true;
@@ -258,16 +273,15 @@ module.exports = (opts) => {
   });
 
   /**
-     * Iconizer update
-     */
+   * Iconizer update
+   */
   gulp.task('iconizer:update', (done) => {
     gulp.series('iconizer:icons', 'iconizer:colored', 'nunjucks')(done);
   });
 
-
   /**
-     * scripts from blocks
-     */
+   * Scripts blocks
+   */
   gulp.task('scripts:others', (done) => {
     const stream = gulp.src(`${settings.paths.js.src}/*.js`)
       .pipe(plumber())
@@ -293,8 +307,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * СКРИПТЫ ВЕНДОРНЫЕ
-     */
+   * Scripts vendors
+   */
   gulp.task('scripts:vendors', (done) => {
     const vendorsDist = `${settings.paths.storage}/${settings.folders.js.src}/${settings.folders.js.vendors}`;
 
@@ -315,8 +329,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * СКРИПТЫ ПЛАГИНОВ
-     */
+   * Scripts plugins
+   */
   gulp.task('scripts:plugins', (done) => {
     const stream = gulp.src(`${settings.paths.js.plugins}/**/*.js`)
       .pipe(plumber())
@@ -336,8 +350,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * СТИЛИ ПЛАГИНОВ
-     */
+   * Styles plugins
+   */
   gulp.task('styles:plugins', (done) => {
     gulp.src(`${settings.paths.js.plugins}/**/*.css`)
       .pipe(plumber())
@@ -357,9 +371,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * сборка стилей блоков, для каждого отдельный css
-     */
-
+   * Styles blocks
+   */
   gulp.task('styles', (done) => {
     const $data = {
       beml: settings.app.beml,
@@ -399,8 +412,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * СТАТИКА
-     */
+   * Static files
+   */
   gulp.task('static', (done) => {
     const stream = gulp.src([
       `${settings.paths.static}/**/*.*`,
@@ -423,8 +436,8 @@ module.exports = (opts) => {
   });
 
   /**
-    * static server
-    */
+   * static server
+   */
   gulp.task('server:static', (done) => {
     settings.app.bsSP.middleware = [
       // (req, res, next) => {
@@ -501,8 +514,8 @@ module.exports = (opts) => {
   });
 
   /** ^^^
-     * Bootstrap 4 tasks
-     ==================================================================== */
+   * Bootstrap 4 tasks
+   ==================================================================== */
   gulp.task('bootstrap', (done) => {
     if (settings.app.bts.use || settings.app.bts.donor) {
       if (settings.app.bts.donor) {
@@ -755,15 +768,15 @@ module.exports = (opts) => {
   });
 
   /**
-     * очищаем папку сборки перед сборкой Ж)
-     */
+   * Clean build directory
+   */
   gulp.task('clean', (done) => {
     del.sync(settings.paths.dist);
     done();
   });
 
   /**
-   * PROXY MOD
+   * Proxy mod
    */
   gulp.task('proxy-mod', (done) => {
     if (opts.proxyMod) {
@@ -780,7 +793,7 @@ module.exports = (opts) => {
   });
 
   /**
-   * PROXY SERVER
+   * Proxy server
    */
   gulp.task('proxy:server', (done) => {
     settings.proxy.server.middleware = [
@@ -802,7 +815,7 @@ module.exports = (opts) => {
   });
 
   /**
-   * ПРОКСИ СТАТИКА
+   * Proxy mod Static files
    */
   gulp.task('proxy:copy-sources', (done) => {
     const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
@@ -827,7 +840,7 @@ module.exports = (opts) => {
   });
 
   /**
-   * СЛЕЖЕНИЕ ЗА ПРОКСИ СТАТИКОЙ
+   * Proxy watcher
    */
   gulp.task('proxy:watch-sources', (done) => {
     const watchOpts = Object.assign({
