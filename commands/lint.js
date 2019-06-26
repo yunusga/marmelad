@@ -13,7 +13,6 @@ module.exports = () => {
       return;
     }
 
-
     nodeW3CValidator.writeFile('static/result.json', output);
   });
 };
