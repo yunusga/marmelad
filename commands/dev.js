@@ -98,6 +98,15 @@ module.exports = (opts) => {
   });
 
   /**
+   * Proxy Server Auth
+   */
+  bsPS.use(require('bs-auth'), {
+    user: getAuthParams(opts.auth)[0],
+    pass: getAuthParams(opts.auth)[1],
+    use: opts.auth,
+  });
+
+  /**
    * Nunjucks
    */
   gulp.task('nunjucks', (done) => {
