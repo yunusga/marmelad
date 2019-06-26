@@ -170,15 +170,15 @@ const app = {
 const proxy = {
   sources: {
     copy: [
-      path.join(folders.static, 'css'),
-      path.join(folders.static, 'fonts'),
-      path.join(folders.static, 'js'),
+      // path.join(folders.static, 'css'),
+      // path.join(folders.static, 'fonts'),
+      // path.join(folders.static, 'js'),
     ], // ресурсы для копирования
     ignored: [
       `${folders.static}/**/*.db`,
       `${folders.static}/**/*tmp*`,
     ],
-    to: 'wp-theme', // путь до директории копирования (wp-content/themes/marmelad)
+    to: 'marmelad-no-proxy-folder-targer', // путь до директории копирования (wp-content/themes/marmelad)
   },
   server: {
     proxy: 'http://marmelad.loc',
