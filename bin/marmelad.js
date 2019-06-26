@@ -37,6 +37,9 @@ CLI
   .command('dev')
   .description('run development server')
   .option('-a, --auth [user@password]', 'set user@password for authorization')
+  .option('--proxy-mod', 'proxy mode with copy files from build')
+  .option('--build', 'build project once')
+  .option('--minify', 'minify js and css')
   .action((dev) => {
     require('../commands/dev')(dev);
   })
@@ -65,6 +68,16 @@ CLI
   .option('-t, --techs [html,js,css,json]', 'Files extensions for new block')
   .action((pageName, opts) => {
     require('../commands/cb')(pageName, opts.techs);
+  });
+
+/**
+ * линтера сборки
+ */
+CLI
+  .command('lint')
+  .description('lint project')
+  .action((opts) => {
+    require('../commands/lint')(opts.techs);
   });
 
 

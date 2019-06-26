@@ -41,7 +41,7 @@ const iconizer = {
   url: 'img', // путь до подключаемого спрайта iconizer.dest без paths.dist
   srcIcons: path.join(folders.marmelad, folders.iconizer.src, 'icons'),
   srcColored: path.join(folders.marmelad, folders.iconizer.src, 'colored'),
-  icon: (name, opts) => {
+  icon(name, opts) {
     opts = Object.assign({
       tag: 'div',
       type: 'icons',
@@ -85,7 +85,7 @@ const iconizer = {
 };
 
 const autoprefixer = {
-  browsers: [
+  overrideBrowserslist: [
     '>= 1%',
     'last 2 major version',
     'not dead',
@@ -167,9 +167,37 @@ const app = {
   },
 };
 
+const proxy = {
+  sources: {
+    copy: [
+      // path.join(folders.static, 'css'),
+      // path.join(folders.static, 'fonts'),
+      // path.join(folders.static, 'js'),
+    ], // ресурсы для копирования
+    ignored: [
+      `${folders.static}/**/*.db`,
+      `${folders.static}/**/*tmp*`,
+    ],
+    to: 'marmelad-no-proxy-folder-targer', // путь до директории копирования (wp-content/themes/marmelad)
+  },
+  server: {
+    proxy: 'http://marmelad.loc',
+    logFileChanges: false,
+    ui: false,
+    latencyRoutes: [
+      {
+        route: '/wp-admin/admin-ajax.php',
+        latency: 3000,
+        active: true,
+      },
+    ],
+  },
+};
+
 module.exports = {
   folders,
   app,
   paths,
   iconizer,
+  proxy,
 };
