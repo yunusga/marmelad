@@ -167,9 +167,33 @@ const app = {
   },
 };
 
+const proxy = {
+  sources: {
+    copy: [
+      path.join(folders.static, 'css'),
+      path.join(folders.static, 'fonts'),
+      path.join(folders.static, 'js'),
+    ], // ресурсы для копирования
+    to: 'wp-theme', // путь до директории копирования (wp-content/themes/marmelad)
+  },
+  server: {
+    proxy: 'http://marmelad.loc',
+    logFileChanges: false,
+    ui: false,
+    latencyRoutes: [
+      {
+        route: '/wp-admin/admin-ajax.php',
+        latency: 3000,
+        active: true,
+      },
+    ],
+  },
+};
+
 module.exports = {
   folders,
   app,
   paths,
   iconizer,
+  proxy,
 };

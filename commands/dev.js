@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const gulp = require('gulp');
-const bsSP = require('browser-sync').create();
+const bsSP = require('browser-sync').create('Dev Server');
+const bsPS = require('browser-sync').create('Proxy Server');
 const tap = require('gulp-tap');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
@@ -761,11 +762,100 @@ module.exports = (opts) => {
     done();
   });
 
+  /**
+   * PROXY MOD
+   */
+  gulp.task('proxy-mod', (done) => {
+    if (opts.proxyMod) {
+      if (opts.build) {
+        gulp.series('proxy:copy-sources')();
+      } else {
+        gulp.series('proxy:copy-sources', 'proxy:watch-sources', 'proxy:server')();
+      }
+
+      LOG(`Proxy Mod ................... ${chalk.bold.green('Started')}`);
+    }
+
+    done();
+  });
+
+  /**
+   * PROXY SERVER
+   */
+  gulp.task('proxy:server', (done) => {
+    settings.proxy.server.middleware = [
+      (req, res, next) => {
+        const latencyRoutes = settings.proxy.server.latencyRoutes ? settings.proxy.server.latencyRoutes : [];
+        const match = latencyRoutes.filter(item => req.url.match(new RegExp(`^${item.route}`)) && item.active);
+
+        if (match.length && match[0].active) {
+          setTimeout(next, match[0].latency);
+        } else {
+          next();
+        }
+      },
+    ];
+
+    bsPS.init(settings.proxy.server, () => {
+      done();
+    });
+  });
+
+  /**
+   * ПРОКСИ СТАТИКА
+   */
+  gulp.task('proxy:copy-sources', (done) => {
+    const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
+
+    const stream = gulp.src(sources, {
+      allowEmpty: true,
+      base: settings.folders.static,
+    })
+      .pipe(plumber())
+      .pipe(gulp.dest(settings.proxy.sources.to));
+
+    stream.on('end', () => {
+      LOG(`Proxy Copy Sources ................... ${chalk.bold.green('Done')}`);
+      // bsSP.reload();
+      done();
+    });
+
+    stream.on('error', (err) => {
+      done(err);
+    });
+  });
+
+  /**
+   * СЛЕЖЕНИЕ ЗА ПРОКСИ СТАТИКОЙ
+   */
+  gulp.task('proxy:watch-sources', (done) => {
+    const watchOpts = Object.assign({
+      ignoreInitial: true,
+      ignored: [
+        `${settings.folders.static}/**/*.db`,
+        `${settings.folders.static}/**/*tmp*`,
+      ],
+      usePolling: false,
+      cwd: process.cwd(),
+    }, settings.app.watchOpts);
+
+    const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
+
+    gulp.watch(
+      sources,
+      watchOpts,
+      gulp.parallel('proxy:copy-sources'),
+    );
+
+    LOG(`Proxy Watch Sources ................... ${chalk.bold.green('Started')}`);
+
+    done();
+  });
+
   gulp.task(
     'develop',
     gulp.series(
       'clean',
-      'server:static',
       'static',
       'iconizer:icons',
       'iconizer:colored',
@@ -779,33 +869,13 @@ module.exports = (opts) => {
         'styles',
         'bootstrap',
       ),
-      'watch',
-    ),
-  );
-
-  gulp.task(
-    'build',
-    gulp.series(
-      'clean',
-      'static',
-      'iconizer:icons',
-      'iconizer:colored',
-      'database',
-      gulp.parallel(
-        'nunjucks',
-        'scripts:vendors',
-        'scripts:plugins',
-        'scripts:others',
-        'styles:plugins',
-        'styles',
-        'bootstrap',
-      ),
+      'proxy-mod',
     ),
   );
 
   if (opts.build) {
-    gulp.series('build')();
-  } else {
     gulp.series('develop')();
+  } else {
+    gulp.series('develop', 'server:static', 'watch')();
   }
 };
