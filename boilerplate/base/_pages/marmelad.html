@@ -10,68 +10,70 @@ layout: !!map
 
 {% extends 'app.html' %}
 
-{% block main %}
-
-<style>
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		margin: 0 0 10px;
-	}
-
-	p {
-		margin: 0 0 20px;
-	}
-	.container {
-		padding: 20px;
-	}
-
-	.icon-marmelad-logo {
-		width: 120px;
-		height: 120px;
-	}
-
-	.mmd-head {
-		display: flex;
-		align-items: center;
-	}
-
-	.mmd-head__logo {
-		flex: 0 0 120px;
-		max-width: 120px;
-		margin-left: 30px;
-	}
-
-	.mmd-head__meta {
-		flex: 1;
-	}
-
-	.mmd-head__title {
-		font-size: 30px;
-		margin: 0 0 10px;
-	}
-
-	.mmd-head__description {
-		font-size: 16px;
-	}
-
-	.info-section {
-		margin: 40px 0;
-		padding: 30px 30px 10px 30px;
-		border: 2px dashed #cdcdcd;
-	}
-
-	@media (min-width: 960px) {
-		.container {
-			width: 100%;
-			max-width: 960px;
-			margin: 0 auto;
+{% block inlineStyles %}
+	<style>
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			margin: 0 0 10px;
 		}
-	}
-</style>
+
+		p {
+			margin: 0 0 20px;
+		}
+		.container {
+			padding: 20px;
+		}
+
+		.icon-marmelad-logo {
+			width: 120px;
+			height: 120px;
+		}
+
+		.mmd-head {
+			display: flex;
+			align-items: center;
+		}
+
+		.mmd-head__logo {
+			flex: 0 0 120px;
+			max-width: 120px;
+			margin-left: 30px;
+		}
+
+		.mmd-head__meta {
+			flex: 1;
+		}
+
+		.mmd-head__title {
+			font-size: 30px;
+			margin: 0 0 10px;
+		}
+
+		.mmd-head__description {
+			font-size: 16px;
+		}
+
+		.info-section {
+			margin: 40px 0;
+			padding: 30px 30px 10px 30px;
+			border: 2px dashed #cdcdcd;
+		}
+
+		@media (min-width: 960px) {
+			.container {
+				width: 100%;
+				max-width: 960px;
+				margin: 0 auto;
+			}
+		}
+	</style>
+{% endblock %}
+
+{% block main %}
 
 <div class="container">
 	<header class="mmd-head d-flex">
@@ -88,7 +90,7 @@ layout: !!map
 	</header>
 
 	<nav>
-		<a href="{{ app.package.homepage }}" rel="nofollow,noopener" target="_blank">github</a> / <a href="{{ app.package.bugs.url }}" rel="nofollow,noopener" target="_blank">issues</a> / <a href="https://www.npmjs.com/package/marmelad" rel="nofollow,noopener" target="_blank">npm</a>
+		<a href="{{ app.package.homepage }}" rel="noopener" target="_blank">github</a> / <a href="{{ app.package.bugs.url }}" rel="noopener" target="_blank">issues</a> / <a href="https://www.npmjs.com/package/marmelad" rel="noopener" target="_blank">npm</a>
 	</nav>
 
 	<hr>
