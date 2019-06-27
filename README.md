@@ -1,7 +1,7 @@
 [ci-img]:  https://travis-ci.org/solversgroup/marmelad.svg
 [ci]:      https://travis-ci.org/solversgroup/marmelad
 
-# marmelad <sup>[6.0.0](CHANGELOG.md#6000-26062019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
+# marmelad <sup>[6.2.1](CHANGELOG.md#621-27062019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
@@ -18,6 +18,7 @@
   - [`dev [options]`](#dev-options-параметры-запуска)
   - [`cp <name>`](#cp-name-создание-страницы)
   - [`cb [options] <name>`](#cb-options-name-создание-блока)
+  - [`lint`](#lint-w3c-валидатор)
   - [TCI](#tci)
 - [Структура проекта](#структура-проекта)
 - [Шаблоны/Блоки](#шаблоныблоки)
@@ -145,6 +146,12 @@ new-block
 Параметр `--t` позволяет указывать конкретно какие технологии необходимо создать. По сути в этот параметр можно перечислить через зяпятую сколько угодно форматов.
 
 Формат для стилей указывать необязательно, если он не будет указан, то команда создаст файл с форматом стилей, который указан в `settings.marmelad.js -> app.css`.
+
+### `lint` W3C валидатор
+
+Запуск W3C валидатора на уже собранном проекте.
+
+> Запуск W3C валидатора необходимо выполнять только после сборки проекта, иначе результаты валидации будут некорректны.
 
 ### TCI
 
