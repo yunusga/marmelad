@@ -64,7 +64,7 @@ const iconizer = {
     opts.class = opts.class ? ` ${opts.class}` : '';
 
     return `
-      <${opts.tag} class="svg-icon svg-icon--${name}${typeClass}${opts.class}" aria-hidden="true" focusable="false">
+      <${opts.tag} class="svg-icon svg-icon--${name}${typeClass}${opts.class}" aria-hidden="true">
         <svg class="svg-icon__link">
           <use xlink:href="${external}#${name}"></use>
         </svg>
