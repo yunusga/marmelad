@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const gulp = require('gulp');
-const bsSP = require('browser-sync').create();
+const bsSP = require('browser-sync').create('Dev Server');
+const bsPS = require('browser-sync').create('Proxy Server');
 const tap = require('gulp-tap');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
@@ -14,6 +15,7 @@ const cheerio = require('cheerio');
 const svgSprite = require('gulp-svg-sprite');
 const stylus = require('gulp-stylus');
 const postcss = require('gulp-postcss');
+const cssnano = require('cssnano');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
 const inlineSvg = require('postcss-inline-svg');
@@ -38,14 +40,23 @@ const PERF = require('execution-time')();
 const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
-const iconizer = require('../modules/gulp-iconizer');
 const nunjucks = require('../modules/nunjucks');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
 
+/**
+ * Return default login and password or from CLI argements
+ * @param {string} params <login>@<password>
+ * @returns {array} [0] login [1] password
+ */
 const getAuthParams = params => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
 
+/**
+ * Return array of icon names for svg-sprite
+ * @param {string} iconPath path to icons directory
+ * @returns {array} array of icon names for svg-sprite
+ */
 const getIconsNamesList = (iconPath) => {
   let iconsList = [];
 
@@ -55,16 +66,20 @@ const getIconsNamesList = (iconPath) => {
 
   return iconsList;
 };
-const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${blocksPath}/${el}`);
 
 /**
- * Проверка правильности установки логина и пароля для авторизации
+ * Return array of paths to blocks.
+ * @param {string} blocksPath path to _blocks directory
+ * @returns {array} array of paths to blocks
  */
+const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${blocksPath}/${el}`);
 
 module.exports = (opts) => {
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
 
-  TCI.run();
+  if (!opts.build) {
+    TCI.run();
+  }
 
   DB.set('git', {
     branch: branchName({
@@ -74,6 +89,9 @@ module.exports = (opts) => {
 
   LAGMAN.init(settings);
 
+  /**
+   * Server Auth
+   */
   bsSP.use(require('bs-auth'), {
     user: getAuthParams(opts.auth)[0],
     pass: getAuthParams(opts.auth)[1],
@@ -81,8 +99,17 @@ module.exports = (opts) => {
   });
 
   /**
-     * NUNJUCKS
-     */
+   * Proxy Server Auth
+   */
+  bsPS.use(require('bs-auth'), {
+    user: getAuthParams(opts.auth)[0],
+    pass: getAuthParams(opts.auth)[1],
+    use: opts.auth,
+  });
+
+  /**
+   * Nunjucks
+   */
   gulp.task('nunjucks', (done) => {
     let templateName = '';
     let error = false;
@@ -104,6 +131,7 @@ module.exports = (opts) => {
           env.addFilter('limitto', require('../modules/nunjucks/filters/lomitto'));
           env.addFilter('bodyClass', require('../modules/nunjucks/filters/bodyclass'));
           env.addGlobal('_icon', settings.iconizer.icon);
+          env.addGlobal('inlineSvgSprite', require('../modules/nunjucks/globals/inlineSvgSprite'));
 
           return env;
         },
@@ -133,7 +161,6 @@ module.exports = (opts) => {
           console.log(err);
         }
       }))
-      .pipe(iconizer(settings.iconizer))
       .pipe(postHTML([
         require('posthtml-bem')(settings.app.beml),
       ]))
@@ -179,8 +206,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * Iconizer
-     */
+   * Iconizer
+   */
   gulp.task('iconizer:icons', (done) => {
     if (settings.iconizer.mode === 'external') {
       settings.iconizer.plugin.svg.doctypeDeclaration = true;
@@ -256,16 +283,15 @@ module.exports = (opts) => {
   });
 
   /**
-     * Iconizer update
-     */
+   * Iconizer update
+   */
   gulp.task('iconizer:update', (done) => {
     gulp.series('iconizer:icons', 'iconizer:colored', 'nunjucks')(done);
   });
 
-
   /**
-     * scripts from blocks
-     */
+   * Scripts blocks
+   */
   gulp.task('scripts:others', (done) => {
     const stream = gulp.src(`${settings.paths.js.src}/*.js`)
       .pipe(plumber())
@@ -277,7 +303,12 @@ module.exports = (opts) => {
         presets: ['@babel/preset-env'].map(require.resolve),
         plugins: ['@babel/plugin-transform-object-assign'].map(require.resolve),
       }))
-      .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
+      .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`))
+      .pipe(gif(opts.minify, uglify()))
+      .pipe(gif(opts.minify, rename({
+        suffix: '.min',
+      })))
+      .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`)));
 
     stream.on('end', () => {
       LOG(`Scripts others ...................... ${chalk.bold.green('Done')}`);
@@ -291,8 +322,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * СКРИПТЫ ВЕНДОРНЫЕ
-     */
+   * Scripts vendors
+   */
   gulp.task('scripts:vendors', (done) => {
     const vendorsDist = `${settings.paths.storage}/${settings.folders.js.src}/${settings.folders.js.vendors}`;
 
@@ -313,8 +344,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * СКРИПТЫ ПЛАГИНОВ
-     */
+   * Scripts plugins
+   */
   gulp.task('scripts:plugins', (done) => {
     const stream = gulp.src(`${settings.paths.js.plugins}/**/*.js`)
       .pipe(plumber())
@@ -334,8 +365,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * СТИЛИ ПЛАГИНОВ
-     */
+   * Styles plugins
+   */
   gulp.task('styles:plugins', (done) => {
     gulp.src(`${settings.paths.js.plugins}/**/*.css`)
       .pipe(plumber())
@@ -355,9 +386,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * сборка стилей блоков, для каждого отдельный css
-     */
-
+   * Styles blocks
+   */
   gulp.task('styles', (done) => {
     const $data = {
       beml: settings.app.beml,
@@ -388,6 +418,13 @@ module.exports = (opts) => {
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
+      .pipe(gif(opts.minify, postcss([
+        cssnano(settings.app.cssnano),
+      ])))
+      .pipe(gif(opts.minify, rename({
+        suffix: '.min',
+      })))
+      .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/css`)))
       .on('end', () => {
         LOG(`Styles CSS .......................... ${chalk.bold.green('Done')}`);
       })
@@ -397,8 +434,8 @@ module.exports = (opts) => {
   });
 
   /**
-     * СТАТИКА
-     */
+   * Static files
+   */
   gulp.task('static', (done) => {
     const stream = gulp.src([
       `${settings.paths.static}/**/*.*`,
@@ -421,8 +458,8 @@ module.exports = (opts) => {
   });
 
   /**
-    * static server
-    */
+   * static server
+   */
   gulp.task('server:static', (done) => {
     settings.app.bsSP.middleware = [
       // (req, res, next) => {
@@ -499,8 +536,8 @@ module.exports = (opts) => {
   });
 
   /** ^^^
-     * Bootstrap 4 tasks
-     ==================================================================== */
+   * Bootstrap 4 tasks
+   ==================================================================== */
   gulp.task('bootstrap', (done) => {
     if (settings.app.bts.use || settings.app.bts.donor) {
       if (settings.app.bts.donor) {
@@ -730,17 +767,122 @@ module.exports = (opts) => {
     ],
     watchOpts,
     (complete) => {
-      gulp.series('iconizer:update')(complete);
+      const { srcIcons } = settings.iconizer;
+      let sizeLimitError = false;
+
+      if (fs.existsSync(srcIcons)) {
+        fs.readdirSync(srcIcons).forEach((iconName) => {
+          const iconStats = fs.statSync(`${srcIcons}/${iconName}`);
+
+          if (iconStats.size > 3072) {
+            sizeLimitError = true;
+            console.log(chalk`{bgRed  ERROR } icon {yellow ${iconName}} more than 3kb`);
+          }
+        });
+      }
+
+      if (!sizeLimitError) {
+        gulp.series('iconizer:update')(complete);
+      }
     });
 
     done();
   });
 
   /**
-     * очищаем папку сборки перед сборкой Ж)
-     */
+   * Clean build directory
+   */
   gulp.task('clean', (done) => {
     del.sync(settings.paths.dist);
+    done();
+  });
+
+  /**
+   * Proxy mod
+   */
+  gulp.task('proxy-mod', (done) => {
+    if (opts.proxyMod) {
+      if (opts.build) {
+        gulp.series('proxy:copy-sources')();
+      } else {
+        gulp.series('proxy:copy-sources', 'proxy:watch-sources', 'proxy:server')();
+      }
+
+      LOG(`Proxy Mod ................... ${chalk.bold.green('Started')}`);
+    }
+
+    done();
+  });
+
+  /**
+   * Proxy server
+   */
+  gulp.task('proxy:server', (done) => {
+    settings.proxy.server.middleware = [
+      (req, res, next) => {
+        const latencyRoutes = settings.proxy.server.latencyRoutes ? settings.proxy.server.latencyRoutes : [];
+        const match = latencyRoutes.filter(item => req.url.match(new RegExp(`^${item.route}`)) && item.active);
+
+        if (match.length && match[0].active) {
+          setTimeout(next, match[0].latency);
+        } else {
+          next();
+        }
+      },
+    ];
+
+    bsPS.init(settings.proxy.server, () => {
+      done();
+    });
+  });
+
+  /**
+   * Proxy mod Static files
+   */
+  gulp.task('proxy:copy-sources', (done) => {
+    const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
+    const ignored = settings.proxy.sources.ignored.map(ignore => `!${ignore}`);
+
+    const stream = gulp.src([...sources, ...ignored], {
+      allowEmpty: true,
+      base: settings.folders.static,
+    })
+      .pipe(plumber())
+      .pipe(gulp.dest(settings.proxy.sources.to));
+
+    stream.on('end', () => {
+      LOG(`Proxy Copy Sources ................... ${chalk.bold.green('Done')}`);
+      // bsSP.reload();
+      done();
+    });
+
+    stream.on('error', (err) => {
+      done(err);
+    });
+  });
+
+  /**
+   * Proxy watcher
+   */
+  gulp.task('proxy:watch-sources', (done) => {
+    const watchOpts = Object.assign({
+      ignoreInitial: true,
+      usePolling: false,
+      cwd: process.cwd(),
+    }, settings.app.watchOpts);
+
+    watchOpts.ignored = [...watchOpts.ignored, ...settings.proxy.sources.ignored];
+
+    const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
+
+    gulp.watch(
+      sources,
+      watchOpts,
+      gulp.parallel('proxy:copy-sources'),
+    );
+
+    LOG(`Proxy Watch Sources ................... ${chalk.bold.green('Started')}`);
+
     done();
   });
 
@@ -748,7 +890,6 @@ module.exports = (opts) => {
     'develop',
     gulp.series(
       'clean',
-      'server:static',
       'static',
       'iconizer:icons',
       'iconizer:colored',
@@ -762,9 +903,13 @@ module.exports = (opts) => {
         'styles',
         'bootstrap',
       ),
-      'watch',
+      'proxy-mod',
     ),
   );
 
-  gulp.series('develop')();
+  if (opts.build) {
+    gulp.series('develop')();
+  } else {
+    gulp.series('develop', 'server:static', 'watch')();
+  }
 };

@@ -15,7 +15,7 @@ module.exports = (dir, opts) => {
   // набор поддерживаемых css-препроцессоров marmelad
   const supportedCSS = new Set(['scss', 'sass', 'styl']);
 
-  // удаление необходимого препроцессора и набора исключений
+  // удаление необходимого препроцессора из набора исключений
   supportedCSS.delete(opts.css);
 
   const boilerplatePath = path.join(__dirname.replace('commands', ''), 'boilerplate');
