@@ -910,6 +910,6 @@ module.exports = (opts) => {
   if (opts.build) {
     gulp.series('develop')();
   } else {
-    gulp.series('develop', 'server:static', 'watch')();
+    gulp.series('server:static', 'develop', 'watch')();
   }
 };
