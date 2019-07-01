@@ -310,6 +310,8 @@ module.exports = (opts) => {
       })))
       .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`)));
 
+    LOG(`Scripts others ......................... ${chalk.bold.green('Done')}`);
+    bsSP.reload();
     done();
   });
 
