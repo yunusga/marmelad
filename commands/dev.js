@@ -293,7 +293,7 @@ module.exports = (opts) => {
    * Scripts blocks
    */
   gulp.task('scripts:others', (done) => {
-    const stream = gulp.src(`${settings.paths.js.src}/*.js`)
+    gulp.src(`${settings.paths.js.src}/*.js`)
       .pipe(plumber())
       .pipe(include({
         extensions: 'js',
@@ -310,15 +310,7 @@ module.exports = (opts) => {
       })))
       .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`)));
 
-    stream.on('end', () => {
-      LOG(`Scripts others ...................... ${chalk.bold.green('Done')}`);
-      bsSP.reload();
-      done();
-    });
-
-    stream.on('error', (err) => {
-      done(err);
-    });
+    done();
   });
 
   /**
@@ -910,6 +902,6 @@ module.exports = (opts) => {
   if (opts.build) {
     gulp.series('develop')();
   } else {
-    gulp.series('server:static', 'develop', 'watch')();
+    gulp.series('develop', 'server:static', 'watch')();
   }
 };
