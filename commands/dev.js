@@ -410,6 +410,7 @@ module.exports = (opts) => {
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
+      .pipe(bsSP.stream())
       .pipe(gif(opts.minify, postcss([
         cssnano(settings.app.cssnano),
       ])))
