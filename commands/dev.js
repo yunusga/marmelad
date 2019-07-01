@@ -688,11 +688,15 @@ module.exports = (opts) => {
 
         LAGMAN.store.src = [];
 
-        LAGMAN.store.onDemand.forEach((page) => {
+        LAGMAN.store.blocks[blockName].forEach((page) => {
           LAGMAN.store.src.push(`${settings.paths._pages}/**/${page}.html`);
         });
 
-        gulp.series('nunjucks')();
+        if (LAGMAN.store.blocks[blockName].size) {
+          gulp.series('nunjucks')();
+        } else {
+          LOG(`[nunjucks] block ${chalk.bold.yellow(blockName)} has no dependencies`);
+        }
       })
       .on('unlink', (blockPath) => {
         const blockName = LAGMAN.getName(blockPath);
