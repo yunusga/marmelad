@@ -293,7 +293,7 @@ module.exports = (opts) => {
    * Scripts blocks
    */
   gulp.task('scripts:others', (done) => {
-    const stream = gulp.src(`${settings.paths.js.src}/*.js`)
+    gulp.src(`${settings.paths.js.src}/*.js`)
       .pipe(plumber())
       .pipe(include({
         extensions: 'js',
@@ -310,15 +310,9 @@ module.exports = (opts) => {
       })))
       .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`)));
 
-    stream.on('end', () => {
-      LOG(`Scripts others ...................... ${chalk.bold.green('Done')}`);
-      bsSP.reload();
-      done();
-    });
-
-    stream.on('error', (err) => {
-      done(err);
-    });
+    LOG(`Scripts others ......................... ${chalk.bold.green('Done')}`);
+    bsSP.reload();
+    done();
   });
 
   /**
@@ -418,6 +412,7 @@ module.exports = (opts) => {
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
+      .pipe(bsSP.stream())
       .pipe(gif(opts.minify, postcss([
         cssnano(settings.app.cssnano),
       ])))
@@ -693,11 +688,15 @@ module.exports = (opts) => {
 
         LAGMAN.store.src = [];
 
-        LAGMAN.store.onDemand.forEach((page) => {
+        LAGMAN.store.blocks[blockName].forEach((page) => {
           LAGMAN.store.src.push(`${settings.paths._pages}/**/${page}.html`);
         });
 
-        gulp.series('nunjucks')();
+        if (LAGMAN.store.blocks[blockName].size) {
+          gulp.series('nunjucks')();
+        } else {
+          LOG(`[nunjucks] block ${chalk.bold.yellow(blockName)} has no dependencies`);
+        }
       })
       .on('unlink', (blockPath) => {
         const blockName = LAGMAN.getName(blockPath);
@@ -910,6 +909,6 @@ module.exports = (opts) => {
   if (opts.build) {
     gulp.series('develop')();
   } else {
-    gulp.series('server:static', 'develop', 'watch')();
+    gulp.series('develop', 'server:static', 'watch')();
   }
 };
