@@ -11,7 +11,11 @@ module.exports = (name, techs) => {
     fs.mkdirSync(blockPath);
 
     extensions.split(',').forEach((ext) => {
-      fs.writeFileSync(`${blockPath}/${name}.${ext}`, '', { encoding: 'utf8' });
+      if (ext === 'html') {
+        fs.writeFileSync(`${blockPath}/${name}.${ext}`, `<div block="${name}"></div><!-- ${name} -->`, { encoding: 'utf8' });
+      } else {
+        fs.writeFileSync(`${blockPath}/${name}.${ext}`, '', { encoding: 'utf8' });
+      }
     });
 
     process.stdout.write(`✔  block ${name} is created`);
