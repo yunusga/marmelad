@@ -41,6 +41,7 @@ const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
 const nunjucks = require('../modules/nunjucks');
+const Incw = require('../modules/nunjucks/incw');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
@@ -132,6 +133,8 @@ module.exports = (opts) => {
           env.addFilter('bodyClass', require('../modules/nunjucks/filters/bodyclass'));
           env.addGlobal('_icon', settings.iconizer.icon);
           env.addGlobal('inlineSvgSprite', require('../modules/nunjucks/globals/inlineSvgSprite'));
+
+          env.addExtension('incw', new Incw(env, DB.store, settings));
 
           return env;
         },
