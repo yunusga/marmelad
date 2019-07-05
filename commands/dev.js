@@ -439,7 +439,7 @@ module.exports = (opts) => {
       `${settings.paths.static}/**/*.*`,
       `!${settings.paths.static}/**/Thumbs.db`,
       `!${settings.paths.static}/**/*tmp*`,
-    ])
+    ], { dot: true })
       .pipe(plumber())
       .pipe(changed(settings.paths.storage))
       .pipe(gulp.dest(settings.paths.storage));
