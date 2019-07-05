@@ -624,11 +624,10 @@ module.exports = (opts) => {
     }
 
     /* СТАТИКА */
-    gulp.watch(
-      `${settings.paths.static}/**/*.*`,
-      watchOpts,
-      gulp.parallel('static'),
-    );
+    gulp.watch([
+      `${settings.paths.static}/**/*`,
+      `${settings.paths.static}/**/.*`,
+    ], watchOpts, gulp.parallel('static'));
 
     /* STYLES */
     gulp.watch([
