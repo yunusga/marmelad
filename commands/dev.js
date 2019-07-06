@@ -41,7 +41,7 @@ const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
 const nunjucks = require('../modules/nunjucks');
-const Incw = require('../modules/nunjucks/incw');
+const Incw = require('../modules/nunjucks/globals/incw');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
@@ -439,7 +439,7 @@ module.exports = (opts) => {
       `${settings.paths.static}/**/*.*`,
       `!${settings.paths.static}/**/Thumbs.db`,
       `!${settings.paths.static}/**/*tmp*`,
-    ])
+    ], { dot: true })
       .pipe(plumber())
       .pipe(changed(settings.paths.storage))
       .pipe(gulp.dest(settings.paths.storage));
@@ -624,11 +624,10 @@ module.exports = (opts) => {
     }
 
     /* СТАТИКА */
-    gulp.watch(
-      `${settings.paths.static}/**/*.*`,
-      watchOpts,
-      gulp.parallel('static'),
-    );
+    gulp.watch([
+      `${settings.paths.static}/**/*`,
+      `${settings.paths.static}/**/.*`,
+    ], watchOpts, gulp.parallel('static'));
 
     /* STYLES */
     gulp.watch([

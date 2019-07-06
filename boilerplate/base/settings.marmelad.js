@@ -184,6 +184,7 @@ const proxy = {
     proxy: 'http://marmelad.loc',
     logFileChanges: false,
     ui: false,
+    open: false,
     latencyRoutes: [
       {
         route: '/wp-admin/admin-ajax.php',

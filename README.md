@@ -1,7 +1,7 @@
 [ci-img]:  https://travis-ci.org/solversgroup/marmelad.svg
 [ci]:      https://travis-ci.org/solversgroup/marmelad
 
-# marmelad <sup>[6.6.3](CHANGELOG.md#663-02072019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
+# marmelad <sup>[6.10.4](CHANGELOG.md#6104-06072019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
@@ -121,6 +121,8 @@ Commands help:
 - `dev --build` одноразовая сборка проекта без запуска слежения за изменениями и пересборки
 - `dev --minify` включает обжатие для js/css, создаёт файлы с суффиксом `.min` рядом с необжатым файлом
 - `dev --proxy-mod` режим сборки статики + проксирование уже живого сайта с копированием необходимых ресурсов (css,js) в определённую директорию рабочего сайта
+
+> `dev --proxy-mod` ошибка **Error: Missing positive glob** означает что вы не прописали в конфиге директории для копирования, по умолчанию они закомментированны.
 
 ### `cp <name>` создание страницы
 
