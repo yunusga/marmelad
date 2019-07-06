@@ -41,7 +41,7 @@ const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
 const nunjucks = require('../modules/nunjucks');
-const Incw = require('../modules/nunjucks/incw');
+const Incw = require('../modules/nunjucks/globals/incw');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
