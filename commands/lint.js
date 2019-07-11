@@ -1,6 +1,7 @@
 const nodeW3CValidator = require('node-w3c-validator');
 const chalk = require('chalk');
 const path = require('path');
+const glob = require('glob');
 
 function logResults(msg) {
   const types = {
@@ -17,23 +18,46 @@ function logResults(msg) {
 }
 
 module.exports = () => {
-  // validate
-  nodeW3CValidator('static/*.html', {
-    format: 'json',
-    skipNonHtml: true,
-    verbose: true,
-    errorsOnly: false,
-  }, (err, output) => {
-    if (err === null) {
-      return;
-    }
 
-    const result = JSON.parse(output);
+  const pages = glob.sync('static/**/*.html');
+  let index = 0;
+  let current = 0;
+  let zero = pages.length > 9 ? true : false;
 
-    result.messages.forEach((message) => {
-      logResults(message);
+  function validate(templatePath) {
+    nodeW3CValidator(templatePath, {
+      format: 'json',
+      skipNonHtml: true,
+      verbose: true,
+      errorsOnly: false,
+    }, (err, output) => {
+      if (err === null) {
+        return;
+      }
+
+      const result = JSON.parse(output);
+      const template = path.basename(templatePath);
+
+      console.log(result.messages);
+
+      console.log(`${chalk.gray(`${current}/${pages.length} -`)} ${chalk.bold.yellow(template)} - ${result.messages.length} errors`);
+
+      roundRobin();
     });
+  }
 
-    nodeW3CValidator.writeFile('static/validator.json', output);
-  });
+  function roundRobin() {
+    if (index < pages.length) {
+      validate(pages[index]);
+      index++;
+
+      if (zero) {
+        current = index < 10 ? `0${index}` : index;
+      } else {
+        current = index;
+      }
+    }
+  }
+
+  roundRobin();
 };
