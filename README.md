@@ -17,7 +17,7 @@
   - [`init [options]`](#init-options-инициализация)
   - [`dev [options]`](#dev-options-параметры-запуска)
   - [`cp <name>`](#cp-name-создание-страницы)
-  - [`cb [options] <name>`](#cb-options-name-создание-блока)
+  - [`cb <name> [options]`](#cb-name-options-создание-блока)
   - [`lint`](#lint-w3c-валидатор)
   - [`format`](#format-форматирование-html)
   - [`pack [name] [options]`](#pack-name-options-архивирование-проекта)
@@ -130,7 +130,7 @@ Commands help:
 
 Файл страницы создаётся в директории `marmelad/_pages`, в имени файла расширение не указывается.
 
-### `cb [options] <name>` создание блока
+### `cb <name> [options]` создание блока
 
 Файлы блока создаются в директории `marmelad/_blocks`.
 
