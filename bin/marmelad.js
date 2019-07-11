@@ -82,6 +82,16 @@ CLI
 
 
 /**
+ * Prettier
+ */
+CLI
+  .command('format')
+  .description('Format project code')
+  .action((opts) => {
+    require('../commands/format')(opts);
+  });
+
+/**
  * парсим аргументы командной строки
  */
 CLI.parse(process.argv);
