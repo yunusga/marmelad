@@ -86,7 +86,7 @@ CLI
  */
 CLI
   .command('format')
-  .description('Format project code')
+  .description('Format project code (HTML only temporarily)')
   .action((opts) => {
     require('../commands/format')(opts);
   });
