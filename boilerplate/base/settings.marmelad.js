@@ -201,6 +201,7 @@ const w3cValidator = {
   exec: {
     maxBuffer: 1024 * 500,
   },
+  reportName: 'w3c-validator.html',
 };
 
 module.exports = {
