@@ -195,10 +195,19 @@ const proxy = {
   },
 };
 
+const w3cValidator = {
+  format: 'html',
+  skipNonHtml: true,
+  exec: {
+    maxBuffer: 1024 * 500,
+  },
+};
+
 module.exports = {
   folders,
   app,
   paths,
   iconizer,
   proxy,
+  w3cValidator,
 };
