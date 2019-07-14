@@ -199,7 +199,7 @@ const w3cValidator = {
   format: 'html',
   skipNonHtml: true,
   exec: {
-    maxBuffer: 1024 * 500,
+    maxBuffer: 1024 * 1024,
   },
   reportName: 'w3c-validator.html',
 };
