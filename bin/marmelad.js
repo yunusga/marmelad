@@ -13,6 +13,7 @@ CLI
   .description(PKG.description)
   .on('--help', () => {
     LOG(`\nCommands help:\n  ${PKG.name} [command] --help\n  mmd [command] --help`);
+    LOG(`\nSource files:\n  ${__filename}`);
   });
 
 
