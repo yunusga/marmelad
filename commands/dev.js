@@ -239,7 +239,7 @@ module.exports = (opts) => {
         },
       }, 'app');
 
-      LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
+      LOG(`[iconizer] icons ${chalk.bold.green('Done')}`);
 
       done();
     });
@@ -274,7 +274,7 @@ module.exports = (opts) => {
         },
       }, 'app');
 
-      LOG(`Iconizer ............................ ${chalk.bold.green('Done')}`);
+      LOG(`[iconizer] colored ${chalk.bold.green('Done')}`);
 
       done();
     });
@@ -313,7 +313,7 @@ module.exports = (opts) => {
       })))
       .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`)));
 
-    LOG(`Scripts others ......................... ${chalk.bold.green('Done')}`);
+    LOG(`[js] others ${chalk.bold.green('Done')}`);
     bsSP.reload();
     done();
   });
@@ -330,7 +330,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(vendorsDist));
 
     stream.on('end', () => {
-      LOG(`Scripts vendors ..................... ${chalk.bold.green('Done')}`);
+      LOG(`[js] vendors ${chalk.bold.green('Done')}`);
       bsSP.reload();
       done();
     });
@@ -351,7 +351,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
     stream.on('end', () => {
-      LOG(`Scripts plugins ..................... ${chalk.bold.green('Done')}`);
+      LOG(`[js] plugins ${chalk.bold.green('Done')}`);
       bsSP.reload();
       done();
     });
@@ -375,7 +375,7 @@ module.exports = (opts) => {
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .on('end', () => {
-        LOG(`Plugins CSS ......................... ${chalk.bold.green('Done')}`);
+        LOG(`[css] plugins ${chalk.bold.green('Done')}`);
       })
       .pipe(bsSP.stream());
 
@@ -424,7 +424,7 @@ module.exports = (opts) => {
       })))
       .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/css`)))
       .on('end', () => {
-        LOG(`Styles CSS .......................... ${chalk.bold.green('Done')}`);
+        LOG(`[css] styles ${chalk.bold.green('Done')}`);
       })
       .pipe(bsSP.stream());
 
@@ -445,7 +445,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.paths.storage));
 
     stream.on('end', () => {
-      LOG(`Static files copy ................... ${chalk.bold.green('Done')}`);
+      LOG(`Static files copy ${chalk.bold.green('Done')}`);
       bsSP.reload();
       done();
     });
@@ -561,7 +561,7 @@ module.exports = (opts) => {
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(settings.app.bts['4'].dest.css))
       .on('end', () => {
-        LOG(`Bootstrap ${settings.app.bts['4'].code} SASS ........... ${chalk.bold.green('Done')}`);
+        LOG(`Bootstrap ${settings.app.bts['4'].code} SASS ${chalk.bold.green('Done')}`);
       })
       .pipe(bsSP.stream());
 
@@ -576,7 +576,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.app.bts['4'].dest.js));
 
     stream.on('end', () => {
-      LOG(`Bootstrap ${settings.app.bts['4'].code} JS ............. ${chalk.bold.green('Done')}`);
+      LOG(`Bootstrap ${settings.app.bts['4'].code} JS ${chalk.bold.green('Done')}`);
       bsSP.reload();
       done();
     });
@@ -809,7 +809,7 @@ module.exports = (opts) => {
         gulp.series('proxy:copy-sources', 'proxy:watch-sources', 'proxy:server')();
       }
 
-      LOG(`Proxy Mod ................... ${chalk.bold.green('Started')}`);
+      LOG(`Proxy Mod ${chalk.bold.green('Started')}`);
     }
 
     done();
@@ -852,7 +852,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.proxy.sources.to));
 
     stream.on('end', () => {
-      LOG(`Proxy Copy Sources ................... ${chalk.bold.green('Done')}`);
+      LOG(`Proxy Copy Sources ${chalk.bold.green('Done')}`);
       // bsSP.reload();
       done();
     });
@@ -882,7 +882,7 @@ module.exports = (opts) => {
       gulp.parallel('proxy:copy-sources'),
     );
 
-    LOG(`Proxy Watch Sources ................... ${chalk.bold.green('Started')}`);
+    LOG(`Proxy Watch Sources ${chalk.bold.green('Started')}`);
 
     done();
   });
