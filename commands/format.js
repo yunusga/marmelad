@@ -1,7 +1,9 @@
 const gulp = require('gulp');
 const pretty = require('gulp-pretty-html');
+const ora = require('ora');
 
 module.exports = (opts) => {
+  const spinner = ora('Format HTML started').start();
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
 
   gulp.task('format', (done) => {
@@ -15,6 +17,8 @@ module.exports = (opts) => {
         unformatted: ['code', 'pre', 'em', 'strong', 'span', 'i', 'b', 'br', 'svg'],
       }))
       .pipe(gulp.dest(settings.paths.dist));
+
+    spinner.succeed('Format HTML done');
 
     done();
   });
