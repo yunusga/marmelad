@@ -204,6 +204,17 @@ const w3cValidator = {
   reportName: 'w3c-validator.html',
 };
 
+const pretty = {
+  html: {
+    indent_size: 4,
+    indent_char: '',
+    indent_with_tabs: true,
+    wrap_line_length: 0,
+    preserve_newlines: false,
+    unformatted: ['code', 'pre', 'em', 'strong', 'span', 'i', 'b', 'br', 'symbol'],
+  },
+};
+
 module.exports = {
   folders,
   app,
@@ -211,4 +222,5 @@ module.exports = {
   iconizer,
   proxy,
   w3cValidator,
+  pretty,
 };
