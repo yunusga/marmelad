@@ -118,7 +118,7 @@
     "through2": "3.0.1"
   },
   "scripts": {
-    "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm i && npm link",
+    "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm link",
     "test": "jest"
   },
   "jest": {
