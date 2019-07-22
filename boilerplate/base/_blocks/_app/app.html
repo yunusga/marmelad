@@ -45,7 +45,7 @@
 
         <title>{{ pageTitle }} - {{ app.package.name | capitalize }} v{{ app.package.version }} / {{ git.branch }}</title>
 
-        <link rel="stylesheet" href="{{ app.storage }}css/app.css">
+        <link rel="stylesheet" href="css/app.css">
 
         {% block inlineStyles %}{% endblock %}
 
@@ -93,8 +93,8 @@
 
         {% include 'page-scroller.html' %}
 
-        <script src="{{ app.storage }}js/vendors/jquery-3.4.1.min.js"></script>
-        <script src="{{ app.storage }}js/app.js"></script>
+        <script src="js/vendors/jquery-3.4.1.min.js"></script>
+        <script src="js/app.js"></script>
 
     </body><!-- b:w-page -->
 </html>
