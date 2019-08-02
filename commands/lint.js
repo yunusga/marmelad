@@ -3,7 +3,8 @@ const del = require('del');
 
 module.exports = () => {
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
-  const options = Object.assign({
+
+  const nw3cOpts = Object.assign({
     format: 'html',
     skipNonHtml: true,
     exec: {
@@ -12,12 +13,12 @@ module.exports = () => {
     reportName: 'w3c-validator.html',
   }, settings.w3cValidator);
 
-  del.sync(`${settings.paths.dist}/${options.reportName}`);
+  del.sync(`${settings.paths.dist}/${nw3cOpts.reportName}`);
 
-  nodeW3CValidator(`${settings.paths.dist}/**/*.html`, options, (err, output) => {
+  nodeW3CValidator(`${settings.paths.dist}/**/*.html`, nw3cOpts, (err, output) => {
     if (err === null) {
       return;
     }
-    nodeW3CValidator.writeFile(`${settings.paths.dist}/${options.reportName}`, output);
+    nodeW3CValidator.writeFile(`${settings.paths.dist}/${nw3cOpts.reportName}`, output);
   });
 };
