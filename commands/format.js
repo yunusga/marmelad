@@ -3,7 +3,6 @@ const pretty = require('gulp-pretty-html');
 const ora = require('ora');
 
 module.exports = (opts) => {
-  const spinner = ora('Format HTML started').start();
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
   const options = Object.assign({
     html: {
@@ -16,15 +15,15 @@ module.exports = (opts) => {
     },
   }, settings.pretty);
 
-  gulp.task('format', (done) => {
+  gulp.task('format:html', (done) => {
+    const htmlSpinner = ora('Format HTML started').start();
+
     gulp.src(`${settings.paths.dist}/**/*.html`)
       .pipe(pretty(options.html))
       .pipe(gulp.dest(settings.paths.dist));
 
-    spinner.succeed('Format HTML done');
+    htmlSpinner.succeed('Format HTML done');
 
     done();
   });
-
-  gulp.series('format')();
 };
