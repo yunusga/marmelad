@@ -13,6 +13,8 @@ module.exports = (name, techs) => {
     extensions.split(',').forEach((ext) => {
       if (ext === 'html') {
         fs.writeFileSync(`${blockPath}/${name}.${ext}`, `<div block="${name}"></div><!-- ${name} -->`, { encoding: 'utf8' });
+      } else if (['css', 'styl', 'scss'].includes(ext)) {
+        fs.writeFileSync(`${blockPath}/${name}.${ext}`, `.${name} {}`, { encoding: 'utf8' });
       } else {
         fs.writeFileSync(`${blockPath}/${name}.${ext}`, '', { encoding: 'utf8' });
       }
