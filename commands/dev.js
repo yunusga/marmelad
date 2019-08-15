@@ -460,29 +460,6 @@ module.exports = (opts) => {
    */
   gulp.task('server:static', (done) => {
     settings.app.bsSP.middleware = [
-      // (req, res, next) => {
-      //   if (path.extname(req.url) === '.html') {
-      //     const pageName = LAGMAN.getName(req.url);
-
-      //     if (LAGMAN.store.onDemand.has(pageName)) {
-      //       // LAGMAN.store.src = `${settings.paths._pages}${req.url}`;
-      //       LAGMAN.store.onDemand.delete(pageName);
-      //       // LAGMAN.store.isFront = true;
-
-      //       // gulp.series('nunjucks');
-
-      //       // const body = fs.readFileSync(path.join(process.cwd(), settings.paths.dist, req.url)).toString();
-
-      //       // res.writeHead(200, {
-      //       //   'Content-Length': Buffer.byteLength(body),
-      //       //   'Content-Type': 'text/html;charset=UTF-8',
-      //       // });
-
-      //       // res.end(body);
-      //     }
-      //   }
-      //   next();
-      // },
       (req, res, next) => {
         const latencyRoutes = settings.app.bsSP.latencyRoutes ? settings.app.bsSP.latencyRoutes : [];
         const match = latencyRoutes.filter(item => req.url.match(new RegExp(`^${item.route}`)) && item.active);
