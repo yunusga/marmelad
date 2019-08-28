@@ -26,4 +26,6 @@ module.exports = (opts) => {
 
     done();
   });
+
+  gulp.series('format:html')();
 };
