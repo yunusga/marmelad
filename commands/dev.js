@@ -132,6 +132,7 @@ module.exports = (opts) => {
           env.addFilter('limitto', require('../modules/nunjucks/filters/lomitto'));
           env.addFilter('bodyClass', require('../modules/nunjucks/filters/bodyclass'));
           env.addGlobal('_icon', settings.iconizer.icon);
+          env.addGlobal('_fns', settings._fns);
           env.addGlobal('inlineSvgSprite', require('../modules/nunjucks/globals/inlineSvgSprite'));
 
           env.addExtension('incw', new Incw(env, DB.store, settings));

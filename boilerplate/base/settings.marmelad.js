@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 const folders = {
   dist: 'static',
@@ -215,9 +216,16 @@ const pretty = {
   },
 };
 
+const _fns = {
+  inline: (filePath) => {
+    return fs.readFileSync(`marmelad/${filePath}`);
+  },
+};
+
 module.exports = {
   folders,
   app,
+  _fns,
   paths,
   iconizer,
   proxy,
