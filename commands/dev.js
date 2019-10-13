@@ -51,7 +51,7 @@ const LAGMAN = new (require('../modules/nunjucks/lagman'))();
  * @param {string} params <login>@<password>
  * @returns {array} [0] login [1] password
  */
-const getAuthParams = params => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
+const getAuthParams = (params) => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
 
 /**
  * Return array of icon names for svg-sprite
@@ -62,7 +62,7 @@ const getIconsNamesList = (iconPath) => {
   let iconsList = [];
 
   if (fs.existsSync(iconPath)) {
-    iconsList = fs.readdirSync(iconPath).map(iconName => iconName.replace(/.svg/g, ''));
+    iconsList = fs.readdirSync(iconPath).map((iconName) => iconName.replace(/.svg/g, ''));
   }
 
   return iconsList;
@@ -73,7 +73,7 @@ const getIconsNamesList = (iconPath) => {
  * @param {string} blocksPath path to _blocks directory
  * @returns {array} array of paths to blocks
  */
-const getNunJucksBlocks = blocksPath => fs.readdirSync(blocksPath).map(el => `${blocksPath}/${el}`);
+const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) => `${blocksPath}/${el}`);
 
 module.exports = (opts) => {
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
@@ -226,7 +226,7 @@ module.exports = (opts) => {
       .pipe(replace(/<style[\s\S]*?\/style><path[\s\S]*?\s+?d=/g, '<path d='))
       .pipe(replace(/\sfill[\s\S]*?(['"])[\s\S]*?\1/g, ''))
       .pipe(replace(/<title>[\s\S]*?<\/title>/g, ''))
-      .pipe(replace(/<svg /, match => `${match} class="${settings.iconizer.cssClass} ${settings.iconizer.cssClass}--icons" `))
+      .pipe(replace(/<svg /, (match) => `${match} class="${settings.iconizer.cssClass} ${settings.iconizer.cssClass}--icons" `))
       .pipe(rename({
         dirname: '',
       }))
@@ -261,7 +261,7 @@ module.exports = (opts) => {
     const stream = gulp.src(`${settings.iconizer.srcColored}/*.svg`)
       .pipe(svgSprite(settings.iconizer.plugin))
       .pipe(replace(/<title>[\s\S]*?<\/title>/g, ''))
-      .pipe(replace(/<svg /, match => `${match} class="${settings.iconizer.cssClass} ${settings.iconizer.cssClass}--colored" `))
+      .pipe(replace(/<svg /, (match) => `${match} class="${settings.iconizer.cssClass} ${settings.iconizer.cssClass}--colored" `))
       .pipe(rename({
         dirname: '',
       }))
@@ -463,7 +463,7 @@ module.exports = (opts) => {
     settings.app.bsSP.middleware = [
       (req, res, next) => {
         const latencyRoutes = settings.app.bsSP.latencyRoutes ? settings.app.bsSP.latencyRoutes : [];
-        const match = latencyRoutes.filter(item => req.url.match(new RegExp(`^${item.route}`)) && item.active);
+        const match = latencyRoutes.filter((item) => req.url.match(new RegExp(`^${item.route}`)) && item.active);
 
         if (match.length && match[0].active) {
           setTimeout(next, match[0].latency);
@@ -565,7 +565,7 @@ module.exports = (opts) => {
   });
 
   gulp.task('watch', (done) => {
-    const watchOpts = Object.assign({
+    const watchOpts = {
       ignoreInitial: true,
       ignored: [
         `${settings.folders.marmelad}/**/*.db`,
@@ -573,7 +573,8 @@ module.exports = (opts) => {
       ],
       usePolling: false,
       cwd: process.cwd(),
-    }, settings.app.watchOpts);
+      ...settings.app.watchOpts,
+    };
 
     if (settings.app.bts.use || settings.app.bts.donor) {
       let bsTask = '';
@@ -800,7 +801,7 @@ module.exports = (opts) => {
     settings.proxy.server.middleware = [
       (req, res, next) => {
         const latencyRoutes = settings.proxy.server.latencyRoutes ? settings.proxy.server.latencyRoutes : [];
-        const match = latencyRoutes.filter(item => req.url.match(new RegExp(`^${item.route}`)) && item.active);
+        const match = latencyRoutes.filter((item) => req.url.match(new RegExp(`^${item.route}`)) && item.active);
 
         if (match.length && match[0].active) {
           setTimeout(next, match[0].latency);
@@ -819,8 +820,8 @@ module.exports = (opts) => {
    * Proxy mod Static files
    */
   gulp.task('proxy:copy-sources', (done) => {
-    const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
-    const ignored = settings.proxy.sources.ignored.map(ignore => `!${ignore}`);
+    const sources = settings.proxy.sources.copy.map((directory) => `${directory}/**/*`);
+    const ignored = settings.proxy.sources.ignored.map((ignore) => `!${ignore}`);
 
     const stream = gulp.src([...sources, ...ignored], {
       allowEmpty: true,
@@ -844,15 +845,16 @@ module.exports = (opts) => {
    * Proxy watcher
    */
   gulp.task('proxy:watch-sources', (done) => {
-    const watchOpts = Object.assign({
+    const watchOpts = {
       ignoreInitial: true,
       usePolling: false,
       cwd: process.cwd(),
-    }, settings.app.watchOpts);
+      ...settings.app.watchOpts,
+    };
 
     watchOpts.ignored = [...watchOpts.ignored, ...settings.proxy.sources.ignored];
 
-    const sources = settings.proxy.sources.copy.map(directory => `${directory}/**/*`);
+    const sources = settings.proxy.sources.copy.map((directory) => `${directory}/**/*`);
 
     gulp.watch(
       sources,
