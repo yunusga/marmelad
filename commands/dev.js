@@ -47,13 +47,7 @@ const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
 const authArgs = require('../modules/authArgs');
 const getIconsNamesList = require('../modules/iconsNames');
-
-/**
- * Return array of paths to blocks.
- * @param {string} blocksPath path to _blocks directory
- * @returns {array} array of paths to blocks
- */
-const getNunJucksBlocks = (blocksPath) => fs.readdirSync(blocksPath).map((el) => `${blocksPath}/${el}`);
+const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
 
 module.exports = (opts) => {
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
