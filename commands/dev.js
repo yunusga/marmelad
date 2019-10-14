@@ -45,13 +45,8 @@ const Incw = require('../modules/nunjucks/globals/incw');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
+const authArgs = require('../modules/authArgs');
 
-/**
- * Return default login and password or from CLI argements
- * @param {string} params <login>@<password>
- * @returns {array} [0] login [1] password
- */
-const getAuthParams = (params) => (typeof params !== 'string' ? [pkg.name, false] : params.split('@'));
 
 /**
  * Return array of icon names for svg-sprite
@@ -94,8 +89,8 @@ module.exports = (opts) => {
    * Server Auth
    */
   bsSP.use(require('bs-auth'), {
-    user: getAuthParams(opts.auth)[0],
-    pass: getAuthParams(opts.auth)[1],
+    user: authArgs(opts.auth, pkg.name)[0],
+    pass: authArgs(opts.auth, pkg.name)[1],
     use: opts.auth,
   });
 
@@ -103,8 +98,8 @@ module.exports = (opts) => {
    * Proxy Server Auth
    */
   bsPS.use(require('bs-auth'), {
-    user: getAuthParams(opts.auth)[0],
-    pass: getAuthParams(opts.auth)[1],
+    user: authArgs(opts.auth, pkg.name)[0],
+    pass: authArgs(opts.auth, pkg.name)[1],
     use: opts.auth,
   });
 
