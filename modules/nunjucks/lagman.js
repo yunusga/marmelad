@@ -67,8 +67,8 @@ class Lagman {
 
   compare(oldSet, newSet) {
     return {
-      deleted: new Set([...oldSet].filter(block => !newSet.has(block))),
-      addeded: new Set([...newSet].filter(block => !oldSet.has(block))),
+      deleted: new Set([...oldSet].filter((block) => !newSet.has(block))),
+      addeded: new Set([...newSet].filter((block) => !oldSet.has(block))),
     };
   }
 
