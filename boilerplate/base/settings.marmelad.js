@@ -43,13 +43,14 @@ const iconizer = {
   srcIcons: path.join(folders.marmelad, folders.iconizer.src, 'icons'),
   srcColored: path.join(folders.marmelad, folders.iconizer.src, 'colored'),
   icon(name, opts) {
-    opts = Object.assign({
+    opts = {
       tag: 'div',
       type: 'icons',
       class: '',
       mode: this.ctx.app.settings.iconizer.mode,
       url: this.ctx.app.settings.iconizer.url,
-    }, opts);
+      ...opts,
+    };
 
     let external = '';
     let typeClass = '';
@@ -122,6 +123,8 @@ const app = {
   },
   autoprefixer,
   postcss: {
+    sortMQ: {},
+    momentumScrolling: {},
     easingGradients: {},
     inlineSvg: {},
   },

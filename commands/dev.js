@@ -27,7 +27,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const gif = require('gulp-if');
 const LOG = require('fancy-log');
 const plumber = require('gulp-plumber');
-const groupMQ = require('gulp-group-css-media-queries');
+const combineAndSortMQ = require('postcss-sort-media-queries');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
 const include = require('gulp-include');
@@ -343,10 +343,10 @@ module.exports = (opts) => {
     gulp.src(`${settings.paths.js.plugins}/**/*.css`)
       .pipe(plumber())
       .pipe(concat('plugins.min.css'))
-      .pipe(groupMQ())
       .pipe(postcss([
         momentumScrolling(),
         flexBugsFixes(),
+        combineAndSortMQ(),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .on('end', () => {
@@ -368,7 +368,7 @@ module.exports = (opts) => {
     Object.assign($data, DB.store.app.stylus);
 
     // обратная совместимость с старыми проектами
-    settings.app.postcss = settings.app.postcss || {};
+    const postcssOpts = settings.app.postcss || {};
 
     gulp.src(`${settings.paths.styles}/*.{styl,scss,sass}`)
       .pipe(plumber())
@@ -381,12 +381,12 @@ module.exports = (opts) => {
       .pipe(gif('*.sass', sass({
         indentedSyntax: true,
       })))
-      .pipe(groupMQ())
       .pipe(postcss([
-        momentumScrolling(),
+        combineAndSortMQ(postcssOpts.sortMQ),
+        momentumScrolling(postcssOpts.momentumScrolling),
         flexBugsFixes(),
-        inlineSvg(settings.app.postcss.inlineSvg),
-        easingGradients(settings.app.postcss.easingGradients),
+        inlineSvg(postcssOpts.inlineSvg),
+        easingGradients(postcssOpts.easingGradients),
         autoprefixer(settings.app.autoprefixer),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
