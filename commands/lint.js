@@ -4,14 +4,15 @@ const del = require('del');
 module.exports = () => {
   const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
 
-  const nw3cOpts = Object.assign({
+  const nw3cOpts = {
     format: 'html',
     skipNonHtml: true,
     exec: {
       maxBuffer: 1024 * 1024,
     },
     reportName: 'w3c-validator.html',
-  }, settings.w3cValidator);
+    ...settings.w3cValidator,
+  };
 
   del.sync(`${settings.paths.dist}/${nw3cOpts.reportName}`);
 
