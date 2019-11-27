@@ -111,11 +111,11 @@ CLI
  */
 CLI.parse(process.argv);
 
-
 /**
  * В случае если не передан ни один аргумент,
  * показываем справку
  */
-if (!CLI.args.length) {
+if (!process.argv.slice(2).length) {
   CLI.help();
+  process.exit(1);
 }
