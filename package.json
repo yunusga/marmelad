@@ -62,7 +62,7 @@
     "@babel/core": "7.4.5",
     "@babel/plugin-transform-object-assign": "7.2.0",
     "@babel/preset-env": "7.4.5",
-    "autoprefixer": "9.6.0",
+    "autoprefixer": "9.7.3",
     "browser-sync": "2.26.7",
     "bs-auth": "1.1.6",
     "camelcase": "5.3.1",
