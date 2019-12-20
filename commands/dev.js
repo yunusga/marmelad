@@ -40,6 +40,7 @@ const PERF = require('execution-time')();
 const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
+const bem = require('../modules/posthtml/bem');
 const nunjucks = require('../modules/nunjucks');
 const Incw = require('../modules/nunjucks/globals/incw');
 const TCI = require('../modules/tci');
@@ -140,7 +141,7 @@ module.exports = (opts) => {
         }
       }))
       .pipe(postHTML([
-        require('posthtml-bem')(settings.app.beml),
+        bem(settings.app.beml),
       ]))
       .pipe(gulp.dest(settings.paths.dist));
 
