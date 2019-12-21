@@ -33,13 +33,13 @@ const concat = require('gulp-concat');
 const include = require('gulp-include');
 const chokidar = require('chokidar');
 const decache = require('decache');
-const pipeErrorStop = require('pipe-error-stop');
 const del = require('del');
 const GLOB = require('glob');
 const PERF = require('execution-time')();
 const branchName = require('current-git-branch');
 
 const pkg = require('../package.json');
+const pipeErrorStop = require('../modules/pipe-error-stop');
 const bem = require('../modules/posthtml/bem');
 const nunjucks = require('../modules/nunjucks');
 const Incw = require('../modules/nunjucks/globals/incw');
