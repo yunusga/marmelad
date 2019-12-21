@@ -23,26 +23,6 @@
         <meta name="MobileOptimized" content="320">
         <meta name="HandheldFriendly" content="True">
 
-        {# Open Graph #}
-        <!-- Primary Meta Tags -->
-        <meta name="title" content="{{ pageTitle }} - {{ app.package.name | capitalize}} v{{ app.package.version }} / {{ git.branch }}">
-        <meta name="description" content="{{ app.package.description }}">
-
-        <!-- Open Graph / Facebook -->
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://github.com/solversgroup/marmelad">
-        <meta property="og:title" content="{{ pageTitle }}">
-        <meta property="og:description" content="{{ app.package.description }}">
-        <meta property="og:image" content="https://github.com/solversgroup/marmelad/blob/master/marmelad.svg?sanitize=true">
-
-        <!-- Twitter -->
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://github.com/solversgroup/marmelad">
-        <meta property="twitter:title" content="{{ pageTitle }}">
-        <meta property="twitter:description" content="{{ app.package.description }}">
-        <meta property="twitter:image" content="https://github.com/solversgroup/marmelad/blob/master/marmelad.svg?sanitize=true">
-        {# Open Graph End #}
-
         <title>{{ pageTitle }} - {{ app.package.name | capitalize }} v{{ app.package.version }} / {{ git.branch }}</title>
 
         <link rel="stylesheet" href="css/app.css">
@@ -58,39 +38,39 @@
         <div elem="wrapper">
 
             {% if layout.header %}
-            {% include 'app-header.html' %}
+            	{% include 'app-header.html' %}
             {% endif %}
 
             <div elem="content">
 
                 <main elem="main">
                     {% block main %}{% endblock %}
-                </main><!-- e:main -->
+                </main><!-- app__main -->
 
                 {% if layout.left %}
                 <aside elem="aside" mods="left">
                     {% block asideLeft %}{% endblock %}
-                </aside><!-- e:aside m:left -->
+                </aside><!-- app__aside left -->
                 {% endif %}
 
                 {% if layout.right %}
                 <aside elem="aside" mods="right">
                     {% block asideRight %}{% endblock %}
-                </aside><!-- e:aside m:right -->
+                </aside><!-- app__aside right -->
                 {% endif %}
 
-            </div><!-- b:m-content -->
+            </div><!-- app__content -->
 
             {% if layout.footer %}
-            {% include 'app-footer.html' %}
+            	{% include 'app-footer.html' %}
             {% endif %}
 
-        </div><!-- b:wrapper -->
+        </div><!-- app__wrapper -->
 
         {% include 'page-scroller.html' %}
 
         <script src="js/vendors/jquery-3.4.1.min.js"></script>
         <script src="js/app.js"></script>
 
-    </body><!-- b:w-page -->
+    </body><!-- app -->
 </html>
