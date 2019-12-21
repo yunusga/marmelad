@@ -15,7 +15,6 @@ const cheerio = require('cheerio');
 const svgSprite = require('gulp-svg-sprite');
 const stylus = require('gulp-stylus');
 const postcss = require('gulp-postcss');
-const cssnano = require('cssnano');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
 const inlineSvg = require('postcss-inline-svg');
@@ -282,12 +281,7 @@ module.exports = (opts) => {
         presets: ['@babel/preset-env'].map(require.resolve),
         plugins: ['@babel/plugin-transform-object-assign'].map(require.resolve),
       }))
-      .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`))
-      .pipe(gif(opts.minify, uglify()))
-      .pipe(gif(opts.minify, rename({
-        suffix: '.min',
-      })))
-      .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`)));
+      .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
     LOG(`[js] others ${chalk.bold.green('Done')}`);
     bsSP.reload();
@@ -392,13 +386,6 @@ module.exports = (opts) => {
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .pipe(bsSP.stream())
-      .pipe(gif(opts.minify, postcss([
-        cssnano(settings.app.cssnano),
-      ])))
-      .pipe(gif(opts.minify, rename({
-        suffix: '.min',
-      })))
-      .pipe(gif(opts.minify, gulp.dest(`${settings.paths.storage}/css`)))
       .on('end', () => {
         LOG(`[css] styles ${chalk.bold.green('Done')}`);
       })

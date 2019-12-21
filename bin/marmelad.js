@@ -40,7 +40,6 @@ CLI
   .option('-a, --auth [user@password]', 'set user@password for authorization')
   .option('--proxy-mod', 'proxy mode with copy files from build')
   .option('--build', 'build project once')
-  .option('--minify', 'minify js and css')
   .action((dev) => {
     require('../commands/dev')(dev);
   })
