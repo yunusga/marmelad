@@ -153,10 +153,10 @@ const app = {
     use: '<%- btsUse %>',
     donor: '<%- btsDonor %>',
     4: {
-      code: '4.3.1',
+      code: '4.4.1',
       src: {
-        css: path.join(paths.marmelad, 'bootstrap', '4.3.1'),
-        js: path.join(paths.marmelad, 'bootstrap', '4.3.1'),
+        css: path.join(paths.marmelad, 'bootstrap', '4.4.1'),
+        js: path.join(paths.marmelad, 'bootstrap', '4.4.1'),
       },
       dest: {
         css: path.join(paths.storage, 'bootstrap', 'css'),
