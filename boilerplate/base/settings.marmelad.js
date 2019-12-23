@@ -220,9 +220,7 @@ const pretty = {
 };
 
 const _fns = {
-  inline: (filePath) => {
-    return fs.readFileSync(`marmelad/${filePath}`);
-  },
+  inline: (filePath) => fs.readFileSync(`marmelad/${filePath}`),
 };
 
 module.exports = {
