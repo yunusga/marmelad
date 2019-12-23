@@ -6,7 +6,6 @@ const bsSP = require('browser-sync').create('Dev Server');
 const bsPS = require('browser-sync').create('Proxy Server');
 const tap = require('gulp-tap');
 const babel = require('gulp-babel');
-const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const frontMatter = require('gulp-front-matter');
@@ -316,8 +315,7 @@ module.exports = (opts) => {
   gulp.task('scripts:plugins', (done) => {
     const stream = gulp.src(`${settings.paths.js.plugins}/**/*.js`)
       .pipe(plumber())
-      .pipe(concat('plugins.min.js'))
-      .pipe(uglify())
+      .pipe(concat('plugins.js'))
       .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
     stream.on('end', () => {
@@ -337,7 +335,7 @@ module.exports = (opts) => {
   gulp.task('styles:plugins', (done) => {
     gulp.src(`${settings.paths.js.plugins}/**/*.css`)
       .pipe(plumber())
-      .pipe(concat('plugins.min.css'))
+      .pipe(concat('plugins.css'))
       .pipe(postcss([
         momentumScrolling(),
         flexBugsFixes(),
