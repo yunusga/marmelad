@@ -64,7 +64,7 @@
     "@babel/preset-env": "7.4.5",
     "autoprefixer": "9.6.0",
     "browser-sync": "2.26.7",
-    "bs-auth": "1.1.6",
+    "bs-auth": "1.2.7",
     "camelcase": "5.3.1",
     "chalk": "2.4.2",
     "cheerio": "1.0.0-rc.2",
