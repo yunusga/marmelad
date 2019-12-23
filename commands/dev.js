@@ -103,7 +103,7 @@ module.exports = (opts) => {
         ext: '.html',
         setUp(env) {
           env.addFilter('translit', require('../modules/nunjucks/filters/translit'));
-          env.addFilter('limitto', require('../modules/nunjucks/filters/lomitto'));
+          env.addFilter('limitto', require('../modules/nunjucks/filters/limitto'));
           env.addFilter('bodyClass', require('../modules/nunjucks/filters/bodyclass'));
           env.addGlobal('_icon', settings.iconizer.icon);
           env.addGlobal('_fns', settings._fns);
