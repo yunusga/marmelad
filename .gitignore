@@ -9,4 +9,3 @@ dist
 test
 assets/svg/sprite.svg
 assets/svg/sprite.symbol.html
-package-lock.json
