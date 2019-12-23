@@ -20,7 +20,7 @@ module.exports = (name, techs) => {
       }
     });
 
-    process.stdout.write(`✔  block ${name} is created`);
+    process.stdout.write(`✔  block ${name} is created\n`);
   }
 
   process.exit();
