@@ -123,10 +123,10 @@ const app = {
   },
   autoprefixer,
   postcss: {
-    sortMQ: {},
-    momentumScrolling: {},
-    easingGradients: {},
-    inlineSvg: {},
+    // sortMQ: {},
+    // momentumScrolling: [],
+    // easingGradients: {},
+    // inlineSvg: {},
   },
   bsSP: {
     server: {
