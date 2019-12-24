@@ -133,6 +133,7 @@ const app = {
       baseDir: paths.dist,
     },
     port: 8967,
+    online: false,
     open: false,
     directory: true,
     ghostMode: false,
