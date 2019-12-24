@@ -85,10 +85,10 @@ CLI
  * Prettier
  */
 CLI
-  .command('format')
-  .description('Format project code (HTML only temporarily)')
+  .command('dist')
+  .description('Release tasks for project')
   .action((opts) => {
-    require('../commands/format')(opts);
+    require('../commands/dist')(opts);
   });
 
 
