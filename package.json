@@ -109,7 +109,7 @@
     "postcss-inline-svg": "4.0.0",
     "postcss-momentum-scrolling": "1.6.12",
     "posthtml-bem": "0.2.2",
-    "readline-sync": "1.4.9",
+    "readline-sync": "1.4.10",
     "replace-ext": "1.0.0",
     "through2": "3.0.1"
   },
