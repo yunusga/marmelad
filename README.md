@@ -1,7 +1,9 @@
 [ci-img]:  https://travis-ci.org/solversgroup/marmelad.svg
 [ci]:      https://travis-ci.org/solversgroup/marmelad
 
-# marmelad <sup>[6.10.4](CHANGELOG.md#6104-06072019)</sup> [![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad)
+# marmelad
+
+[![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad) [![npm](https://img.shields.io/npm/dt/marmelad.svg)](https://www.npmjs.com/package/marmelad) ![GitHub](https://img.shields.io/github/license/solversgroup/marmelad)
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
@@ -278,10 +280,11 @@ TCI (text command interface) - добавлен в шаблон вёрстки �
 ### Post CSS плагины
 
 - [autoprefixer](https://www.npmjs.com/package/autoprefixer)
-- [gulp-group-css-media-queries](https://www.npmjs.com/package/gulp-group-css-media-queries)
+- [postcss-easing-gradients](https://www.npmjs.com/package/postcss-easing-gradients)
 - [postcss-flexbugs-fixes](https://www.npmjs.com/package/postcss-flexbugs-fixes)
 - [postcss-inline-svg](https://www.npmjs.com/package/postcss-inline-svg)
 - [postcss-momentum-scrolling](https://www.npmjs.com/package/postcss-momentum-scrolling)
+- [postcss-sort-media-queries](https://github.com/solversgroup/postcss-sort-media-queries)
 
 ## Bootstrap
 
