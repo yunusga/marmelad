@@ -44,7 +44,7 @@ const iconizer = {
   srcColored: path.join(folders.marmelad, folders.iconizer.src, 'colored'),
   icon(name, opts) {
     opts = {
-      tag: 'div',
+      tag: 'span',
       type: 'icons',
       class: '',
       mode: this.ctx.app.settings.iconizer.mode,
