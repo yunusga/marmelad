@@ -111,7 +111,7 @@
     "postcss-easing-gradients": "3.0.1",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-inline-svg": "4.1.0",
-    "postcss-momentum-scrolling": "2.2.8",
+    "postcss-momentum-scrolling": "2.2.9",
     "postcss-sort-media-queries": "1.0.15",
     "posthtml-attrs-sorter": "1.1.0",
     "query-string": "6.9.0",
