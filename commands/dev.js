@@ -49,7 +49,14 @@ const getIconsNamesList = require('../modules/iconsNames');
 const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
 
 module.exports = (opts) => {
-  const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
+
+  const mmdSettingsPath = `${process.cwd()}/marmelad/settings.marmelad`;
+
+  if (!fs.existsSync(mmdSettingsPath)) {
+    console.log('[startup error] marmelad запускается в директории без предварительно созданного mmd init пустого проекта.');
+    process.exit(1);
+  }
+  const settings = require(mmdSettingsPath);
 
   if (!opts.build) {
     TCI.run();
