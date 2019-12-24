@@ -51,7 +51,7 @@ const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
 module.exports = (opts) => {
   const mmdSettingsPath = `${process.cwd()}/marmelad/settings.marmelad`;
 
-  if (!fs.existsSync(mmdSettingsPath)) {
+  if (!fs.existsSync(`${mmdSettingsPath}.js`)) {
     console.log('[startup error] marmelad запускается в директории без предварительно созданного mmd init пустого проекта.');
     process.exit(1);
   }
