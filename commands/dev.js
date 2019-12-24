@@ -49,7 +49,6 @@ const getIconsNamesList = require('../modules/iconsNames');
 const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
 
 module.exports = (opts) => {
-
   const mmdSettingsPath = `${process.cwd()}/marmelad/settings.marmelad`;
 
   if (!fs.existsSync(mmdSettingsPath)) {
