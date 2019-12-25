@@ -224,6 +224,23 @@ const _fns = {
   inline: (filePath) => fs.readFileSync(`marmelad/${filePath}`),
 };
 
+const dist = {
+  attrSorter: {
+    order: [
+      'id', 'class', 'name',
+      'data-.+', 'ng-.+', 'src',
+      'for', 'type', 'href',
+      'values', 'title', 'alt',
+      'role', 'aria-.+',
+      '$unknown$',
+    ],
+  },
+  hasher: {
+    attributes: [],
+    path: paths.dist,
+  },
+};
+
 module.exports = {
   folders,
   app,
@@ -233,4 +250,5 @@ module.exports = {
   proxy,
   w3cValidator,
   pretty,
+  dist,
 };
