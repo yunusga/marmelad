@@ -44,7 +44,7 @@ module.exports = (customName, opts) => {
         gzip: 'gzip',
       },
       opts.folders.split(','),
-    ).pipe(fs.createWriteStream(`${archiveName}.tgz`));
+    ).pipe(fs.createWriteStream(`${archiveName}.tar.gz`));
   }
 
   spinner.succeed('Archive project done');
