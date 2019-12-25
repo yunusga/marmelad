@@ -12,7 +12,17 @@ function setFileHash(url, path) {
 
   let [uri, query] = fullUrl.split('?');
 
+  if (global._mmdHashes.has(uri)) {
+    query = queryString.parse(query);
+    query.v = global._mmdHashes.get(uri);
+    query = queryString.stringify(query);
+
+    return `${uri}?${query}`;
+  }
+
   const hash = hasha.fromFileSync(`${path}/${uri}`, { algorithm: 'sha1', encoding: 'hex' });
+
+  global._mmdHashes.set(uri, hash);
 
   query = queryString.parse(query);
   query.v = hash;
@@ -22,6 +32,11 @@ function setFileHash(url, path) {
 }
 
 module.exports = (options = {}) => (tree) => new Promise((resolve, reject) => {
+
+  if (!global._mmdHashes) {
+    global._mmdHashes = new Map();
+  }
+
   let tags = ['link', 'script'];
   let attributes = ['href', 'src'];
 
