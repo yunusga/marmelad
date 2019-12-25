@@ -225,7 +225,7 @@ const _fns = {
 };
 
 const dist = {
-  attrSorter: {
+  attrsSorter: {
     order: [
       'id', 'class', 'name',
       'data-.+', 'ng-.+', 'src',

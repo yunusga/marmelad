@@ -34,12 +34,51 @@ module.exports = () => {
   });
 
   gulp.task('posthtml', (done) => {
-    const { dist } = settings;
+    const dist = settings.dist || {
+      attrsSorter: {
+        order: [
+          'id', 'class', 'name',
+          'data-.+', 'ng-.+', 'src',
+          'for', 'type', 'href',
+          'values', 'title', 'alt',
+          'role', 'aria-.+',
+          '$unknown$',
+        ],
+      },
+      hasher: {
+        attributes: [],
+        path: settings.paths.dist,
+      },
+    };
+
+    const attrsSorterOpts = {
+      order: [
+        'id', 'class', 'name',
+        'data-.+', 'ng-.+', 'src',
+        'for', 'type', 'href',
+        'values', 'title', 'alt',
+        'role', 'aria-.+',
+        '$unknown$',
+      ],
+      ...dist.attrsSorter,
+    };
+
+    const hasherOpts = {
+      order: [
+        'id', 'class', 'name',
+        'data-.+', 'ng-.+', 'src',
+        'for', 'type', 'href',
+        'values', 'title', 'alt',
+        'role', 'aria-.+',
+        '$unknown$',
+      ],
+      ...dist.hasher,
+    };
 
     gulp.src(`${settings.paths.dist}/**/*.html`)
       .pipe(postHTML([
-        attrsSorter(dist.attrsSorter),
-        hasher(dist.hasher),
+        attrsSorter(attrsSorterOpts),
+        hasher(hasherOpts),
       ]))
       .pipe(gulp.dest(settings.paths.dist));
 
