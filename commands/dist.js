@@ -33,28 +33,57 @@ module.exports = () => {
     done();
   });
 
-  gulp.task('hasher', (done) => {
+  gulp.task('posthtml', (done) => {
+    const dist = settings.dist || {
+      attrsSorter: {
+        order: [
+          'id', 'class', 'name',
+          'data-.+', 'ng-.+', 'src',
+          'for', 'type', 'href',
+          'values', 'title', 'alt',
+          'role', 'aria-.+',
+          '$unknown$',
+        ],
+      },
+      hasher: {
+        attributes: [],
+        path: settings.paths.dist,
+      },
+    };
+
+    const attrsSorterOpts = {
+      order: [
+        'id', 'class', 'name',
+        'data-.+', 'ng-.+', 'src',
+        'for', 'type', 'href',
+        'values', 'title', 'alt',
+        'role', 'aria-.+',
+        '$unknown$',
+      ],
+      ...dist.attrsSorter,
+    };
+
+    const hasherOpts = {
+      order: [
+        'id', 'class', 'name',
+        'data-.+', 'ng-.+', 'src',
+        'for', 'type', 'href',
+        'values', 'title', 'alt',
+        'role', 'aria-.+',
+        '$unknown$',
+      ],
+      ...dist.hasher,
+    };
+
     gulp.src(`${settings.paths.dist}/**/*.html`)
       .pipe(postHTML([
-        attrsSorter({
-          order: [
-            'id', 'class', 'name',
-            'data-.+', 'ng-.+', 'src',
-            'for', 'type', 'href',
-            'values', 'title', 'alt',
-            'role', 'aria-.+',
-            '$unknown$',
-          ],
-        }),
-        hasher({
-          attributes: [],
-          path: settings.paths.dist,
-        }),
+        attrsSorter(attrsSorterOpts),
+        hasher(hasherOpts),
       ]))
       .pipe(gulp.dest(settings.paths.dist));
 
     done();
   });
 
-  gulp.series('format:html', 'hasher')();
+  gulp.series('format:html', 'posthtml')();
 };
