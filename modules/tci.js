@@ -5,16 +5,17 @@ const CMD = require('cmd-exec').init();
 const LOG = console.log;
 
 function run(options) {
-  const opts = Object.assign({
+  const opts = {
     usePolling: true,
-  }, options);
+    ...options,
+  };
 
   const tciFilePath = 'marmelad/.tci';
   const TCIWatcher = chokidar.watch(tciFilePath, opts);
 
   TCIWatcher.on('change', (file) => {
     const text = fs.readFileSync(file, { encoding: 'utf8' }).replace(/\n+$/m, '');
-    const commands = text.split('\n').map(item => `mmd ${item}`);
+    const commands = text.split('\n').map((item) => `mmd ${item}`);
 
     CMD
       .exec(commands.join(' && '))
@@ -25,7 +26,7 @@ function run(options) {
         LOG(err.message);
       })
       .done(() => {
-        //console.log();
+        // console.log();
       });
   });
 }
