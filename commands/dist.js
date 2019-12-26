@@ -35,20 +35,8 @@ module.exports = () => {
 
   gulp.task('posthtml', (done) => {
     const dist = settings.dist || {
-      attrsSorter: {
-        order: [
-          'id', 'class', 'name',
-          'data-.+', 'ng-.+', 'src',
-          'for', 'type', 'href',
-          'values', 'title', 'alt',
-          'role', 'aria-.+',
-          '$unknown$',
-        ],
-      },
-      hasher: {
-        attributes: [],
-        path: settings.paths.dist,
-      },
+      attrsSorter: {},
+      hasher: {},
     };
 
     const attrsSorterOpts = {
