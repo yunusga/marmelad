@@ -21,19 +21,17 @@ module.exports = () => {
     ...settings.pretty,
   };
 
-  gulp.task('format:html', (done) => {
-    const htmlSpinner = ora('Format HTML started').start();
+  gulp.task('format:html', () => {
+    // const htmlSpinner = ora('Format HTML started').start();
 
-    gulp.src(`${settings.paths.dist}/**/*.html`)
-      .pipe(pretty(htmlFmtOpts.html))
+    return gulp.src(`${settings.paths.dist}/*.html`)
+      .pipe(pretty(htmlFmtOpts))
       .pipe(gulp.dest(settings.paths.dist));
 
-    htmlSpinner.succeed('Format HTML done');
-
-    done();
+    // htmlSpinner.succeed('Format HTML done');
   });
 
-  gulp.task('posthtml', (done) => {
+  gulp.task('posthtml:tools', () => {
     const dist = settings.dist || {
       attrsSorter: {},
       hasher: {},
@@ -57,15 +55,13 @@ module.exports = () => {
       ...dist.hasher,
     };
 
-    gulp.src(`${settings.paths.dist}/**/*.html`)
+    return gulp.src(`${settings.paths.dist}/*.html`)
       .pipe(postHTML([
         attrsSorter(attrsSorterOpts),
         hasher(hasherOpts),
       ]))
       .pipe(gulp.dest(settings.paths.dist));
-
-    done();
   });
 
-  gulp.series('format:html', 'posthtml')();
+  gulp.series('format:html', 'posthtml:tools')();
 };
