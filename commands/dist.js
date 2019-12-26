@@ -64,14 +64,8 @@ module.exports = () => {
     };
 
     const hasherOpts = {
-      order: [
-        'id', 'class', 'name',
-        'data-.+', 'ng-.+', 'src',
-        'for', 'type', 'href',
-        'values', 'title', 'alt',
-        'role', 'aria-.+',
-        '$unknown$',
-      ],
+      attributes: [],
+      path: settings.paths.dist,
       ...dist.hasher,
     };
 
