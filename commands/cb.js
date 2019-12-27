@@ -1,8 +1,9 @@
 const fs = require('fs');
+const getSettings = require('../modules/get-settings');
 
 module.exports = (name, techs) => {
   const blockPath = `marmelad/_blocks/${name}`;
-  const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
+  const settings = getSettings();
   const extensions = techs || 'html,css,js,json'.replace('css', settings.app.css || 'css');
 
   if (fs.existsSync(blockPath)) {

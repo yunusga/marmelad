@@ -5,9 +5,10 @@ const pretty = require('gulp-pretty-html');
 const ora = require('ora');
 
 const hasher = require('../modules/posthtml/hasher');
+const getSettings = require('../modules/get-settings');
 
 module.exports = () => {
-  const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
+  const settings = getSettings();
 
   const htmlFmtOpts = {
     html: {
