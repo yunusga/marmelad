@@ -3,7 +3,9 @@
 
 # marmelad
 
-[![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad) [![npm](https://img.shields.io/npm/dt/marmelad.svg)](https://www.npmjs.com/package/marmelad) ![GitHub](https://img.shields.io/github/license/solversgroup/marmelad)
+[![npm](https://img.shields.io/npm/v/marmelad.svg)](https://www.npmjs.com/package/marmelad) [![npm](https://img.shields.io/npm/dt/marmelad.svg)](https://www.npmjs.com/package/marmelad) [![License](https://img.shields.io/github/license/solversgroup/marmelad)](https://github.com/solversgroup/marmelad/blob/master/LICENSE) ![since Wed Feb 24 08:39:42 2016 +0500](https://img.shields.io/badge/since-Wed%20Feb%2024%2008%3A39%3A42%202016%20%2B0500-blue)
+
+
 
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 

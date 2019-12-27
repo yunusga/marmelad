@@ -47,15 +47,10 @@ const LAGMAN = new (require('../modules/nunjucks/lagman'))();
 const authArgs = require('../modules/authArgs');
 const getIconsNamesList = require('../modules/iconsNames');
 const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
+const getSettings = require('../modules/get-settings');
 
 module.exports = (opts) => {
-  const mmdSettingsPath = `${process.cwd()}/marmelad/settings.marmelad`;
-
-  if (!fs.existsSync(`${mmdSettingsPath}.js`)) {
-    console.log('[startup error] marmelad запускается в директории без предварительно созданного mmd init пустого проекта.');
-    process.exit(1);
-  }
-  const settings = require(mmdSettingsPath);
+  const settings = getSettings();
 
   if (!opts.build) {
     TCI.run();

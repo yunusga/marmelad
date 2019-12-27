@@ -1,8 +1,41 @@
 @require 'components/_variables';
 @require 'components/_mixins';
-@require 'components/reboot';
+@require 'components/normalize';
 @require 'components/iconizer';
 // @require 'components/wordpress';
+
+*
+  min-width 0
+  min-height 0
+  box-sizing: border-box
+  -webkit-tap-highlight-color rgba(0,0,0, 0)
+
+  &::before,
+  &::after
+    box-sizing: border-box
+
+html
+  font-family sans-serif
+  -webkit-tap-highlight-color rgba(0, 0, 0, 0)
+  // -webkit-font-smoothing antialiased
+  // -ms-text-size-adjust 100%
+
+body
+  font-family: $body.fontFamily
+  font-size: $body.fontSize
+  font-weight: $body.fontWeight
+  line-height: $body.lineHeight
+  color: $body.color
+  background-color: $body.bgc
+
+svg:not(:root)
+  overflow hidden
+
+blockquote
+  padding: 15px
+  padding-left: 20px
+  border-left: 5px solid $colors.theme
+  background-color: rgba($colors.theme, .03)
 
 .theme-color
   color: $colors.primary
@@ -12,6 +45,7 @@
  *
  * @link https://make.wordpress.org/accessibility/handbook/markup/the-css-class-screen-reader-text/
  */
+.visuallyhidden,
 .screen-reader-text
   border: 0
   clip: rect(1px, 1px, 1px, 1px)
@@ -24,6 +58,7 @@
   width: 1px
   word-wrap: normal !important
 
+  &:active,
   &:focus
     background-color: #eee
     clip: auto !important
@@ -39,11 +74,6 @@
     top: 5px
     width: auto
     z-index: 100000 /* Above WP toolbar. */
-
-*
-  min-width 0
-  min-height 0
-  -webkit-tap-highlight-color rgba(0,0,0, 0)
 
 @require '../_blocks/**/*.styl';
 @require 'components/_keyframes';

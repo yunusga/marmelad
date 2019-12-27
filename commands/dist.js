@@ -5,9 +5,10 @@ const pretty = require('gulp-pretty-html');
 const ora = require('ora');
 
 const hasher = require('../modules/posthtml/hasher');
+const getSettings = require('../modules/get-settings');
 
 module.exports = () => {
-  const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
+  const settings = getSettings();
 
   const htmlFmtOpts = {
     html: {
@@ -22,33 +23,22 @@ module.exports = () => {
   };
 
   gulp.task('format:html', (done) => {
-    const htmlSpinner = ora('Format HTML started').start();
+    const formatHTML = ora('Format HTML started').start();
 
-    gulp.src(`${settings.paths.dist}/**/*.html`)
-      .pipe(pretty(htmlFmtOpts.html))
+    const stream = gulp.src(`${settings.paths.dist}/*.html`)
+      .pipe(pretty(htmlFmtOpts))
       .pipe(gulp.dest(settings.paths.dist));
 
-    htmlSpinner.succeed('Format HTML done');
-
-    done();
+    stream.on('end', () => {
+      formatHTML.succeed('Format HTML done');
+      done();
+    });
   });
 
-  gulp.task('posthtml', (done) => {
+  gulp.task('posthtml:tools', (done) => {
     const dist = settings.dist || {
-      attrsSorter: {
-        order: [
-          'id', 'class', 'name',
-          'data-.+', 'ng-.+', 'src',
-          'for', 'type', 'href',
-          'values', 'title', 'alt',
-          'role', 'aria-.+',
-          '$unknown$',
-        ],
-      },
-      hasher: {
-        attributes: [],
-        path: settings.paths.dist,
-      },
+      attrsSorter: {},
+      hasher: {},
     };
 
     const attrsSorterOpts = {
@@ -64,26 +54,25 @@ module.exports = () => {
     };
 
     const hasherOpts = {
-      order: [
-        'id', 'class', 'name',
-        'data-.+', 'ng-.+', 'src',
-        'for', 'type', 'href',
-        'values', 'title', 'alt',
-        'role', 'aria-.+',
-        '$unknown$',
-      ],
+      attributes: [],
+      path: settings.paths.dist,
       ...dist.hasher,
     };
 
-    gulp.src(`${settings.paths.dist}/**/*.html`)
+    const posthtmlTools = ora('PostHTML tools started').start();
+
+    const stream = gulp.src(`${settings.paths.dist}/*.html`)
       .pipe(postHTML([
         attrsSorter(attrsSorterOpts),
         hasher(hasherOpts),
       ]))
       .pipe(gulp.dest(settings.paths.dist));
 
-    done();
+    stream.on('end', () => {
+      posthtmlTools.succeed('PostHTML tools done');
+      done();
+    });
   });
 
-  gulp.series('format:html', 'posthtml')();
+  gulp.series('format:html', 'posthtml:tools')();
 };

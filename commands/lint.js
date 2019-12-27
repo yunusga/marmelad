@@ -1,8 +1,10 @@
 const nodeW3CValidator = require('node-w3c-validator');
 const del = require('del');
 
+const getSettings = require('../modules/get-settings');
+
 module.exports = () => {
-  const settings = require(`${process.cwd()}/marmelad/settings.marmelad`);
+  const settings = getSettings();
 
   const nw3cOpts = {
     format: 'html',
