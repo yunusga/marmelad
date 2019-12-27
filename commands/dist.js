@@ -21,17 +21,20 @@ module.exports = () => {
     ...settings.pretty,
   };
 
-  gulp.task('format:html', () => {
-    // const htmlSpinner = ora('Format HTML started').start();
+  gulp.task('format:html', (done) => {
+    const formatHTML = ora('Format HTML started').start();
 
-    return gulp.src(`${settings.paths.dist}/*.html`)
+    const stream = gulp.src(`${settings.paths.dist}/*.html`)
       .pipe(pretty(htmlFmtOpts))
       .pipe(gulp.dest(settings.paths.dist));
 
-    // htmlSpinner.succeed('Format HTML done');
+    stream.on('end', () => {
+      formatHTML.succeed('Format HTML done');
+      done();
+    });
   });
 
-  gulp.task('posthtml:tools', () => {
+  gulp.task('posthtml:tools', (done) => {
     const dist = settings.dist || {
       attrsSorter: {},
       hasher: {},
@@ -55,12 +58,19 @@ module.exports = () => {
       ...dist.hasher,
     };
 
-    return gulp.src(`${settings.paths.dist}/*.html`)
+    const posthtmlTools = ora('PostHTML tools started').start();
+
+    const stream = gulp.src(`${settings.paths.dist}/*.html`)
       .pipe(postHTML([
         attrsSorter(attrsSorterOpts),
         hasher(hasherOpts),
       ]))
       .pipe(gulp.dest(settings.paths.dist));
+
+    stream.on('end', () => {
+      posthtmlTools.succeed('PostHTML tools done');
+      done();
+    });
   });
 
   gulp.series('format:html', 'posthtml:tools')();
