@@ -1,46 +1,30 @@
-const fs = require('fs');
+const { performance } = require('perf_hooks');
+
 const path = require('path');
 const chalk = require('chalk');
 const gulp = require('gulp');
 const bsSP = require('browser-sync').create('Dev Server');
 const bsPS = require('browser-sync').create('Proxy Server');
-const tap = require('gulp-tap');
-const babel = require('gulp-babel');
 const rename = require('gulp-rename');
-const replace = require('gulp-replace');
-const frontMatter = require('gulp-front-matter');
-const postHTML = require('gulp-posthtml');
-const cheerio = require('cheerio');
-const svgSprite = require('gulp-svg-sprite');
-const stylus = require('gulp-stylus');
 const postcss = require('gulp-postcss');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
 const inlineSvg = require('postcss-inline-svg');
 const easingGradients = require('postcss-easing-gradients');
-const autoprefixer = require('autoprefixer');
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
-const sourcemaps = require('gulp-sourcemaps');
 const gif = require('gulp-if');
 const LOG = require('fancy-log');
 const plumber = require('gulp-plumber');
 const combineAndSortMQ = require('postcss-sort-media-queries');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
-const include = require('gulp-include');
-const chokidar = require('chokidar');
-const decache = require('decache');
-const del = require('del');
+
 const GLOB = require('glob');
 const PERF = require('execution-time')();
 const branchName = require('current-git-branch');
-
 const pkg = require('../package.json');
 const pipeErrorStop = require('../modules/pipe-error-stop');
-const bem = require('../modules/posthtml/bem');
-const nunjucks = require('../modules/nunjucks');
-const Incw = require('../modules/nunjucks/globals/incw');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
 const LAGMAN = new (require('../modules/nunjucks/lagman'))();
@@ -48,6 +32,10 @@ const authArgs = require('../modules/authArgs');
 const getIconsNamesList = require('../modules/iconsNames');
 const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
 const getSettings = require('../modules/get-settings');
+
+console.log(`getSettings  ${performance.now()}`);
+
+// process.exit(1);
 
 module.exports = (opts) => {
   const settings = getSettings();
@@ -86,6 +74,15 @@ module.exports = (opts) => {
    * Nunjucks
    */
   gulp.task('nunjucks', (done) => {
+    const postHTML = require('gulp-posthtml');
+    const frontMatter = require('gulp-front-matter');
+    const tap = require('gulp-tap');
+    const cheerio = require('cheerio');
+
+    const nunjucks = require('../modules/nunjucks');
+    const bem = require('../modules/posthtml/bem');
+    const Incw = require('../modules/nunjucks/globals/incw');
+
     let templateName = '';
     let error = false;
 
@@ -187,6 +184,9 @@ module.exports = (opts) => {
    * Iconizer
    */
   gulp.task('iconizer:icons', (done) => {
+    const svgSprite = require('gulp-svg-sprite');
+    const replace = require('gulp-replace');
+
     if (settings.iconizer.mode === 'external') {
       settings.iconizer.plugin.svg.doctypeDeclaration = true;
     }
@@ -226,6 +226,9 @@ module.exports = (opts) => {
   });
 
   gulp.task('iconizer:colored', (done) => {
+    const svgSprite = require('gulp-svg-sprite');
+    const replace = require('gulp-replace');
+
     if (settings.iconizer.mode === 'external') {
       settings.iconizer.plugin.svg.doctypeDeclaration = true;
     }
@@ -271,6 +274,9 @@ module.exports = (opts) => {
    * Scripts blocks
    */
   gulp.task('scripts:others', (done) => {
+    const babel = require('gulp-babel');
+    const include = require('gulp-include');
+
     gulp.src(`${settings.paths.js.src}/*.js`)
       .pipe(plumber())
       .pipe(include({
@@ -355,6 +361,9 @@ module.exports = (opts) => {
    * Styles blocks
    */
   gulp.task('styles', (done) => {
+    const autoprefixer = require('autoprefixer');
+    const stylus = require('gulp-stylus');
+
     const $data = {
       beml: settings.app.beml,
     };
@@ -489,6 +498,9 @@ module.exports = (opts) => {
   });
 
   gulp.task('bts4:sass', (done) => {
+    const autoprefixer = require('autoprefixer');
+    const sourcemaps = require('gulp-sourcemaps');
+
     gulp.src(`${settings.app.bts['4'].src.css}/scss/[^_]*.scss`)
       .pipe(plumber())
       .pipe(sourcemaps.init())
@@ -526,6 +538,9 @@ module.exports = (opts) => {
   });
 
   gulp.task('watch', (done) => {
+    const chokidar = require('chokidar');
+    const decache = require('decache');
+
     const watchOpts = {
       ignoreInitial: true,
       ignored: [
@@ -734,6 +749,8 @@ module.exports = (opts) => {
    * Clean build directory
    */
   gulp.task('clean', (done) => {
+    const del = require('del');
+
     del.sync(settings.paths.dist);
     done();
   });
