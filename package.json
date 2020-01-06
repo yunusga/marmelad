@@ -117,7 +117,8 @@
     "readline-sync": "1.4.10",
     "replace-ext": "1.0.0",
     "tar": "5.0.5",
-    "through2": "3.0.1"
+    "through2": "3.0.1",
+    "update-notifier": "^4.0.0"
   },
   "scripts": {
     "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm link",

@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
 const CLI = require('commander');
-const PKG = require('../package.json');
+const updateNotifier = require('update-notifier');
+const pkg = require('../package.json');
+
+updateNotifier({pkg}).notify();
 
 const LOG = console.log;
 
@@ -9,11 +12,12 @@ const LOG = console.log;
  * Установка флагов/параметров для командной строки
  */
 CLI
-  .version(PKG.version, '-v, --version')
-  .description(PKG.description)
+  .version(pkg.version, '-v, --version')
+  .description(pkg.description)
   .on('--help', () => {
-    LOG(`\nCommands help:\n  ${PKG.name} [command] --help\n  mmd [command] --help`);
+    LOG(`\nCommands help:\n  ${pkg.name} [command] --help\n  mmd [command] --help`);
     LOG(`\nSource files:\n  ${__filename}`);
+    LOG(`Version:\n  ${pkg.version}`);
   });
 
 
