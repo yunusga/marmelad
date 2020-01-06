@@ -1,3 +1,5 @@
+console.log('Warming up...');
+
 const { performance } = require('perf_hooks');
 
 const path = require('path');
@@ -33,9 +35,7 @@ const getIconsNamesList = require('../modules/iconsNames');
 const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
 const getSettings = require('../modules/get-settings');
 
-console.log(`getSettings  ${performance.now()}`);
-
-// process.exit(1);
+console.log(`Warmed at ${Math.round(performance.now())}ms`);
 
 module.exports = (opts) => {
   const settings = getSettings();
