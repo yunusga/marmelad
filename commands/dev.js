@@ -1,4 +1,4 @@
-console.log('Warming up...');
+console.log('\nMarmelad Warming up...');
 
 const { performance } = require('perf_hooks');
 
@@ -23,7 +23,6 @@ const changed = require('gulp-changed');
 const concat = require('gulp-concat');
 
 const GLOB = require('glob');
-const PERF = require('execution-time')();
 const branchName = require('current-git-branch');
 const pkg = require('../package.json');
 const pipeErrorStop = require('../modules/pipe-error-stop');
@@ -35,7 +34,7 @@ const getIconsNamesList = require('../modules/iconsNames');
 const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
 const getSettings = require('../modules/get-settings');
 
-console.log(`Warmed at ${Math.round(performance.now())}ms`);
+console.log(`Marmelad Warmed at ${Math.round(performance.now())}ms\n`);
 
 module.exports = (opts) => {
   const settings = getSettings();
@@ -74,6 +73,8 @@ module.exports = (opts) => {
    * Nunjucks
    */
   gulp.task('nunjucks', (done) => {
+    const njkStartPerf = performance.now();
+
     const postHTML = require('gulp-posthtml');
     const frontMatter = require('gulp-front-matter');
     const tap = require('gulp-tap');
@@ -85,8 +86,6 @@ module.exports = (opts) => {
 
     let templateName = '';
     let error = false;
-
-    PERF.start('nunjucks');
 
     const stream = gulp.src(LAGMAN.store.src)
       .pipe(plumber())
@@ -142,7 +141,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
-      LOG(`[nunjucks] ${error ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${PERF.stop('nunjucks').time.toFixed(0)}ms`);
+      LOG(`[nunjucks] ${error ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
 
       bsSP.reload();
 
