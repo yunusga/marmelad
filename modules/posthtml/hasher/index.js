@@ -1,19 +1,18 @@
+const url = require('url');
 const hasha = require('hasha');
-const isUrl = require('is-url');
-const queryString = require('query-string');
-const normalizeUrl = require('normalize-url');
 
-function setFileHash(url, path) {
-  const fullUrl = /^[/?]/.test(url) ? `foo.bar${url}` : url;
+function setFileHash(src, path) {
 
-  if (!isUrl(normalizeUrl(fullUrl))) {
-    return url;
+  const parsed = url.parse(src);
+
+  if (parsed.protocol) {
+    return src;
   }
 
-  let [uri, query] = fullUrl.split('?');
-  let hash = '';
+  const uri = parsed.pathname;
+  const searchParams = new URLSearchParams(parsed.search);
 
-  query = queryString.parse(query);
+  let hash = '';
 
   if (global._mmdHashes.has(uri)) {
     hash = global._mmdHashes.get(uri);
@@ -22,10 +21,9 @@ function setFileHash(url, path) {
     global._mmdHashes.set(uri, hash);
   }
 
-  query.v = hash;
-  query = queryString.stringify(query);
+  searchParams.set('v', hash);
 
-  return `${uri}?${query}`;
+  return `${uri}?${searchParams.toString()}`;
 }
 
 module.exports = (options = {}) => (tree) => new Promise((resolve, reject) => {
