@@ -216,7 +216,7 @@ const pretty = {
     indent_with_tabs: true,
     wrap_line_length: 0,
     preserve_newlines: false,
-    unformatted: ['code', 'pre', 'em', 'strong', 'span', 'i', 'b', 'br', 'symbol'],
+    unformatted: ['code', 'pre', 'em', 'strong', 'i', 'b', 'br', 'symbol'],
   },
 };
 
