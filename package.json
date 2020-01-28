@@ -108,7 +108,7 @@
     "postcss-easing-gradients": "3.0.1",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-inline-svg": "4.1.0",
-    "postcss-momentum-scrolling": "2.2.9",
+    "postcss-momentum-scrolling": "2.3.10",
     "postcss-sort-media-queries": "1.0.15",
     "posthtml-attrs-sorter": "1.1.0",
     "readline-sync": "1.4.10",
