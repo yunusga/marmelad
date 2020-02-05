@@ -106,7 +106,7 @@
     "ora": "4.0.3",
     "plugin-error": "1.0.1",
     "postcss-easing-gradients": "3.0.1",
-    "postcss-flexbugs-fixes": "4.1.0",
+    "postcss-flexbugs-fixes": "4.2.0",
     "postcss-inline-svg": "4.1.0",
     "postcss-momentum-scrolling": "2.2.9",
     "postcss-sort-media-queries": "1.0.15",
