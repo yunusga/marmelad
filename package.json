@@ -109,7 +109,7 @@
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-inline-svg": "4.1.0",
     "postcss-momentum-scrolling": "2.2.9",
-    "postcss-sort-media-queries": "1.0.15",
+    "postcss-sort-media-queries": "1.31.21",
     "posthtml-attrs-sorter": "1.1.0",
     "readline-sync": "1.4.10",
     "replace-ext": "1.0.0",
