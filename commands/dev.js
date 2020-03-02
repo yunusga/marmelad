@@ -13,6 +13,7 @@ const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
 const inlineSvg = require('postcss-inline-svg');
 const easingGradients = require('postcss-easing-gradients');
+const viewportHeightCorrection = require('postcss-viewport-height-correction');
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
 const gif = require('gulp-if');
@@ -343,6 +344,7 @@ module.exports = (opts) => {
       .pipe(plumber())
       .pipe(concat('plugins.css'))
       .pipe(postcss([
+        viewportHeightCorrection(),
         momentumScrolling(),
         flexBugsFixes(),
         combineAndSortMQ(),
@@ -384,6 +386,7 @@ module.exports = (opts) => {
         indentedSyntax: true,
       })))
       .pipe(postcss([
+        viewportHeightCorrection(),
         combineAndSortMQ(postcssOpts.sortMQ),
         momentumScrolling(postcssOpts.momentumScrolling),
         flexBugsFixes(),

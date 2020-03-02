@@ -2,21 +2,33 @@
  * Глобальные-вспомогательные функции
  * ========================================================================== */
 
-/**
-  * Возвращает HTML-код иконки из SVG-спрайта
-  *
-  * @param {String} name Название иконки из спрайта
-  * @param {Object} opts Объект настроек для SVG-иконки
-  *
-  * @example SVG-иконка
-  * getSVGSpriteIcon('some-icon', {
-  *   tag: 'div',
-  *   type: 'icons', // colored для подключения иконки из цветного спрайта
-  *   class: '', // дополнительные классы для иконки
-  *   mode: 'inline', // external для подключаемых спрайтов
-  *   url: '', // путь до файла спрайта, необходим только для подключаемых спрайтов
-  * });
-  */
+/* ^^^
+ * Viewport Height Correction
+ *
+ * @link https://www.npmjs.com/package/postcss-viewport-height-correction
+ * ========================================================================== */
+function setViewportProperty(){
+  var vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', vh + 'px');
+}
+window.addEventListener('resize', setViewportProperty);
+setViewportProperty(); // Call the fuction for initialisation
+
+/* ^^^
+ * Возвращает HTML-код иконки из SVG-спрайта
+ *
+ * @param {String} name Название иконки из спрайта
+ * @param {Object} opts Объект настроек для SVG-иконки
+ *
+ * @example SVG-иконка
+ * getSVGSpriteIcon('some-icon', {
+ *   tag: 'div',
+ *   type: 'icons', // colored для подключения иконки из цветного спрайта
+ *   class: '', // дополнительные классы для иконки
+ *   mode: 'inline', // external для подключаемых спрайтов
+ *   url: '', // путь до файла спрайта, необходим только для подключаемых спрайтов
+ * });
+ */
 function getSVGSpriteIcon(name, opts) {
   opts = Object.assign({
     tag: 'div',
