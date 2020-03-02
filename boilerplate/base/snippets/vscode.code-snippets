@@ -16,7 +16,7 @@
 		"description": "Generate BEML element HTML code"
   },
   "Include NunJucks template": {
-    "prefix": "incl",
+    "prefix": "include",
     "body": [
       "{% include '${1}.${2:html}' %}"
     ],
@@ -30,7 +30,7 @@
     "description": "Include NunJucks template with parameters"
   },
   "NunJucks _icon function": {
-    "prefix": "_ico",
+    "prefix": "_icon",
     "body": [
       "{{ _icon('${$1}', { tag: '${2:span}' }) }}"
     ],

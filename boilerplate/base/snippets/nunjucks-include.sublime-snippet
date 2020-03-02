@@ -3,5 +3,5 @@
 {% include '${1}.${2:html}' %}
 ]]></content>
   <description>Include NunJucks Template</description>
-  <tabTrigger>incl</tabTrigger>
+  <tabTrigger>include</tabTrigger>
 </snippet>
