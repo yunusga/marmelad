@@ -5,7 +5,7 @@ function setFileHash(src, path) {
 
   const parsed = url.parse(src);
 
-  if (parsed.protocol) {
+  if (parsed.protocol || src.indexOf('//') > -1) {
     return src;
   }
 
