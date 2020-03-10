@@ -8,6 +8,7 @@ const gulp = require('gulp');
 const bsSP = require('browser-sync').create('Dev Server');
 const bsPS = require('browser-sync').create('Proxy Server');
 const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
 const postcss = require('gulp-postcss');
 const flexBugsFixes = require('postcss-flexbugs-fixes');
 const momentumScrolling = require('postcss-momentum-scrolling');
@@ -322,7 +323,8 @@ module.exports = (opts) => {
   gulp.task('scripts:plugins', (done) => {
     const stream = gulp.src(`${settings.paths.js.plugins}/**/*.js`)
       .pipe(plumber())
-      .pipe(concat('plugins.js'))
+      .pipe(concat('plugins.min.js'))
+      .pipe(uglify())
       .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
     stream.on('end', () => {
@@ -342,7 +344,7 @@ module.exports = (opts) => {
   gulp.task('styles:plugins', (done) => {
     gulp.src(`${settings.paths.js.plugins}/**/*.css`)
       .pipe(plumber())
-      .pipe(concat('plugins.css'))
+      .pipe(concat('plugins.min.css'))
       .pipe(postcss([
         viewportHeightCorrection(),
         momentumScrolling(),
