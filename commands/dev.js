@@ -2,6 +2,7 @@ console.log('\nMarmelad Warming up...');
 
 const { performance } = require('perf_hooks');
 
+const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const gulp = require('gulp');
@@ -721,6 +722,7 @@ module.exports = (opts) => {
     }
 
     /* Iconizer */
+
     gulp.watch([
       `${settings.iconizer.srcIcons}/*.svg`,
       `${settings.iconizer.srcColored}/*.svg`,
@@ -730,15 +732,19 @@ module.exports = (opts) => {
       const { srcIcons } = settings.iconizer;
       let sizeLimitError = false;
 
-      if (fs.existsSync(srcIcons)) {
-        fs.readdirSync(srcIcons).forEach((iconName) => {
-          const iconStats = fs.statSync(`${srcIcons}/${iconName}`);
+      try {
+        if (fs.existsSync(srcIcons)) {
+          fs.readdirSync(srcIcons).forEach((iconName) => {
+            const iconStats = fs.statSync(`${srcIcons}/${iconName}`);
 
-          if (iconStats.size > 3072) {
-            sizeLimitError = true;
-            console.log(chalk`{bgRed  ERROR } icon {yellow ${iconName}} more than 3kb`);
-          }
-        });
+            if (iconStats.size > 3072) {
+              sizeLimitError = true;
+              console.log(chalk`{bgRed  ERROR } icon {yellow ${iconName}} more than 3kb`);
+            }
+          });
+        }
+      } catch (err) {
+        console.log(err);
       }
 
       if (!sizeLimitError) {
