@@ -106,7 +106,7 @@
     "postcss-extract-media-query": "2.0.0",
     "postcss-flexbugs-fixes": "4.2.0",
     "postcss-inline-svg": "4.1.0",
-    "postcss-momentum-scrolling": "2.5.15",
+    "postcss-momentum-scrolling": "2.5.17",
     "postcss-sort-media-queries": "1.31.21",
     "postcss-viewport-height-correction": "1.0.1",
     "posthtml-attrs-sorter": "1.1.0",
