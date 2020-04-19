@@ -21,6 +21,7 @@ const sassGlob = require('gulp-sass-glob');
 const gif = require('gulp-if');
 const LOG = require('fancy-log');
 const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
 const combineAndSortMQ = require('postcss-sort-media-queries');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
@@ -280,7 +281,12 @@ module.exports = (opts) => {
     const include = require('gulp-include');
 
     gulp.src(`${settings.paths.js.src}/*.js`)
-      .pipe(plumber())
+      .pipe(plumber({ errorHandler: function(err) {
+        notify.onError({
+            title: "Ошибка: проверьте скрипты " + err.plugin,
+            message:  err.toString()
+        })(err);
+      }}))
       .pipe(include({
         extensions: 'js',
         hardFail: false,
@@ -303,7 +309,12 @@ module.exports = (opts) => {
     const vendorsDist = `${settings.paths.storage}/${settings.folders.js.src}/${settings.folders.js.vendors}`;
 
     const stream = gulp.src(`${settings.paths.js.vendors}/**/*.js`)
-      .pipe(plumber())
+      .pipe(plumber({ errorHandler: function(err) {
+        notify.onError({
+            title: "Ошибка: проверьте скрипты в папке vendors " + err.plugin,
+            message:  err.toString()
+        })(err);
+      }}))
       .pipe(changed(vendorsDist))
       .pipe(gulp.dest(vendorsDist));
 
@@ -323,7 +334,12 @@ module.exports = (opts) => {
    */
   gulp.task('scripts:plugins', (done) => {
     const stream = gulp.src(`${settings.paths.js.plugins}/**/*.js`)
-      .pipe(plumber())
+      .pipe(plumber({ errorHandler: function(err) {
+        notify.onError({
+            title: "Ошибка: проверьте скрипты в плагинах " + err.plugin,
+            message:  err.toString()
+        })(err);
+      }}))
       .pipe(concat('plugins.min.js'))
       .pipe(uglify())
       .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
@@ -344,7 +360,12 @@ module.exports = (opts) => {
    */
   gulp.task('styles:plugins', (done) => {
     gulp.src(`${settings.paths.js.plugins}/**/*.css`)
-      .pipe(plumber())
+    .pipe(plumber({ errorHandler: function(err) {
+      notify.onError({
+          title: "Ошибка: проверьте стили в плагинах " + err.plugin,
+          message:  err.toString()
+      })(err);
+    }}))
       .pipe(concat('plugins.min.css'))
       .pipe(postcss([
         viewportHeightCorrection(),
@@ -354,10 +375,9 @@ module.exports = (opts) => {
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .on('end', () => {
-        LOG(`[css] plugins ${chalk.bold.green('Done')}`);
+        LOG( `[css] plugins ${chalk.bold.green('Done')}`);
       })
       .pipe(bsSP.stream());
-
     done();
   });
 
@@ -367,7 +387,6 @@ module.exports = (opts) => {
   gulp.task('styles', (done) => {
     const autoprefixer = require('autoprefixer');
     const stylus = require('gulp-stylus');
-
     const $data = {
       beml: settings.app.beml,
     };
@@ -378,7 +397,12 @@ module.exports = (opts) => {
     const postcssOpts = settings.app.postcss || {};
 
     gulp.src(`${settings.paths.styles}/*.{styl,scss,sass}`)
-      .pipe(plumber())
+      .pipe(plumber({ errorHandler: function(err) {
+        notify.onError({
+            title: "Ошибка: проверьте стили " + err.plugin,
+            message:  err.toString()
+        })(err);
+      }}))
       .pipe(gif('*.styl', stylus({
         'include css': true,
         rawDefine: { $data },
