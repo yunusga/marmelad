@@ -128,7 +128,7 @@
     "eslint-config-airbnb-base": "14.1.0",
     "eslint-plugin-import": "2.20.2",
     "fs-extra": "9.0.0",
-    "jest": "25.3.0"
+    "jest": "25.4.0"
   },
   "eslintConfig": {
     "env": {
