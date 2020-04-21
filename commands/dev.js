@@ -25,6 +25,7 @@ const notify = require('gulp-notify');
 const combineAndSortMQ = require('postcss-sort-media-queries');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
+const through = require('through2');
 
 const GLOB = require('glob');
 const branchName = require('current-git-branch');
@@ -89,10 +90,20 @@ module.exports = (opts) => {
     const Incw = require('../modules/nunjucks/globals/incw');
 
     let templateName = '';
-    let error = false;
+    let hasError = false;
 
     const stream = gulp.src(LAGMAN.store.src)
-      .pipe(plumber())
+      .pipe(plumber({
+        errorHandler: notify.onError(function(error) {
+          bsSP.sockets.emit('error:message', error);
+          hasError = true;
+
+          return {
+            title: `[nunjucks] ошибка: проверьте шаблоны ${error.plugin}`,
+            message: error.message,
+          };
+        })
+      }))
       .pipe(tap((file) => {
         templateName = path.basename(file.path);
       }))
@@ -115,12 +126,14 @@ module.exports = (opts) => {
         },
       }))
       .pipe(pipeErrorStop({
-        errorCallback: (err) => {
-          error = true;
-          console.log(`\n${err.name}: ${err.message.replace(/(unknown path)/, templateName)}\n`);
+        errorCallback: (error) => {
+          hasError = true;
+          error.message = error.message.replace(/(unknown path)/, templateName);
+          bsSP.sockets.emit('error:message', error);
+          console.log(`\n${error.name}: ${error.message}\n`);
         },
         successCallback: () => {
-          error = false;
+          hasError = false;
         },
       }))
       .pipe(tap((file) => {
@@ -135,8 +148,10 @@ module.exports = (opts) => {
           });
 
           LAGMAN.refresh(pageName, 'pages', blocksSet);
-        } catch (err) {
-          console.log(err);
+        } catch (error) {
+          hasError = true;
+          bsSP.sockets.emit('error:message', error);
+          console.log(error);
         }
       }))
       .pipe(postHTML([
@@ -145,21 +160,24 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
-      LOG(`[nunjucks] ${error ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
-
-      bsSP.reload();
+      if ( !hasError ) {
+        LOG(`[nunjucks] ${hasError ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
+        bsSP.reload();
+      }
 
       done();
     });
 
-    stream.on('error', (err) => {
-      console.log(err);
-      done(err);
+    stream.on('error', (error) => {
+      bsSP.sockets.emit('error:message', error);
+      console.log(error);
+      done(error);
     });
   });
 
   gulp.task('database', (done) => {
     DB.onError = (blockPath, error) => {
+      bsSP.sockets.emit('error:message', error);
       LOG.error(chalk.bold.red(blockPath));
       LOG.error(error.message);
     };
@@ -222,9 +240,10 @@ module.exports = (opts) => {
       done();
     });
 
-    stream.on('error', (err) => {
-      console.log(err);
-      done(err);
+    stream.on('error', (error) => {
+      bsSP.sockets.emit('error:message', error);
+      console.log(error);
+      done(error);
     });
   });
 
@@ -260,9 +279,10 @@ module.exports = (opts) => {
       done();
     });
 
-    stream.on('error', (err) => {
-      console.log(err);
-      done(err);
+    stream.on('error', (error) => {
+      bsSP.sockets.emit('error:message', error);
+      console.log(error);
+      done(error);
     });
   });
 
@@ -280,13 +300,20 @@ module.exports = (opts) => {
     const babel = require('gulp-babel');
     const include = require('gulp-include');
 
-    gulp.src(`${settings.paths.js.src}/*.js`)
-      .pipe(plumber({ errorHandler: function(err) {
-        notify.onError({
-            title: "Ошибка: проверьте скрипты " + err.plugin,
-            message:  err.toString()
-        })(err);
-      }}))
+    let hasError = false;
+
+    const stream = gulp.src(`${settings.paths.js.src}/*.js`)
+      .pipe(plumber({
+        errorHandler: notify.onError(function(error) {
+          bsSP.sockets.emit('error:message', error);
+          hasError = true;
+
+          return {
+            title: `[scripts:others] ошибка: проверьте скрипты ${error.plugin}`,
+            message: error.message,
+          }
+        }),
+      }))
       .pipe(include({
         extensions: 'js',
         hardFail: false,
@@ -297,9 +324,18 @@ module.exports = (opts) => {
       }))
       .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
-    LOG(`[js] others ${chalk.bold.green('Done')}`);
-    bsSP.reload();
-    done();
+    stream.on('end', () => {
+      if (!hasError) {
+        LOG(`[js] others ${chalk.bold.green('Done')}`);
+        bsSP.reload();
+      }
+
+      done();
+    });
+
+    stream.on('error', (error) => {
+      done(error);
+    });
   });
 
   /**
@@ -308,24 +344,36 @@ module.exports = (opts) => {
   gulp.task('scripts:vendors', (done) => {
     const vendorsDist = `${settings.paths.storage}/${settings.folders.js.src}/${settings.folders.js.vendors}`;
 
+    let hasError = false;
+
     const stream = gulp.src(`${settings.paths.js.vendors}/**/*.js`)
-      .pipe(plumber({ errorHandler: function(err) {
-        notify.onError({
-            title: "Ошибка: проверьте скрипты в папке vendors " + err.plugin,
-            message:  err.toString()
-        })(err);
-      }}))
+      .pipe(plumber({
+        errorHandler: notify.onError(function(error) {
+          bsSP.sockets.emit('error:message', error);
+          hasError = true;
+
+          return {
+            title: `[scripts:vendors] ошибка: проверьте  ${error.plugin}`,
+            message: error.message,
+          };
+        })
+      }))
       .pipe(changed(vendorsDist))
       .pipe(gulp.dest(vendorsDist));
 
     stream.on('end', () => {
-      LOG(`[js] vendors ${chalk.bold.green('Done')}`);
-      bsSP.reload();
+      if (!hasError) {
+        LOG(`[js] vendors ${chalk.bold.green('Done')}`);
+        bsSP.reload();
+      }
+
       done();
     });
 
-    stream.on('error', (err) => {
-      done(err);
+    stream.on('error', (error) => {
+      bsSP.sockets.emit('error:message', error);
+      console.log(error);
+      done(error);
     });
   });
 
@@ -333,25 +381,37 @@ module.exports = (opts) => {
    * Scripts plugins
    */
   gulp.task('scripts:plugins', (done) => {
+    let hasError = false;
+
     const stream = gulp.src(`${settings.paths.js.plugins}/**/*.js`)
-      .pipe(plumber({ errorHandler: function(err) {
-        notify.onError({
-            title: "Ошибка: проверьте скрипты в плагинах " + err.plugin,
-            message:  err.toString()
-        })(err);
-      }}))
+      .pipe(plumber({
+        errorHandler: notify.onError(function(error) {
+          bsSP.sockets.emit('error:message', error);
+          hasError = true;
+
+          return {
+            title: `[scripts:plugins] ошибка: проверьте ${error.plugin}`,
+            message: error.message,
+          };
+        })
+      }))
       .pipe(concat('plugins.min.js'))
       .pipe(uglify())
       .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
     stream.on('end', () => {
-      LOG(`[js] plugins ${chalk.bold.green('Done')}`);
-      bsSP.reload();
+      if (!hasError) {
+        LOG(`[js] plugins ${chalk.bold.green('Done')}`);
+        bsSP.reload();
+      }
+
       done();
     });
 
-    stream.on('error', (err) => {
-      done(err);
+    stream.on('error', (error) => {
+      bsSP.sockets.emit('error:message', error);
+      console.log(error);
+      done(error);
     });
   });
 
@@ -402,6 +462,7 @@ module.exports = (opts) => {
             title: "Ошибка: проверьте стили " + err.plugin,
             message:  err.toString()
         })(err);
+        bsSP.sockets.emit('error:message', err);
       }}))
       .pipe(gif('*.styl', stylus({
         'include css': true,
@@ -494,6 +555,8 @@ module.exports = (opts) => {
         },
       },
     ];
+
+    bsSP.use(require('../modules/browser-sync/screen-message'));
 
     bsSP.init(settings.app.bsSP, () => {
       // let urls = bsSP.getOption('urls');
