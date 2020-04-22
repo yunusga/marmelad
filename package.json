@@ -100,7 +100,7 @@
     "hasha": "5.2.0",
     "node-w3c-validator": "1.6.1",
     "nunjucks": "3.2.1",
-    "ora": "4.0.3",
+    "ora": "4.0.4",
     "plugin-error": "1.0.1",
     "postcss-easing-gradients": "3.0.1",
     "postcss-extract-media-query": "2.0.0",
