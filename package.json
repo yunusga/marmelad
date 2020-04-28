@@ -112,7 +112,7 @@
     "posthtml-attrs-sorter": "1.1.0",
     "readline-sync": "1.4.10",
     "replace-ext": "1.0.0",
-    "tar": "6.0.1",
+    "tar": "6.0.2",
     "through2": "3.0.1",
     "update-notifier": "^4.1.0"
   },
