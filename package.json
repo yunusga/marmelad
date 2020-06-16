@@ -59,15 +59,15 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "7.9.6",
-    "@babel/plugin-transform-object-assign": "^7.8.3",
-    "@babel/preset-env": "^7.9.6",
+    "@babel/core": "7.10.2",
+    "@babel/plugin-transform-object-assign": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
     "archiver": "4.0.1",
-    "autoprefixer": "9.7.6",
+    "autoprefixer": "9.8.0",
     "browser-sync": "2.26.7",
     "bs-auth": "1.2.7",
     "camelcase": "6.0.0",
-    "chalk": "4.0.0",
+    "chalk": "4.1.0",
     "cheerio": "1.0.0-rc.3",
     "chokidar": "3.4.0",
     "cmd-exec": "0.1.0",
@@ -88,6 +88,7 @@
     "gulp-postcss": "8.0.0",
     "gulp-posthtml": "3.0.4",
     "gulp-pretty-html": "2.0.10",
+    "gulp-notify": "^3.2.0",
     "gulp-rename": "2.0.0",
     "gulp-replace": "1.0.0",
     "gulp-sass": "4.1.0",
@@ -106,8 +107,8 @@
     "postcss-extract-media-query": "2.0.0",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-inline-svg": "4.1.0",
-    "postcss-momentum-scrolling": "2.5.17",
-    "postcss-sort-media-queries": "^1.4.24",
+    "postcss-momentum-scrolling": "2.7.17",
+    "postcss-sort-media-queries": "^1.6.24",
     "postcss-viewport-height-correction": "1.0.4",
     "posthtml-attrs-sorter": "1.1.0",
     "readline-sync": "1.4.10",
@@ -118,22 +119,26 @@
   },
   "scripts": {
     "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm i",
-    "test": "jest"
+    "test": "jest",
+    "eslint": "eslint ."
   },
   "jest": {
     "testRegex": "tests/.*\\.(js|jsx)$"
   },
   "devDependencies": {
-    "eslint": "7.0.0",
-    "eslint-config-airbnb-base": "14.1.0",
-    "eslint-plugin-import": "2.20.2",
-    "fs-extra": "9.0.0",
-    "gulp-notify": "^3.2.0",
+    "eslint": "7.2.0",
+    "eslint-config-airbnb-base": "14.2.0",
+    "eslint-plugin-import": "2.21.2",
+    "fs-extra": "9.0.1",
     "jest": "26.0.1"
   },
   "eslintConfig": {
+    "ignorePatterns": [
+      "node_modules/"
+    ],
     "env": {
-      "jest": true
+      "jest": true,
+      "es6": true
     },
     "extends": "airbnb-base",
     "rules": {
