@@ -59,11 +59,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "7.10.2",
-    "@babel/plugin-transform-object-assign": "^7.10.1",
-    "@babel/preset-env": "^7.10.2",
+    "@babel/core": "7.10.3",
+    "@babel/plugin-transform-object-assign": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
     "archiver": "4.0.1",
-    "autoprefixer": "9.8.0",
+    "autoprefixer": "9.8.4",
     "browser-sync": "2.26.7",
     "bs-auth": "1.2.7",
     "camelcase": "6.0.0",
@@ -114,23 +114,23 @@
     "readline-sync": "1.4.10",
     "replace-ext": "2.0.0",
     "tar": "6.0.2",
-    "through2": "3.0.1",
+    "through2": "3.0.2",
     "update-notifier": "^4.1.0"
   },
   "scripts": {
     "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm i",
     "test": "jest",
-    "eslint": "eslint ."
+    "eslint": "eslint **/*.js --ignore-pattern !node_modules/*"
   },
   "jest": {
     "testRegex": "tests/.*\\.(js|jsx)$"
   },
   "devDependencies": {
-    "eslint": "7.2.0",
+    "eslint": "7.3.1",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.21.2",
     "fs-extra": "9.0.1",
-    "jest": "26.0.1"
+    "jest": "26.1.0"
   },
   "eslintConfig": {
     "ignorePatterns": [
