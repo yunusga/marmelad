@@ -25,8 +25,6 @@ const notify = require('gulp-notify');
 const combineAndSortMQ = require('postcss-sort-media-queries');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
-const through = require('through2');
-
 const GLOB = require('glob');
 const branchName = require('current-git-branch');
 const pkg = require('../package.json');
@@ -94,7 +92,7 @@ module.exports = (opts) => {
 
     const stream = gulp.src(LAGMAN.store.src)
       .pipe(plumber({
-        errorHandler: notify.onError(function(error) {
+        errorHandler: notify.onError((error) => {
           bsSP.sockets.emit('error:message', error);
           hasError = true;
 
@@ -102,7 +100,7 @@ module.exports = (opts) => {
             title: `[nunjucks] ошибка: проверьте шаблоны ${error.plugin}`,
             message: error.message,
           };
-        })
+        }),
       }))
       .pipe(tap((file) => {
         templateName = path.basename(file.path);
@@ -160,7 +158,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
-      if ( !hasError ) {
+      if (!hasError) {
         LOG(`[nunjucks] ${hasError ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
         bsSP.reload();
       }
@@ -304,14 +302,14 @@ module.exports = (opts) => {
 
     const stream = gulp.src(`${settings.paths.js.src}/*.js`)
       .pipe(plumber({
-        errorHandler: notify.onError(function(error) {
+        errorHandler: notify.onError((error) => {
           bsSP.sockets.emit('error:message', error);
           hasError = true;
 
           return {
             title: `[scripts:others] ошибка: проверьте скрипты ${error.plugin}`,
             message: error.message,
-          }
+          };
         }),
       }))
       .pipe(include({
@@ -348,7 +346,7 @@ module.exports = (opts) => {
 
     const stream = gulp.src(`${settings.paths.js.vendors}/**/*.js`)
       .pipe(plumber({
-        errorHandler: notify.onError(function(error) {
+        errorHandler: notify.onError((error) => {
           bsSP.sockets.emit('error:message', error);
           hasError = true;
 
@@ -356,7 +354,7 @@ module.exports = (opts) => {
             title: `[scripts:vendors] ошибка: проверьте  ${error.plugin}`,
             message: error.message,
           };
-        })
+        }),
       }))
       .pipe(changed(vendorsDist))
       .pipe(gulp.dest(vendorsDist));
@@ -385,7 +383,7 @@ module.exports = (opts) => {
 
     const stream = gulp.src(`${settings.paths.js.plugins}/**/*.js`)
       .pipe(plumber({
-        errorHandler: notify.onError(function(error) {
+        errorHandler: notify.onError((error) => {
           bsSP.sockets.emit('error:message', error);
           hasError = true;
 
@@ -393,7 +391,7 @@ module.exports = (opts) => {
             title: `[scripts:plugins] ошибка: проверьте ${error.plugin}`,
             message: error.message,
           };
-        })
+        }),
       }))
       .pipe(concat('plugins.min.js'))
       .pipe(uglify())
@@ -420,12 +418,14 @@ module.exports = (opts) => {
    */
   gulp.task('styles:plugins', (done) => {
     gulp.src(`${settings.paths.js.plugins}/**/*.css`)
-    .pipe(plumber({ errorHandler: function(err) {
-      notify.onError({
-          title: "Ошибка: проверьте стили в плагинах " + err.plugin,
-          message:  err.toString()
-      })(err);
-    }}))
+      .pipe(plumber({
+        errorHandler: (err) => {
+          notify.onError({
+            title: `Ошибка: проверьте стили в плагинах ${err.plugin}`,
+            message: err.toString(),
+          })(err);
+        },
+      }))
       .pipe(concat('plugins.min.css'))
       .pipe(postcss([
         viewportHeightCorrection(),
@@ -435,7 +435,7 @@ module.exports = (opts) => {
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .on('end', () => {
-        LOG( `[css] plugins ${chalk.bold.green('Done')}`);
+        LOG(`[css] plugins ${chalk.bold.green('Done')}`);
       })
       .pipe(bsSP.stream());
     done();
@@ -457,13 +457,15 @@ module.exports = (opts) => {
     const postcssOpts = settings.app.postcss || {};
 
     gulp.src(`${settings.paths.styles}/*.{styl,scss,sass}`)
-      .pipe(plumber({ errorHandler: function(err) {
-        notify.onError({
-            title: "Ошибка: проверьте стили " + err.plugin,
-            message:  err.toString()
-        })(err);
-        bsSP.sockets.emit('error:message', err);
-      }}))
+      .pipe(plumber({
+        errorHandler: (err) => {
+          notify.onError({
+            title: `Ошибка: проверьте стили ${err.plugin}`,
+            message: err.toString(),
+          })(err);
+          bsSP.sockets.emit('error:message', err);
+        },
+      }))
       .pipe(gif('*.styl', stylus({
         'include css': true,
         rawDefine: { $data },

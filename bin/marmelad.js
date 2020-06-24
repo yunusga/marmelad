@@ -4,7 +4,7 @@ const CLI = require('commander');
 const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
 
-updateNotifier({pkg}).notify();
+updateNotifier({ pkg }).notify();
 
 const LOG = console.log;
 
@@ -19,7 +19,6 @@ CLI
     LOG(`\nSource files:\n  ${__filename}`);
     LOG(`Version:\n  ${pkg.version}`);
   });
-
 
 /**
  * инициализация нового проекта
@@ -51,7 +50,6 @@ CLI
     // console.log();
   });
 
-
 /**
  * создание страницы
  */
@@ -61,7 +59,6 @@ CLI
   .action((pageName) => {
     require('../commands/cp')(pageName);
   });
-
 
 /**
  * создание блока
@@ -84,7 +81,6 @@ CLI
     require('../commands/lint')(opts.techs);
   });
 
-
 /**
  * Prettier
  */
@@ -94,7 +90,6 @@ CLI
   .action((opts) => {
     require('../commands/dist')(opts);
   });
-
 
 /**
  * Archive

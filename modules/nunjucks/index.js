@@ -15,16 +15,17 @@ function nunjucksBuild(opts) {
       return cb(new PluginError(PLUGIN_NAME, 'Streams are not supported'));
     }
 
-    const options = Object.assign({
+    const options = {
       autoescape: false,
       locals: {},
       searchPaths: [],
-    }, opts);
+      ...opts,
+    };
 
     const str = file.contents.toString('utf8');
     const data = file.data ? file.data : {};
     const fm = file.frontMatter ? file.frontMatter : {};
-    const context = Object.assign({}, options.locals, data, fm);
+    const context = { ...options.locals, ...data, ...fm };
 
     const loader = new nunjucks.FileSystemLoader(options.searchPaths, {
       watch: false,
