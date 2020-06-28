@@ -1,0 +1,16 @@
+
+snippets.sheme
+node_modules
+.idea
+.vscode
+.DS_Store
+*~
+*.diff
+*.patch
+*.tar
+*.gz
+*.zip
+/marmelad/.tci
+/static
+/dist
+/test

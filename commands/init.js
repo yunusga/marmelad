@@ -4,6 +4,7 @@ const gulp = require('gulp');
 const gif = require('gulp-if');
 const replace = require('gulp-replace');
 const readlineSync = require('readline-sync');
+const CMD = require('cmd-exec').init();
 const CHALK = require('chalk');
 
 const CERROR = CHALK.bold.red;
@@ -21,15 +22,20 @@ module.exports = (dir, opts) => {
   const boilerplatePath = path.join(__dirname.replace('commands', ''), 'boilerplate');
 
   // набор файлов для копирования заготовки нового проекта
-  const initFiles = new Set([
+  const boilerplateFiles = new Set([
     path.join(boilerplatePath, 'base', '**', `*.!(${[...supportedCSS].join('|')})`),
+  ]);
+
+  // файлы для копирования в корень проекта
+  const rootFiles = new Set([
+    path.join(boilerplatePath, 'rootfiles', '**', '*'),
   ]);
 
   let btsUse = 'false';
   let btsDonor = 'false';
 
   if (opts.bootstrap) {
-    initFiles.add(path.join(boilerplatePath, 'extensions', 'bootstrap', '**', '*'));
+    boilerplateFiles.add(path.join(boilerplatePath, 'extensions', 'bootstrap', '**', '*'));
 
     btsUse = 'true';
 
@@ -39,9 +45,11 @@ module.exports = (dir, opts) => {
     }
   }
 
-  gulp.task('init:marmelad', (done) => {
+  gulp.task('copy:boilerplate', (done) => {
+    LOG(`${CSUCCESS('[marmelad]')} copy:boilerplate`);
+
     const stream = gulp.src(
-      [...initFiles],
+      [...boilerplateFiles],
       { dot: true },
     )
       .pipe(gif('settings.marmelad.js', replace('<%- css %>', opts.css)))
@@ -50,9 +58,38 @@ module.exports = (dir, opts) => {
       .pipe(gulp.dest(path.join(process.cwd(), dir, 'marmelad')));
 
     stream.on('end', () => {
-      LOG(`${CSUCCESS('[marmelad]')} initialized, type ${CWARN('marmelad -h')} for CLI help`);
       done();
     });
+  });
+
+  gulp.task('copy:rootfiles', (done) => {
+    LOG(`${CSUCCESS('[marmelad]')} copy:rootfiles...`);
+
+    const stream = gulp.src(
+      [...rootFiles],
+      { dot: true },
+    )
+      .pipe(gulp.dest(path.join(process.cwd(), dir)));
+
+    stream.on('end', () => {
+      done();
+    });
+  });
+
+  gulp.task('git:init', (done) => {
+    LOG(`${CSUCCESS('[marmelad]')} git:init`);
+
+    CMD
+      .exec('git init && git add . && git commit -m "[marmelad] initial commit"')
+      .then((res) => {
+        LOG(res.message);
+      })
+      .fail((err) => {
+        LOG(err.message);
+      })
+      .done(() => {
+        done();
+      });
   });
 
   dir = dir || '';
@@ -83,5 +120,5 @@ module.exports = (dir, opts) => {
     }
   }
 
-  gulp.series('init:marmelad')();
+  gulp.series('copy:boilerplate', 'copy:rootfiles', 'git:init')();
 };
