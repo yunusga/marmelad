@@ -109,7 +109,7 @@
     "postcss-inline-svg": "4.1.0",
     "postcss-momentum-scrolling": "2.7.17",
     "postcss-sort-media-queries": "^1.6.24",
-    "postcss-viewport-height-correction": "1.0.4",
+    "postcss-viewport-height-correction": "2.0.2",
     "posthtml-attrs-sorter": "1.1.0",
     "readline-sync": "1.4.10",
     "replace-ext": "2.0.0",
