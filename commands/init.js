@@ -79,8 +79,18 @@ module.exports = (dir, opts) => {
   gulp.task('git:init', (done) => {
     LOG(`${CSUCCESS('[marmelad]')} git:init`);
 
+    const gitInitCommands = [
+      'git init',
+      'git add .',
+      'git commit -m "[marmelad] initial commit"',
+    ];
+
+    if (dir) {
+      gitInitCommands.unshift(`cd ${dir}`);
+    }
+
     CMD
-      .exec('git init && git add . && git commit -m "[marmelad] initial commit"')
+      .exec(gitInitCommands.join(' && '))
       .then((res) => {
         LOG(res.message);
       })
