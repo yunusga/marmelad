@@ -117,6 +117,9 @@
     "through2": "4.0.2",
     "update-notifier": "^4.1.0"
   },
+  "scarfSettings": {
+    "enabled": false
+  },
   "scripts": {
     "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm i",
     "test": "jest",
