@@ -63,7 +63,7 @@ module.exports = (dir, opts) => {
   });
 
   gulp.task('copy:rootfiles', (done) => {
-    LOG(`${CSUCCESS('[marmelad]')} copy:rootfiles...`);
+    LOG(`${CSUCCESS('[marmelad]')} copy:rootfiles`);
 
     const stream = gulp.src(
       [...rootFiles],
@@ -80,9 +80,9 @@ module.exports = (dir, opts) => {
     LOG(`${CSUCCESS('[marmelad]')} git:init`);
 
     const gitInitCommands = [
-      'git init',
+      'git init -q',
       'git add .',
-      'git commit -m "[marmelad] initial commit"',
+      'git commit -q -m "[marmelad] initial commit"',
     ];
 
     if (dir) {
@@ -92,12 +92,15 @@ module.exports = (dir, opts) => {
     CMD
       .exec(gitInitCommands.join(' && '))
       .then((res) => {
-        LOG(res.message);
+        if (!opts.test) {
+          LOG(res.exitCode);
+        }
       })
       .fail((err) => {
-        LOG(err.message);
+        LOG(err);
       })
       .done(() => {
+        LOG(`${CSUCCESS('[marmelad]')} initialized, type marmelad -h for CLI help`);
         done();
       });
   });
