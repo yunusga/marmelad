@@ -79,10 +79,12 @@ module.exports = (dir, opts) => {
   gulp.task('git:init', (done) => {
     LOG(`${CSUCCESS('[marmelad]')} git:init`);
 
+    const quietFlag = opts.test ? ' -q' : '';
+
     const gitInitCommands = [
-      'git init -q',
+      `git init${quietFlag}`,
       'git add .',
-      'git commit -q -m "[marmelad] initial commit"',
+      `git commit${quietFlag} -m "[marmelad] initial commit"`,
     ];
 
     if (dir) {
