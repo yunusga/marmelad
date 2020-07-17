@@ -64,7 +64,7 @@
     "@babel/preset-env": "^7.10.4",
     "archiver": "4.0.2",
     "autoprefixer": "9.8.5",
-    "browser-sync": "2.26.7",
+    "browser-sync": "2.26.10",
     "bs-auth": "1.2.7",
     "camelcase": "6.0.0",
     "chalk": "4.1.0",
