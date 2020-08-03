@@ -59,11 +59,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "7.10.5",
+    "@babel/core": "7.11.0",
     "@babel/plugin-transform-object-assign": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
     "archiver": "5.0.0",
-    "autoprefixer": "9.8.5",
+    "autoprefixer": "9.8.6",
     "browser-sync": "2.26.12",
     "bs-auth": "1.2.7",
     "camelcase": "6.0.0",
@@ -99,7 +99,7 @@
     "gulp-tap": "2.0.0",
     "gulp-uglify": "3.0.2",
     "hasha": "5.2.0",
-    "node-w3c-validator": "1.6.2",
+    "node-w3c-validator": "1.6.4",
     "nunjucks": "3.2.2",
     "ora": "4.0.5",
     "plugin-error": "1.0.1",
@@ -129,11 +129,11 @@
     "testRegex": "tests/.*\\.(js|jsx)$"
   },
   "devDependencies": {
-    "eslint": "7.5.0",
+    "eslint": "7.6.0",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.0",
     "fs-extra": "9.0.1",
-    "jest": "26.1.0"
+    "jest": "26.2.2"
   },
   "eslintConfig": {
     "ignorePatterns": [
