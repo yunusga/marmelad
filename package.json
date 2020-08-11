@@ -133,7 +133,7 @@
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.0",
     "fs-extra": "9.0.1",
-    "jest": "26.2.2"
+    "jest": "26.3.0"
   },
   "eslintConfig": {
     "ignorePatterns": [
