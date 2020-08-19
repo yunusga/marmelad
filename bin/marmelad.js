@@ -72,6 +72,18 @@ CLI
   });
 
 /**
+ * переименование блока
+ */
+CLI
+  .command('mv <oldName> <newName>')
+  .description('rename block')
+  .option('-d, --dry', 'Dry run without actually making replacements, for testing purposes')
+  .option('--hard', 'Enable replacements in files')
+  .action((oldName, newName, opts) => {
+    require('../commands/mv')(oldName, newName, opts);
+  });
+
+/**
  * линтера сборки
  */
 CLI
