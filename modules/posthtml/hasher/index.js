@@ -2,7 +2,6 @@ const url = require('url');
 const hasha = require('hasha');
 
 function setFileHash(src, path) {
-
   const parsed = url.parse(src);
 
   if (parsed.protocol || src.indexOf('//') > -1) {
