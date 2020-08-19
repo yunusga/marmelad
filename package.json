@@ -107,15 +107,15 @@
     "postcss-extract-media-query": "2.0.0",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-inline-svg": "4.1.0",
-    "postcss-momentum-scrolling": "2.8.18",
-    "postcss-sort-media-queries": "^1.7.25",
+    "postcss-momentum-scrolling": "2.8.20",
+    "postcss-sort-media-queries": "^1.7.26",
     "postcss-viewport-height-correction": "2.0.2",
     "posthtml-attrs-sorter": "1.1.0",
     "readline-sync": "1.4.10",
     "replace-ext": "2.0.0",
-    "tar": "6.0.2",
+    "tar": "6.0.5",
     "through2": "4.0.2",
-    "update-notifier": "^4.1.0"
+    "update-notifier": "^4.1.1"
   },
   "scarfSettings": {
     "enabled": false
@@ -129,11 +129,11 @@
     "testRegex": "tests/.*\\.(js|jsx)$"
   },
   "devDependencies": {
-    "eslint": "7.6.0",
+    "eslint": "7.7.0",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-import": "2.22.0",
     "fs-extra": "9.0.1",
-    "jest": "26.3.0"
+    "jest": "26.4.0"
   },
   "eslintConfig": {
     "ignorePatterns": [
