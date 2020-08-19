@@ -17,6 +17,7 @@ function setFileHash(src, path) {
     hash = global._mmdHashes.get(uri);
   } else {
     hash = hasha.fromFileSync(`${path}/${uri}`, { algorithm: 'sha1', encoding: 'hex' });
+    hash = hash.slice(0, 24);
     global._mmdHashes.set(uri, hash);
   }
 
