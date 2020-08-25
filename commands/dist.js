@@ -1,11 +1,21 @@
+const path = require('path');
 const gulp = require('gulp');
 const postHTML = require('gulp-posthtml');
 const attrsSorter = require('posthtml-attrs-sorter');
 const pretty = require('gulp-pretty-html');
+const rename = require('gulp-rename');
+const postcss = require('gulp-postcss');
+const cssnano = require('cssnano');
+const uglify = require('gulp-uglify');
+const tap = require('gulp-tap');
 const ora = require('ora');
 
 const hasher = require('../modules/posthtml/hasher');
 const getSettings = require('../modules/get-settings');
+
+function getNormalPath(filePath, basePath) {
+  return filePath.replace(basePath, '').replace(/\\/g, '/').replace(/^\/+/, '');
+}
 
 module.exports = () => {
   const settings = getSettings();
@@ -74,5 +84,61 @@ module.exports = () => {
     });
   });
 
-  gulp.series('format:html', 'posthtml:tools')();
+  gulp.task('minify:css', (done) => {
+    const stream = gulp.src(`${settings.paths.dist}/**/!(*.min).css`)
+      .pipe(tap((file) => {
+        console.log(`minimize: ${path.basename(file.path)}`);
+      }))
+      .pipe(rename({
+        suffix: '.min',
+      }))
+      .pipe(postcss([
+        cssnano(settings.app.cssnano),
+      ], { from: undefined }))
+      .pipe(gulp.dest((file) => {
+        const before = getNormalPath(file.history[0], file.base);
+        const after = getNormalPath(file.history[1], file.base);
+
+        if (!global._mmdMinified) {
+          global._mmdMinified = new Map();
+        }
+
+        global._mmdMinified.set(before, after);
+
+        return file.base;
+      }));
+
+    stream.on('end', () => {
+      done();
+    });
+  });
+
+  gulp.task('minify:js', (done) => {
+    const stream = gulp.src(`${settings.paths.dist}/**/!(*.min).js`)
+      .pipe(tap((file) => {
+        console.log(`minimize: ${path.basename(file.path)}`);
+      }))
+      .pipe(rename({
+        suffix: '.min',
+      }))
+      .pipe(uglify())
+      .pipe(gulp.dest((file) => {
+        const before = getNormalPath(file.history[0], file.base);
+        const after = getNormalPath(file.history[1], file.base);
+
+        if (!global._mmdMinified) {
+          global._mmdMinified = new Map();
+        }
+
+        global._mmdMinified.set(before, after);
+
+        return file.base;
+      }));
+
+    stream.on('end', () => {
+      done();
+    });
+  });
+
+  gulp.series('minify:css', 'minify:js', 'posthtml:tools', 'format:html')();
 };

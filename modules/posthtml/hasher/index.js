@@ -8,17 +8,19 @@ function setFileHash(src, path) {
     return src;
   }
 
-  const uri = parsed.pathname;
   const searchParams = new URLSearchParams(parsed.search);
 
   let hash = '';
+  let uri = parsed.pathname.replace(/^\/+/);
+
+  uri = global._mmdMinified.has(parsed.pathname) ? global._mmdMinified.get(parsed.pathname) : parsed.pathname;
 
   if (global._mmdHashes.has(uri)) {
     hash = global._mmdHashes.get(uri);
   } else {
     hash = hasha.fromFileSync(`${path}/${uri}`, { algorithm: 'sha1', encoding: 'hex' });
     hash = hash.slice(0, 24);
-    global._mmdHashes.set(uri, hash);
+    global._mmdHashes.set(uri.replace(/^\/+/, ''), hash);
   }
 
   searchParams.set('v', hash);
