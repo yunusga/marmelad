@@ -17,6 +17,17 @@ function getNormalPath(filePath, basePath) {
   return filePath.replace(basePath, '').replace(/\\/g, '/').replace(/^\/+/, '');
 }
 
+function setMmdMinified(file) {
+  const before = getNormalPath(file.history[0], file.base);
+  const after = getNormalPath(file.history[1], file.base);
+
+  if (!global._mmdMinified) {
+    global._mmdMinified = new Map();
+  }
+
+  global._mmdMinified.set(before, after);
+}
+
 module.exports = () => {
   const settings = getSettings();
 
@@ -96,15 +107,7 @@ module.exports = () => {
         cssnano(settings.app.cssnano),
       ], { from: undefined }))
       .pipe(gulp.dest((file) => {
-        const before = getNormalPath(file.history[0], file.base);
-        const after = getNormalPath(file.history[1], file.base);
-
-        if (!global._mmdMinified) {
-          global._mmdMinified = new Map();
-        }
-
-        global._mmdMinified.set(before, after);
-
+        setMmdMinified(file);
         return file.base;
       }));
 
@@ -123,15 +126,7 @@ module.exports = () => {
       }))
       .pipe(uglify())
       .pipe(gulp.dest((file) => {
-        const before = getNormalPath(file.history[0], file.base);
-        const after = getNormalPath(file.history[1], file.base);
-
-        if (!global._mmdMinified) {
-          global._mmdMinified = new Map();
-        }
-
-        global._mmdMinified.set(before, after);
-
+        setMmdMinified(file);
         return file.base;
       }));
 
