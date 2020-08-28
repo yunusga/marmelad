@@ -511,3 +511,5 @@ latencyRoutes: [
 Прочтите [Кодекс Поведения участника](CODE_OF_CONDUCT)
 
 *Логотип был взят и изменён, из набора иконок автора <a href="https://www.flaticon.com/authors/freepik" title="Jelly beans">Jelly beans</a> распространяемого под лицензией <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a> с <a href="https://www.flaticon.com/"     title="Flaticon">www.flaticon.com</a>*
+
+[В начало 🔝](#marmelad)
