@@ -65,6 +65,7 @@
   const BODY = document.getElementsByTagName('body')[0];
 
   socket.on(ERROR_MSG_EVENT, (error) => {
+    // eslint-disable-next-line no-control-regex
     const message = error.message.replace(/\[\d+m/gm, '');
 
     if (isInPage(POPUP)) {
