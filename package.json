@@ -105,7 +105,7 @@
     "nunjucks": "3.2.2",
     "ora": "5.0.0",
     "plugin-error": "1.0.1",
-    "postcss-easing-gradients": "3.0.1",
+    "postcss-easing-gradients": "git+https://github.com/solversgroup/postcss-easing-gradients.git",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-inline-svg": "4.1.0",
     "postcss-momentum-scrolling": "2.8.20",
