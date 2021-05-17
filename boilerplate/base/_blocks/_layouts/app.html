@@ -1,19 +1,16 @@
 <!doctype html>
 <html lang="{{ app.lang }}">
-
     <head>
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{{ pageTitle }} - {{ app.package.name | capitalize }} v{{ app.package.version }} / {{ git.branch }}</title>
 
         <meta name="theme-color" content="{{ app.stylus.colors.theme }}">
 
         <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
         <meta name="format-detection" content="telephone=no">
-
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-		<link type="image/png" href="favicon.png" rel="icon">
 
         <meta name="msapplication-tap-highlight" content="no">
 
@@ -23,12 +20,9 @@
         <meta name="MobileOptimized" content="320">
         <meta name="HandheldFriendly" content="True">
 
-        <title>{{ pageTitle }} - {{ app.package.name | capitalize }} v{{ app.package.version }} / {{ git.branch }}</title>
-
         <link rel="stylesheet" href="css/app.css">
 
         {% block inlineStyles %}{% endblock %}
-
     </head>
 
     <body block="app" class="{{ bodyClasses }}">
@@ -38,34 +32,22 @@
         <div elem="wrapper">
 
             {% if layout.header %}
-            	{% include 'app-header.html' %}
+            	{% include 'header.html' %}
             {% endif %}
 
             <div elem="content">
 
                 <main elem="main">
                     {% block main %}{% endblock %}
-                </main><!-- app__main -->
+                </main><!-- app:main -->
 
-                {% if layout.left %}
-                <aside elem="aside" mods="left">
-                    {% block asideLeft %}{% endblock %}
-                </aside><!-- app__aside left -->
-                {% endif %}
-
-                {% if layout.right %}
-                <aside elem="aside" mods="right">
-                    {% block asideRight %}{% endblock %}
-                </aside><!-- app__aside right -->
-                {% endif %}
-
-            </div><!-- app__content -->
+            </div><!-- app:content -->
 
             {% if layout.footer %}
-            	{% include 'app-footer.html' %}
+            	{% include 'footer.html' %}
             {% endif %}
 
-        </div><!-- app__wrapper -->
+        </div><!-- app:wrapper -->
 
         {% include 'page-scroller.html' %}
 
