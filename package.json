@@ -59,7 +59,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "7.14.2",
+    "@babel/core": "7.14.3",
     "@babel/plugin-transform-object-assign": "^7.12.13",
     "@babel/preset-env": "^7.14.2",
     "archiver": "5.3.0",
@@ -72,7 +72,7 @@
     "chokidar": "3.5.1",
     "cmd-exec": "0.1.0",
     "commander": "7.2.0",
-    "cssnano": "^5.0.2",
+    "cssnano": "^5.0.4",
     "current-git-branch": "1.1.0",
     "decache": "4.6.0",
     "del": "6.0.0",
@@ -105,12 +105,12 @@
     "nunjucks": "3.2.3",
     "ora": "5.4.0",
     "plugin-error": "1.0.1",
-    "postcss": "^8.2.15",
+    "postcss": "^8.3.0",
     "postcss-easing-gradients": "git+https://github.com/solversgroup/postcss-easing-gradients.git",
     "postcss-flexbugs-fixes": "5.0.2",
     "postcss-inline-svg": "5.0.0",
-    "postcss-momentum-scrolling": "3.11.20",
-    "postcss-sort-media-queries": "^3.9.10",
+    "postcss-momentum-scrolling": "3.12.21",
+    "postcss-sort-media-queries": "^3.10.11",
     "postcss-viewport-height-correction": "2.0.2",
     "posthtml-attrs-sorter": "1.1.0",
     "readline-sync": "1.4.10",
@@ -121,9 +121,9 @@
     "update-notifier": "^5.1.0"
   },
   "devDependencies": {
-    "eslint": "7.26.0",
+    "eslint": "7.27.0",
     "eslint-config-airbnb-base": "14.2.1",
-    "eslint-plugin-import": "2.23.2",
+    "eslint-plugin-import": "2.23.3",
     "jest": "26.6.3"
   },
   "scarfSettings": {
