@@ -19,7 +19,6 @@ const viewportHeightCorrection = require('postcss-viewport-height-correction');
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
 const gif = require('gulp-if');
-const LOG = require('fancy-log');
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 const combineAndSortMQ = require('postcss-sort-media-queries');
@@ -159,7 +158,7 @@ module.exports = (opts) => {
 
     stream.on('end', () => {
       if (!hasError) {
-        LOG(`[nunjucks] ${hasError ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
+        console.log(`[nunjucks] ${hasError ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
         bsSP.reload();
       }
 
@@ -176,8 +175,8 @@ module.exports = (opts) => {
   gulp.task('database', (done) => {
     DB.onError = (blockPath, error) => {
       bsSP.sockets.emit('error:message', error);
-      LOG.error(chalk.bold.red(blockPath));
-      LOG.error(error.message);
+      console.error(chalk.bold.red(blockPath));
+      console.error(error.message);
     };
 
     [`${settings.paths._blocks}/**/*.json`].forEach((paths) => {
@@ -233,14 +232,14 @@ module.exports = (opts) => {
         },
       }, 'app');
 
-      LOG(`[iconizer] icons ${chalk.bold.green('Done')}`);
+      console.log(`[iconizer] icons ${chalk.bold.green('Done')}`);
 
       done();
     });
 
     stream.on('error', (error) => {
       bsSP.sockets.emit('error:message', error);
-      console.log(error);
+      console.error(error);
       done(error);
     });
   });
@@ -272,7 +271,7 @@ module.exports = (opts) => {
         },
       }, 'app');
 
-      LOG(`[iconizer] colored ${chalk.bold.green('Done')}`);
+      console.log(`[iconizer] colored ${chalk.bold.green('Done')}`);
 
       done();
     });
@@ -315,7 +314,7 @@ module.exports = (opts) => {
       .pipe(include({
         extensions: 'js',
         hardFail: false,
-      })).on('error', LOG)
+      })).on('error', console.log)
       .pipe(babel({
         presets: ['@babel/preset-env'].map(require.resolve),
         plugins: ['@babel/plugin-transform-object-assign'].map(require.resolve),
@@ -324,7 +323,7 @@ module.exports = (opts) => {
 
     stream.on('end', () => {
       if (!hasError) {
-        LOG(`[js] others ${chalk.bold.green('Done')}`);
+        console.log(`[js] others ${chalk.bold.green('Done')}`);
         bsSP.reload();
       }
 
@@ -361,7 +360,7 @@ module.exports = (opts) => {
 
     stream.on('end', () => {
       if (!hasError) {
-        LOG(`[js] vendors ${chalk.bold.green('Done')}`);
+        console.log(`[js] vendors ${chalk.bold.green('Done')}`);
         bsSP.reload();
       }
 
@@ -399,7 +398,7 @@ module.exports = (opts) => {
 
     stream.on('end', () => {
       if (!hasError) {
-        LOG(`[js] plugins ${chalk.bold.green('Done')}`);
+        console.log(`[js] plugins ${chalk.bold.green('Done')}`);
         bsSP.reload();
       }
 
@@ -435,7 +434,7 @@ module.exports = (opts) => {
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .on('end', () => {
-        LOG(`[css] plugins ${chalk.bold.green('Done')}`);
+        console.log(`[css] plugins ${chalk.bold.green('Done')}`);
       })
       .pipe(bsSP.stream());
     done();
@@ -487,7 +486,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .pipe(bsSP.stream())
       .on('end', () => {
-        LOG(`[css] styles ${chalk.bold.green('Done')}`);
+        console.log(`[css] styles ${chalk.bold.green('Done')}`);
       })
       .pipe(bsSP.stream());
 
@@ -508,7 +507,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.paths.storage));
 
     stream.on('end', () => {
-      LOG(`Static files copy ${chalk.bold.green('Done')}`);
+      console.log(`Static files copy ${chalk.bold.green('Done')}`);
       bsSP.reload();
       done();
     });
@@ -606,7 +605,7 @@ module.exports = (opts) => {
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(settings.app.bts['4'].dest.css))
       .on('end', () => {
-        LOG(`Bootstrap ${settings.app.bts['4'].code} SASS ${chalk.bold.green('Done')}`);
+        console.log(`Bootstrap ${settings.app.bts['4'].code} SASS ${chalk.bold.green('Done')}`);
       })
       .pipe(bsSP.stream());
 
@@ -621,7 +620,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.app.bts['4'].dest.js));
 
     stream.on('end', () => {
-      LOG(`Bootstrap ${settings.app.bts['4'].code} JS ${chalk.bold.green('Done')}`);
+      console.log(`Bootstrap ${settings.app.bts['4'].code} JS ${chalk.bold.green('Done')}`);
       bsSP.reload();
       done();
     });
@@ -746,7 +745,7 @@ module.exports = (opts) => {
         if (LAGMAN.store.blocks[blockName].size) {
           gulp.series('nunjucks')();
         } else {
-          LOG(`[nunjucks] block ${chalk.bold.yellow(blockName)} has no dependencies`);
+          console.log(`[nunjucks] block ${chalk.bold.yellow(blockName)} has no dependencies`);
         }
       })
       .on('unlink', (blockPath) => {
@@ -865,7 +864,7 @@ module.exports = (opts) => {
         gulp.series('proxy:copy-sources', 'proxy:watch-sources', 'proxy:server')();
       }
 
-      LOG(`Proxy Mod ${chalk.bold.green('Started')}`);
+      console.log(`Proxy Mod ${chalk.bold.green('Started')}`);
     }
 
     done();
@@ -908,7 +907,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.proxy.sources.to));
 
     stream.on('end', () => {
-      LOG(`Proxy Copy Sources ${chalk.bold.green('Done')}`);
+      console.log(`Proxy Copy Sources ${chalk.bold.green('Done')}`);
       // bsSP.reload();
       done();
     });
@@ -939,7 +938,7 @@ module.exports = (opts) => {
       gulp.parallel('proxy:copy-sources'),
     );
 
-    LOG(`Proxy Watch Sources ${chalk.bold.green('Started')}`);
+    console.log(`Proxy Watch Sources ${chalk.bold.green('Started')}`);
 
     done();
   });

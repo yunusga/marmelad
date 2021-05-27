@@ -1,5 +1,3 @@
-const log = require('fancy-log');
-
 function _createElemClass(blockClass, elemName, config) {
   return blockClass + config.elemPrefix + elemName;
 }
@@ -44,7 +42,7 @@ function _createMixClass(baseClass, mix, config) {
     mods = modRegExp.exec(mixItem) || [];
 
     if (!block) {
-      log('Please add block attribute to a mix definition: ', mixes);
+      console.error('Please add block attribute to a mix definition: ', mixes);
     }
 
     classList = _createClassList({
