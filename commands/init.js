@@ -5,14 +5,18 @@ const gif = require('gulp-if');
 const replace = require('gulp-replace');
 const readlineSync = require('readline-sync');
 const CMD = require('cmd-exec').init();
-const CHALK = require('chalk');
 
-const CERROR = CHALK.bold.red;
-const CWARN = CHALK.bold.yellow;
-const CSUCCESS = CHALK.bold.green;
+const {
+  bold, bgRed, bgYellow, black, green, options,
+} = require('colorette');
+
 const LOG = console.log;
 
 module.exports = (dir, opts) => {
+  // отключаем цветную консоль во время теста
+  if (opts.test) {
+    options.enabled = false;
+  }
   // набор поддерживаемых css-препроцессоров marmelad
   const supportedCSS = new Set(['scss', 'sass', 'styl']);
 
@@ -46,7 +50,7 @@ module.exports = (dir, opts) => {
   }
 
   gulp.task('copy:boilerplate', (done) => {
-    LOG(`${CSUCCESS('[marmelad]')} copy:boilerplate`);
+    LOG(`${bold(green('[marmelad]'))} copy:boilerplate`);
 
     const stream = gulp.src(
       [...boilerplateFiles],
@@ -63,7 +67,7 @@ module.exports = (dir, opts) => {
   });
 
   gulp.task('copy:rootfiles', (done) => {
-    LOG(`${CSUCCESS('[marmelad]')} copy:rootfiles`);
+    LOG(`${bold(green('[marmelad]'))} copy:rootfiles`);
 
     const initInfo = require('../modules/init-info')();
 
@@ -80,7 +84,7 @@ module.exports = (dir, opts) => {
   });
 
   gulp.task('git:init', (done) => {
-    LOG(`${CSUCCESS('[marmelad]')} git:init`);
+    LOG(`${bold(green('[marmelad]'))} git:init`);
 
     const quietFlag = opts.test ? ' -q' : '';
 
@@ -105,7 +109,7 @@ module.exports = (dir, opts) => {
         LOG(err);
       })
       .done(() => {
-        LOG(`${CSUCCESS('[marmelad]')} initialized, type marmelad -h for CLI help`);
+        LOG(`${bold(green('[marmelad]'))} initialized, type marmelad -h for CLI help`);
         done();
       });
   });
@@ -117,18 +121,18 @@ module.exports = (dir, opts) => {
   const hasMarmelad = fs.existsSync(path.join(dir, 'marmelad'));
 
   if (hasMarmelad) {
-    LOG(`${CERROR('[error]')} project is already initialized`);
+    LOG(`${bgRed(' ERROR ')} project is already initialized`);
     process.exit(0);
   }
 
   if (isNotEmpty) {
-    LOG(`${CWARN('[warn]')} Directory is not empty. Some files may be overwritten. Continue?`);
+    LOG(`${bgYellow(black(' WARN '))} Directory is not empty. Some files may be overwritten. Continue?`);
 
     if (!opts.test) {
       const agree = readlineSync.question('(yes|no):');
 
       if (agree !== 'yes') {
-        LOG(`${CERROR('[error]')} initialization aborted`);
+        LOG(`${bgRed(' ERROR ')} initialization aborted`);
         process.exit(0);
       }
     }

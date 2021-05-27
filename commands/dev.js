@@ -4,7 +4,11 @@ const { performance } = require('perf_hooks');
 
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
+
+const {
+  bold, green, red, yellow, bgRed,
+} = require('colorette');
+
 const gulp = require('gulp');
 const bsSP = require('browser-sync').create('Dev Server');
 const rename = require('gulp-rename');
@@ -155,7 +159,7 @@ module.exports = (opts) => {
 
     stream.on('end', () => {
       if (!hasError) {
-        console.log(`[nunjucks] ${hasError ? chalk.bold.red('ERROR') : chalk.bold.green('done')} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
+        console.log(`[nunjucks] ${hasError ? bold(red('ERROR')) : bold(green('done'))} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
         bsSP.reload();
       }
 
@@ -172,7 +176,7 @@ module.exports = (opts) => {
   gulp.task('database', (done) => {
     DB.onError = (blockPath, error) => {
       bsSP.sockets.emit('error:message', error);
-      console.error(chalk.bold.red(blockPath));
+      console.error(bold(red(blockPath)));
       console.error(error.message);
     };
 
@@ -229,7 +233,7 @@ module.exports = (opts) => {
         },
       }, 'app');
 
-      console.log(`[iconizer] icons ${chalk.bold.green('Done')}`);
+      console.log(`[iconizer] icons ${bold(green('Done'))}`);
 
       done();
     });
@@ -268,7 +272,7 @@ module.exports = (opts) => {
         },
       }, 'app');
 
-      console.log(`[iconizer] colored ${chalk.bold.green('Done')}`);
+      console.log(`[iconizer] colored ${bold(green('Done'))}`);
 
       done();
     });
@@ -318,7 +322,7 @@ module.exports = (opts) => {
 
     stream.on('end', () => {
       if (!hasError) {
-        console.log(`[js] others ${chalk.bold.green('Done')}`);
+        console.log(`[js] others ${bold(green('Done'))}`);
         bsSP.reload();
       }
 
@@ -353,7 +357,7 @@ module.exports = (opts) => {
 
     stream.on('end', () => {
       if (!hasError) {
-        console.log(`[js] vendors ${chalk.bold.green('Done')}`);
+        console.log(`[js] vendors ${bold(green('Done'))}`);
         bsSP.reload();
       }
 
@@ -389,7 +393,7 @@ module.exports = (opts) => {
 
     stream.on('end', () => {
       if (!hasError) {
-        console.log(`[js] plugins ${chalk.bold.green('Done')}`);
+        console.log(`[js] plugins ${bold(green('Done'))}`);
         bsSP.reload();
       }
 
@@ -423,7 +427,7 @@ module.exports = (opts) => {
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .on('end', () => {
-        console.log(`[css] plugins ${chalk.bold.green('Done')}`);
+        console.log(`[css] plugins ${bold(green('Done'))}`);
       })
       .pipe(bsSP.stream());
     done();
@@ -474,7 +478,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .pipe(bsSP.stream())
       .on('end', () => {
-        console.log(`[css] styles ${chalk.bold.green('Done')}`);
+        console.log(`[css] styles ${bold(green('Done'))}`);
       })
       .pipe(bsSP.stream());
 
@@ -495,7 +499,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.paths.storage));
 
     stream.on('end', () => {
-      console.log(`Static files copy ${chalk.bold.green('Done')}`);
+      console.log(`Static files copy ${bold(green('Done'))}`);
       bsSP.reload();
       done();
     });
@@ -593,7 +597,7 @@ module.exports = (opts) => {
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(settings.app.bts['4'].dest.css))
       .on('end', () => {
-        console.log(`Bootstrap ${settings.app.bts['4'].code} SASS ${chalk.bold.green('Done')}`);
+        console.log(`Bootstrap ${settings.app.bts['4'].code} SASS ${bold(green('Done'))}`);
       })
       .pipe(bsSP.stream());
 
@@ -608,7 +612,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.app.bts['4'].dest.js));
 
     stream.on('end', () => {
-      console.log(`Bootstrap ${settings.app.bts['4'].code} JS ${chalk.bold.green('Done')}`);
+      console.log(`Bootstrap ${settings.app.bts['4'].code} JS ${bold(green('Done'))}`);
       bsSP.reload();
       done();
     });
@@ -733,7 +737,7 @@ module.exports = (opts) => {
         if (LAGMAN.store.blocks[blockName].size) {
           gulp.series('nunjucks')();
         } else {
-          console.log(`[nunjucks] block ${chalk.bold.yellow(blockName)} has no dependencies`);
+          console.log(`[nunjucks] block ${bold(yellow(blockName))} has no dependencies`);
         }
       })
       .on('unlink', (blockPath) => {
@@ -815,7 +819,7 @@ module.exports = (opts) => {
 
             if (iconStats.size > 3072) {
               sizeLimitError = true;
-              console.log(chalk`{bgRed  ERROR } icon {yellow ${iconName}} more than 3kb`);
+              console.log(`${bgRed(' ERROR ')} icon ${yellow(iconName)} more than 3kb`);
             }
           });
         }
@@ -852,7 +856,7 @@ module.exports = (opts) => {
         gulp.series('proxy:copy-sources', 'proxy:watch-sources', 'proxy:server')();
       }
 
-      console.log(`Proxy Mod ${chalk.bold.green('Started')}`);
+      console.log(`Proxy Mod ${bold(green('Started'))}`);
     }
 
     done();
@@ -895,7 +899,7 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.proxy.sources.to));
 
     stream.on('end', () => {
-      console.log(`Proxy Copy Sources ${chalk.bold.green('Done')}`);
+      console.log(`Proxy Copy Sources ${bold(green('Done'))}`);
       // bsSP.reload();
       done();
     });
@@ -926,7 +930,7 @@ module.exports = (opts) => {
       gulp.parallel('proxy:copy-sources'),
     );
 
-    console.log(`Proxy Watch Sources ${chalk.bold.green('Started')}`);
+    console.log(`Proxy Watch Sources ${bold(green('Started'))}`);
 
     done();
   });

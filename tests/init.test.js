@@ -27,7 +27,7 @@ test('init with create new directory', (done) => {
 test('init in initialized directory', (done) => {
   CMD.exec('node bin/marmelad.js init test/init-test --test', (err, res) => {
     expect(err).toBe(null);
-    expect(res.message).toBe('[error] project is already initialized\n');
+    expect(res.message).toBe(' ERROR  project is already initialized\n');
     done();
   });
 });
@@ -38,14 +38,14 @@ test('init in non empty directory', (done) => {
 
   CMD.exec('node bin/marmelad.js init test/init-test/nonempty --test', (err, res) => {
     expect(err).toBe(null);
-    expect(res.message).toBe('[warn] Directory is not empty. Some files may be overwritten. Continue?\n');
+    expect(res.message).toBe(' WARN  Directory is not empty. Some files may be overwritten. Continue?\n');
     done();
   });
 });
 
 test('init with bootstrap in new directory', (done) => {
   CMD.exec('node bin/marmelad.js init test/init-test/create-bootstrap  --test --bootstrap', (err, res) => {
-    const settings = require('../test/init-test/create-bootstrap/marmelad/settings.marmelad.js');
+    const settings = require('../test/init-test/create-bootstrap/marmelad/settings.marmelad');
 
     expect(err).toBe(null);
     expect(res.message).toBe(SUCCESS_STR);
@@ -58,7 +58,7 @@ test('init with bootstrap in new directory', (done) => {
 
 test('init with bootstrap like DONOR in new directory', (done) => {
   CMD.exec('node bin/marmelad.js init test/init-test/create-bootstrap-donor --test --bootstrap donor', (err, res) => {
-    const settings = require('../test/init-test/create-bootstrap-donor/marmelad/settings.marmelad.js');
+    const settings = require('../test/init-test/create-bootstrap-donor/marmelad/settings.marmelad');
 
     expect(err).toBe(null);
     expect(res.message).toBe(SUCCESS_STR);
@@ -71,7 +71,7 @@ test('init with bootstrap like DONOR in new directory', (done) => {
 
 test('init with SCSS in new directory', (done) => {
   CMD.exec('node bin/marmelad.js init test/init-test/create-scss -c scss --test', (err, res) => {
-    const settings = require('../test/init-test/create-scss/marmelad/settings.marmelad.js');
+    const settings = require('../test/init-test/create-scss/marmelad/settings.marmelad');
 
     expect(err).toBe(null);
     expect(res.message).toBe(SUCCESS_STR);

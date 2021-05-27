@@ -71,6 +71,7 @@
     "cheerio": "1.0.0-rc.9",
     "chokidar": "3.5.1",
     "cmd-exec": "0.1.0",
+    "colorette": "^1.2.2",
     "commander": "7.2.0",
     "cssnano": "^5.0.4",
     "decache": "4.6.0",
