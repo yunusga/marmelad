@@ -84,7 +84,6 @@
     "gulp-front-matter": "^2.0.0-7",
     "gulp-if": "3.0.0",
     "gulp-include": "2.4.1",
-    "gulp-notify": "^4.0.0",
     "gulp-plumber": "1.2.1",
     "gulp-postcss": "9.0.0",
     "gulp-posthtml": "3.0.5",
