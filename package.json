@@ -73,7 +73,6 @@
     "cmd-exec": "0.1.0",
     "commander": "7.2.0",
     "cssnano": "^5.0.4",
-    "current-git-branch": "1.1.0",
     "decache": "4.6.0",
     "del": "6.0.0",
     "fs-extra": "10.0.0",

@@ -65,10 +65,13 @@ module.exports = (dir, opts) => {
   gulp.task('copy:rootfiles', (done) => {
     LOG(`${CSUCCESS('[marmelad]')} copy:rootfiles`);
 
+    const initInfo = require('../modules/init-info')();
+
     const stream = gulp.src(
       [...rootFiles],
       { dot: true },
     )
+      .pipe(gif('.mmd', replace('#', JSON.stringify(initInfo, null, '  '))))
       .pipe(gulp.dest(path.join(process.cwd(), dir)));
 
     stream.on('end', () => {

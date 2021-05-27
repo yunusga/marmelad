@@ -24,7 +24,6 @@ const combineAndSortMQ = require('postcss-sort-media-queries');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
 const GLOB = require('glob');
-const branchName = require('current-git-branch');
 const pkg = require('../package.json');
 const pipeErrorStop = require('../modules/pipe-error-stop');
 const TCI = require('../modules/tci');
@@ -58,12 +57,6 @@ module.exports = (opts) => {
       use: opts.auth,
     });
   }
-
-  DB.set('git', {
-    branch: branchName({
-      altPath: __dirname,
-    }),
-  });
 
   LAGMAN.init(settings);
 
