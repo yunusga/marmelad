@@ -7,7 +7,6 @@ const path = require('path');
 const chalk = require('chalk');
 const gulp = require('gulp');
 const bsSP = require('browser-sync').create('Dev Server');
-const bsPS = require('browser-sync').create('Proxy Server');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 const postcss = require('gulp-postcss');
@@ -41,8 +40,23 @@ console.log(`Marmelad Warmed at ${Math.round(performance.now())}ms\n`);
 module.exports = (opts) => {
   const settings = getSettings();
 
+  let bsPS = null;
+
   if (!opts.build) {
     TCI.run();
+  }
+
+  if (opts.proxyMod) {
+    bsPS = require('browser-sync').create('Proxy Server');
+
+    /**
+     * Proxy Server Auth
+     */
+    bsPS.use(require('bs-auth'), {
+      user: authArgs(opts.auth, pkg.name)[0],
+      pass: authArgs(opts.auth, pkg.name)[1],
+      use: opts.auth,
+    });
   }
 
   DB.set('git', {
@@ -57,15 +71,6 @@ module.exports = (opts) => {
    * Server Auth
    */
   bsSP.use(require('bs-auth'), {
-    user: authArgs(opts.auth, pkg.name)[0],
-    pass: authArgs(opts.auth, pkg.name)[1],
-    use: opts.auth,
-  });
-
-  /**
-   * Proxy Server Auth
-   */
-  bsPS.use(require('bs-auth'), {
     user: authArgs(opts.auth, pkg.name)[0],
     pass: authArgs(opts.auth, pkg.name)[1],
     use: opts.auth,
