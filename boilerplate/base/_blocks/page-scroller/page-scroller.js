@@ -1,56 +1,90 @@
-const PAGE = $('html, body');
-const pageScroller   = $('.page-scroller');
-const inMemoryClass = 'page-scroller--memorized';
-const isVisibleClass = 'page-scroller--visible';
-const enabledOffset = 60;
+(function(window) {
+  'use strict';
 
-let pageYOffset = 0;
-let inMemory = false;
+  let btn = document.getElementById('back_to');
 
-function resetPageScroller() {
-  setTimeout(() => {
-    if (window.pageYOffset > enabledOffset) {
-      pageScroller.addClass(isVisibleClass);
-    } else if (!pageScroller.hasClass(inMemoryClass)) {
-      pageScroller.removeClass(isVisibleClass);
-    }
-  }, 150);
-
-  if (!inMemory) {
-    pageYOffset = 0;
-    pageScroller.removeClass(inMemoryClass);
+  let classes = {
+    visible: 'page-scroller--visible',
+    inMemory: 'page-scroller--in-memory',
   }
 
-  inMemory = false;
-}
+  let tmpY = 0;
+  let viewY = 100;
+  let inMemory = false;
 
-if (pageScroller.length > 0) {
+  /**
+   * Native scrollTo with callback
+   * @param offset - offset to scroll to
+   * @param callback - callback function
+   */
+  function scrollTo(offset, callback) {
+    const fixedOffset = offset.toFixed();
+    const onScroll = function () {
+      if (window.pageYOffset.toFixed() === fixedOffset) {
+        window.removeEventListener('scroll', onScroll);
+        callback();
+      }
+    }
 
-  window.addEventListener('scroll', resetPageScroller, window.supportsPassive ? { passive: true } : false);
+    window.addEventListener('scroll', onScroll);
 
-  pageScroller.on('click', function(event) {
-    event.preventDefault();
+    onScroll();
 
-    window.removeEventListener('scroll', resetPageScroller);
+    window.scrollTo({
+      top: offset,
+      behavior: 'smooth'
+    });
+  }
 
-    if (window.pageYOffset > 0 && pageYOffset === 0) {
+  function resetScroll() {
+    setTimeout(() => {
+      if (window.pageYOffset > viewY) {
+        btn.classList.add(classes.visible);
+      } else if (!btn.classList.contains(classes.inMemory)) {
+        btn.classList.remove(classes.visible);
+      }
+    }, 100);
+
+    if (!inMemory) {
+      tmpY = 0;
+      btn.classList.remove(classes.inMemory);
+    }
+
+    inMemory = false;
+  }
+
+  function addResetScroll() {
+    window.addEventListener('scroll', resetScroll);
+  }
+
+  function removeResetScroll() {
+    window.removeEventListener('scroll', resetScroll);
+  }
+
+  addResetScroll();
+
+  let onClick = function() {
+    removeResetScroll();
+
+    if (window.pageYOffset > 0 && tmpY === 0) {
 
       inMemory = true;
-      pageYOffset = window.pageYOffset;
+      tmpY = window.pageYOffset;
 
-      pageScroller.addClass(inMemoryClass);
+      btn.classList.add(classes.inMemory);
 
-      PAGE.stop().animate({ scrollTop : 0 }, 500, 'swing', () => {
-        window.addEventListener('scroll', resetPageScroller, window.supportsPassive ? { passive: true } : false);
+      scrollTo(0, () => {
+        addResetScroll();
       });
-
     } else {
-      pageScroller.removeClass(inMemoryClass);
+      btn.classList.remove(classes.inMemory);
 
-      PAGE.stop().animate({ scrollTop : pageYOffset }, 500, 'swing', () => {
-        pageYOffset = 0;
-        window.addEventListener('scroll', resetPageScroller, window.supportsPassive ? { passive: true } : false);
+      scrollTo(tmpY, () => {
+        tmpY = 0;
+        addResetScroll();
       });
     }
-  });
-}
+  };
+
+  btn.addEventListener('click', onClick);
+})(window);
