@@ -80,7 +80,7 @@ module.exports = (opts) => {
 
     const postHTML = require('gulp-posthtml');
     const frontMatter = require('gulp-front-matter');
-    const tap = require('gulp-tap');
+    const tap = require('../modules/gulp/tap');
     const cheerio = require('cheerio');
 
     const nunjucks = require('../modules/nunjucks');
@@ -96,11 +96,12 @@ module.exports = (opts) => {
           bsSP.sockets.emit('error:message', error);
           hasError = true;
           console.error(`[nunjucks] ошибка: проверьте шаблоны ${error.plugin}`);
-          console.error(error.message);
+          console.error(error);
         },
       }))
       .pipe(tap((file) => {
         templateName = path.basename(file.path);
+        console.log(templateName);
       }))
       .pipe(frontMatter())
       .pipe(nunjucks({
@@ -158,8 +159,9 @@ module.exports = (opts) => {
       .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
+      console.log(`[nunjucks] ${hasError ? bold(red('ERROR')) : bold(green('done'))} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
+
       if (!hasError) {
-        console.log(`[nunjucks] ${hasError ? bold(red('ERROR')) : bold(green('done'))} in ${(performance.now() - njkStartPerf).toFixed(0)}ms`);
         bsSP.reload();
       }
 
