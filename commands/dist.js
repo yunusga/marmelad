@@ -7,8 +7,9 @@ const rename = require('gulp-rename');
 const postcss = require('gulp-postcss');
 const cssnano = require('cssnano');
 const uglify = require('gulp-uglify');
-const tap = require('gulp-tap');
 const ora = require('ora');
+
+const tap = require('../modules/gulp/tap');
 
 const hasher = require('../modules/posthtml/hasher');
 const getSettings = require('../modules/get-settings');
