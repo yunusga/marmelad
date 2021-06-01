@@ -1,5 +1,5 @@
-const glob = require('glob');
 const path = require('path');
+const glob = require('glob');
 
 class Lagman {
   constructor() {
@@ -13,13 +13,13 @@ class Lagman {
   }
 
   init(opts) {
-    this.store.src = `${opts.paths._pages}/**/*.html`;
+    this.store.src = path.join(opts._pages, '**', '*.html');
 
-    glob.sync('marmelad/_blocks/**/*.html').forEach((block) => {
+    glob.sync(path.join(opts._blocks, '**', '*.html')).forEach((block) => {
       this.create(block, 'blocks');
     });
 
-    glob.sync('marmelad/_pages/**/*.html').forEach((page) => {
+    glob.sync(path.join(opts._pages, '**', '*.html')).forEach((page) => {
       this.create(page, 'pages');
     });
   }
@@ -72,9 +72,9 @@ class Lagman {
     };
   }
 
-  read() {}
+  read() { }
 
-  update() {}
+  update() { }
 
   delete(name, type) {
     delete this.store[type][name];

@@ -31,11 +31,13 @@ const pkg = require('../package.json');
 const pipeErrorStop = require('../modules/pipe-error-stop');
 const TCI = require('../modules/tci');
 const DB = new (require('../modules/database'))();
-const LAGMAN = new (require('../modules/nunjucks/lagman'))();
 const authArgs = require('../modules/authArgs');
 const getIconsNamesList = require('../modules/iconsNames');
-const getNunJucksBlocks = require('../modules/nunjucks/getBlocks');
 const getSettings = require('../modules/get-settings');
+
+const Lagman = require('../modules/lagman');
+
+const LAGMAN = new Lagman();
 
 console.log(`Marmelad Warmed at ${Math.round(performance.now())}ms\n`);
 
@@ -61,7 +63,10 @@ module.exports = (opts) => {
     });
   }
 
-  LAGMAN.init(settings);
+  LAGMAN.init({
+    _pages: settings.paths._pages,
+    _blocks: settings.paths._blocks,
+  });
 
   /**
    * Server Auth
@@ -72,20 +77,24 @@ module.exports = (opts) => {
     use: opts.auth,
   });
 
+  const Templater = require('../modules/nunjucks/templater');
+  const templater = new Templater();
+
+  templater.init(settings, DB.store);
+
+  const gulpNunjucks = require('../modules/nunjucks/gulp');
+  const gulpPostHTML = require('../modules/posthtml/gulp');
+  const posthtmlBem = require('../modules/posthtml/bem');
+  const getBlocksSet = require('../modules/lagman/getBlocksSet');
+
+  const frontMatter = require('gulp-front-matter');
+  const tap = require('../modules/gulp/tap');
+
   /**
    * Nunjucks
    */
   gulp.task('nunjucks', (done) => {
     const njkStartPerf = performance.now();
-
-    const postHTML = require('gulp-posthtml');
-    const frontMatter = require('gulp-front-matter');
-    const tap = require('../modules/gulp/tap');
-    const cheerio = require('cheerio');
-
-    const nunjucks = require('../modules/nunjucks');
-    const bem = require('../modules/posthtml/bem');
-    const Incw = require('../modules/nunjucks/globals/incw');
 
     let templateName = '';
     let hasError = false;
@@ -101,26 +110,9 @@ module.exports = (opts) => {
       }))
       .pipe(tap((file) => {
         templateName = path.basename(file.path);
-        console.log(templateName);
       }))
       .pipe(frontMatter())
-      .pipe(nunjucks({
-        searchPaths: getNunJucksBlocks(settings.paths._blocks),
-        locals: DB.store,
-        ext: '.html',
-        setUp(env) {
-          env.addFilter('translit', require('../modules/nunjucks/filters/translit'));
-          env.addFilter('limitto', require('../modules/nunjucks/filters/limitto'));
-          env.addFilter('bodyClass', require('../modules/nunjucks/filters/bodyclass'));
-          env.addGlobal('_icon', settings.iconizer.icon);
-          env.addGlobal('_fns', settings._fns);
-          env.addGlobal('inlineSvgSprite', require('../modules/nunjucks/globals/inlineSvgSprite'));
-
-          env.addExtension('incw', new Incw(env, DB.store, settings));
-
-          return env;
-        },
-      }))
+      .pipe(gulpNunjucks(templater, DB.store))
       .pipe(pipeErrorStop({
         errorCallback: (error) => {
           hasError = true;
@@ -135,27 +127,20 @@ module.exports = (opts) => {
         },
       }))
       .pipe(tap((file) => {
-        try {
-          const $ = cheerio.load(file.contents.toString());
-          const blocks = $('[block]');
-          const pageName = LAGMAN.getName(file.path);
-          const blocksSet = new Set();
+        getBlocksSet(file, (err, blocksSet) => {
+          if (blocksSet) {
+            const pageName = LAGMAN.getName(file.path);
 
-          blocks.each((index, block) => {
-            blocksSet.add($(block).attr('block'));
-          });
-
-          LAGMAN.refresh(pageName, 'pages', blocksSet);
-        } catch (error) {
-          hasError = true;
-          console.error(error);
-
-          bsSP.sockets.emit('error:message', error);
-        }
+            LAGMAN.refresh(pageName, 'pages', blocksSet);
+          }
+        });
       }))
-      .pipe(postHTML([
-        bem(settings.app.beml),
+      .pipe(gulpPostHTML([
+        posthtmlBem(),
       ]))
+      .pipe(rename({
+        dirname: '',
+      }))
       .pipe(gulp.dest(settings.paths.dist));
 
     stream.on('end', () => {
@@ -724,6 +709,8 @@ module.exports = (opts) => {
     watchBlocks
       .on('add', (blockPath) => {
         LAGMAN.create(blockPath, 'blocks');
+
+        templater.init(settings, DB.store);
       })
       .on('change', (blockPath) => {
         const blockName = LAGMAN.getName(blockPath);
@@ -747,6 +734,8 @@ module.exports = (opts) => {
 
         LAGMAN.delete(blockName, 'blocks');
         watchBlocks.unwatch(blockPath);
+
+        templater.init(settings, DB.store);
       });
 
     /* NunJucks Datas */
