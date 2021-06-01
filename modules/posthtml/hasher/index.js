@@ -1,5 +1,6 @@
 const url = require('url');
-const hasha = require('hasha');
+const crypto = require('crypto');
+const fs = require('fs');
 
 function setFileHash(src, path) {
   const parsed = url.parse(src);
@@ -18,8 +19,13 @@ function setFileHash(src, path) {
   if (global._mmdHashes.has(uri)) {
     hash = global._mmdHashes.get(uri);
   } else {
-    hash = hasha.fromFileSync(`${path}/${uri}`, { algorithm: 'sha1', encoding: 'hex' });
-    hash = hash.slice(0, 24);
+    const fileBuffer = fs.readFileSync(`${path}/${uri}`);
+    const hashSum = crypto.createHash('sha1');
+
+    hashSum.update(fileBuffer);
+
+    hash = hashSum.digest('hex').slice(0, 24);
+
     global._mmdHashes.set(uri.replace(/^\/+/, ''), hash);
   }
 

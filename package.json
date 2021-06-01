@@ -97,7 +97,6 @@
     "gulp-stylus": "2.7.0",
     "gulp-svg-sprite": "1.5.0",
     "gulp-uglify": "3.0.2",
-    "hasha": "5.2.2",
     "node-w3c-validator": "2.0.1",
     "nunjucks": "3.2.3",
     "ora": "5.4.0",
