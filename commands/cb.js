@@ -16,12 +16,14 @@ module.exports = (name, techs) => {
         fs.writeFileSync(`${blockPath}/${name}.${ext}`, `<div block="${name}"></div><!-- ${name} -->`, { encoding: 'utf8' });
       } else if (['css', 'styl', 'scss'].includes(ext)) {
         fs.writeFileSync(`${blockPath}/${name}.${ext}`, `.${name} {}`, { encoding: 'utf8' });
+      } else if (ext === 'json') {
+        fs.writeFileSync(`${blockPath}/${name}.${ext}`, '{}', { encoding: 'utf8' });
       } else {
         fs.writeFileSync(`${blockPath}/${name}.${ext}`, '', { encoding: 'utf8' });
       }
     });
 
-    process.stdout.write(`✔  block ${name} is created\n`);
+    process.stdout.write(`✔  block ${name} is created`);
   }
 
   process.exit();
