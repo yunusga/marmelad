@@ -1,29 +1,14 @@
-const { platform } = require('os');
 const { execSync } = require('child_process');
 
 module.exports = () => {
-  const cwd = process.cwd();
-
-  let cmd = '';
+  const marmelad = __dirname.replace('bin', '');
 
   function getCurrentBranch() {
-    if (platform() === 'win32') {
-      cmd = `pushd ${cwd} & git branch --show-current`;
-    } else {
-      cmd = `(cd ${cwd} ; git branch --show-current)`;
-    }
-
-    return execSync(cmd).toString().replace('\n', '');
+    return execSync('git branch --show-current', { cwd: marmelad }).toString().replace('\n', '');
   }
 
   function getShortHead() {
-    if (platform() === 'win32') {
-      cmd = `pushd ${cwd} & git rev-parse --short HEAD`;
-    } else {
-      cmd = `(cd ${cwd} ; git rev-parse --short HEAD)`;
-    }
-
-    return execSync(cmd).toString().replace('\n', '');
+    return execSync('git rev-parse --short HEAD', { cwd: marmelad }).toString().replace('\n', '');
   }
 
   return {
