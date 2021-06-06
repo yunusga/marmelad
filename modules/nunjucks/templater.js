@@ -21,7 +21,7 @@ class Templater {
       noCache: false,
     });
 
-    this.env = new this.Nunjucks.Environment(this.templaterLoader);
+    this.env = new this.Nunjucks.Environment(this.templaterLoader, { autoescape: false });
 
     this.env.addFilter('translit', require('./filters/translit'));
     this.env.addFilter('limitto', require('./filters/limitto'));
