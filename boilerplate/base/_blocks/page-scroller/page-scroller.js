@@ -1,6 +1,23 @@
 (function(window) {
   'use strict';
 
+  function enableScrollBehaviorPolyfill() {
+
+    window.removeEventListener('scroll', enableScrollBehaviorPolyfill);
+
+    if (! 'scrollBehavior' in document.documentElement.style) {
+      let script = document.createElement('script');
+
+      script.setAttribute('async', true);
+      script.setAttribute('src', site_defers.smoothscroll);
+
+      document.body.appendChild(script);
+    }
+  }
+
+  window.addEventListener('scroll', enableScrollBehaviorPolyfill);
+
+
   let btn = document.getElementById('back_to');
 
   let classes = {
