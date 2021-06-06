@@ -27,8 +27,6 @@
 
     <body block="app" class="{{ bodyClasses }}">
 
-		{{ inlineSvgSprite() }}
-
         <div elem="wrapper">
 
             {% if layout.header %}
@@ -50,6 +48,8 @@
         </div><!-- app:wrapper -->
 
         {% include 'page-scroller.html' %}
+
+		{{ inlineSvgSprite() }}
 
         <script src="js/vendors/jquery-3.6.0.min.js"></script>
         <script src="js/app.js"></script>
