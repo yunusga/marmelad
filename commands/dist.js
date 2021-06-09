@@ -1,6 +1,5 @@
 const path = require('path');
 const gulp = require('gulp');
-const postHTML = require('gulp-posthtml');
 const attrsSorter = require('posthtml-attrs-sorter');
 const pretty = require('gulp-pretty-html');
 const rename = require('gulp-rename');
@@ -9,6 +8,7 @@ const cssnano = require('cssnano');
 const uglify = require('gulp-uglify');
 const ora = require('ora');
 
+const postHTML = require('../modules/posthtml/gulp');
 const tap = require('../modules/gulp/tap');
 
 const hasher = require('../modules/posthtml/hasher');
