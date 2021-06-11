@@ -553,62 +553,6 @@ module.exports = (opts) => {
     });
   });
 
-  /** ^^^
-   * Bootstrap 4 tasks
-   ==================================================================== */
-  gulp.task('bootstrap', (done) => {
-    if (settings.app.bts.use || settings.app.bts.donor) {
-      if (settings.app.bts.donor) {
-        settings.app.bts['4'].dest.js = `${settings.paths.storage}/${settings.folders.js.src}/${settings.folders.js.vendors}`;
-        gulp.series('bts4:js')();
-      } else {
-        gulp.series('bts4:sass', 'bts4:js')();
-      }
-    }
-
-    done();
-  });
-
-  gulp.task('bts4:sass', (done) => {
-    const autoprefixer = require('autoprefixer');
-    const sourcemaps = require('gulp-sourcemaps');
-
-    gulp.src(`${settings.app.bts['4'].src.css}/scss/[^_]*.scss`)
-      .pipe(plumber())
-      .pipe(sourcemaps.init())
-      .pipe(sass(settings.app.bts['4'].sass))
-      .pipe(postcss([
-        momentumScrolling(),
-        autoprefixer(settings.app.bts['4'].autoprefixer),
-      ]))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(settings.app.bts['4'].dest.css))
-      .on('end', () => {
-        console.log(`Bootstrap ${settings.app.bts['4'].code} SASS ${bold(green('Done'))}`);
-      })
-      .pipe(bsSP.stream());
-
-    done();
-  });
-
-  gulp.task('bts4:js', (done) => {
-    const stream = gulp.src(`${settings.app.bts['4'].src.js}/**/*.js`)
-      .pipe(plumber())
-      .pipe(changed(settings.app.bts['4'].dest.js))
-      .pipe(gif(settings.app.bts.donor, rename({ dirname: '' }))) // rename({ dirname: '' })
-      .pipe(gulp.dest(settings.app.bts['4'].dest.js));
-
-    stream.on('end', () => {
-      console.log(`Bootstrap ${settings.app.bts['4'].code} JS ${bold(green('Done'))}`);
-      bsSP.reload();
-      done();
-    });
-
-    stream.on('error', (err) => {
-      done(err);
-    });
-  });
-
   gulp.task('watch', (done) => {
     const chokidar = require('chokidar');
     const decache = require('decache');
@@ -623,32 +567,6 @@ module.exports = (opts) => {
       cwd: process.cwd(),
       ...settings.app.watchOpts,
     };
-
-    if (settings.app.bts.use || settings.app.bts.donor) {
-      let bsTask = '';
-
-      if (settings.app.bts.use) {
-        bsTask = 'bts4:sass';
-      }
-
-      if (settings.app.bts.donor) {
-        bsTask = 'styles';
-      }
-
-      /* SCSS */
-      gulp.watch(
-        `${settings.app.bts['4'].src.css}/**/*.scss`,
-        watchOpts,
-        gulp.parallel(bsTask),
-      );
-
-      /* JS */
-      gulp.watch(
-        `${settings.app.bts['4'].src.js}/**/*.js`,
-        watchOpts,
-        gulp.parallel('bts4:js'),
-      );
-    }
 
     /* СТАТИКА */
     gulp.watch([
@@ -940,8 +858,7 @@ module.exports = (opts) => {
         'scripts:plugins',
         'scripts:others',
         'styles:plugins',
-        'styles',
-        'bootstrap',
+        'styles'
       ),
       'proxy-mod',
     ),

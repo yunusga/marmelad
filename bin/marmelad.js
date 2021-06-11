@@ -27,7 +27,6 @@ CLI
   .command('init [dir]')
   .description('initialize new project')
   .option('-t, --test', 'required for testing')
-  .option('--bootstrap [donor]', 'initialize new project with bootstrap included', false)
   .option('-c, --css [styl,scss,sass]', 'set stylesheet <engine> support', 'styl')
   .action((dir, opts) => {
     require('../commands/init')(dir, opts);

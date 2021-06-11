@@ -150,26 +150,6 @@ const app = {
       },
     ],
   },
-  bts: {
-    use: '<%- btsUse %>',
-    donor: '<%- btsDonor %>',
-    4: {
-      code: '4.5.2',
-      src: {
-        css: path.join(paths.marmelad, 'bootstrap', '4.5.2'),
-        js: path.join(paths.marmelad, 'bootstrap', '4.5.2'),
-      },
-      dest: {
-        css: path.join(paths.storage, 'bootstrap', 'css'),
-        js: path.join(paths.storage, 'bootstrap'),
-      },
-      sass: {
-        precision: 6,
-        outputStyle: 'expanded',
-      },
-      autoprefixer,
-    },
-  },
 };
 
 const proxy = {

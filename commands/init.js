@@ -35,20 +35,6 @@ module.exports = (dir, opts) => {
     path.join(boilerplatePath, 'rootfiles', '**', '*'),
   ]);
 
-  let btsUse = 'false';
-  let btsDonor = 'false';
-
-  if (opts.bootstrap) {
-    boilerplateFiles.add(path.join(boilerplatePath, 'extensions', 'bootstrap', '**', '*'));
-
-    btsUse = 'true';
-
-    if (opts.bootstrap === 'donor') {
-      btsUse = 'false';
-      btsDonor = 'true';
-    }
-  }
-
   gulp.task('copy:boilerplate', (done) => {
     LOG(`${bold(green('[marmelad]'))} copy:boilerplate`);
 
@@ -57,8 +43,6 @@ module.exports = (dir, opts) => {
       { dot: true },
     )
       .pipe(gif('settings.marmelad.js', replace('<%- css %>', opts.css)))
-      .pipe(gif('settings.marmelad.js', replace("'<%- btsUse %>'", btsUse)))
-      .pipe(gif('settings.marmelad.js', replace("'<%- btsDonor %>'", btsDonor)))
       .pipe(gulp.dest(path.join(process.cwd(), dir, 'marmelad')));
 
     stream.on('end', () => {

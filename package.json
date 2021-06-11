@@ -4,7 +4,7 @@
   "description": "Заготовка фронтенд проекта для продвинутых и начинающих 🤘",
   "preferGlobal": true,
   "engines": {
-    "node": ">=10.16.0"
+    "node": ">=14.17.0"
   },
   "author": "Yunus Gaziev <yunusga@yandex.ru> (https://github.com/yunusga)",
   "bin": {
@@ -67,7 +67,6 @@
     "browser-sync": "2.26.14",
     "bs-auth": "1.2.7",
     "camelcase": "6.2.0",
-    "chalk": "4.1.1",
     "cheerio": "1.0.0-rc.9",
     "chokidar": "3.5.1",
     "cmd-exec": "0.1.0",
