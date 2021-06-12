@@ -24,7 +24,6 @@ const sassGlob = require('gulp-sass-glob');
 const gif = require('gulp-if');
 const plumber = require('gulp-plumber');
 const combineAndSortMQ = require('postcss-sort-media-queries');
-const changed = require('gulp-changed');
 const concat = require('gulp-concat');
 const GLOB = require('glob');
 const pkg = require('../package.json');
@@ -339,7 +338,6 @@ module.exports = (opts) => {
           console.error(error.message);
         },
       }))
-      .pipe(changed(vendorsDist))
       .pipe(gulp.dest(vendorsDist));
 
     stream.on('end', () => {
@@ -482,7 +480,6 @@ module.exports = (opts) => {
       `!${settings.paths.static}/**/*tmp*`,
     ], { dot: true })
       .pipe(plumber())
-      .pipe(changed(settings.paths.storage))
       .pipe(gulp.dest(settings.paths.storage));
 
     stream.on('end', () => {
