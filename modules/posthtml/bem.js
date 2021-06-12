@@ -114,8 +114,8 @@ function _assignClassList(attributes, node, config) {
 module.exports = (config) => {
   config = {
     elemPrefix: '__',
-    modPrefix: '_',
-    modDlmtr: '_',
+    modPrefix: '--',
+    modDlmtr: '-',
     ...config,
   };
 
