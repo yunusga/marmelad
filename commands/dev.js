@@ -423,12 +423,7 @@ module.exports = (opts) => {
    */
   gulp.task('styles', (done) => {
     const autoprefixer = require('autoprefixer');
-    const stylus = require('gulp-stylus');
-    const $data = {
-      beml: settings.app.beml,
-    };
-
-    Object.assign($data, DB.store.app.stylus);
+    const stylus = require('../modules/gulp/stylus');
 
     // обратная совместимость с старыми проектами
     const postcssOpts = settings.app.postcss || {};
@@ -444,7 +439,6 @@ module.exports = (opts) => {
       }))
       .pipe(gif('*.styl', stylus({
         'include css': true,
-        rawDefine: { $data },
       })))
       .pipe(gif('*.scss', sassGlob()))
       .pipe(gif('*.scss', sass()))

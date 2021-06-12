@@ -62,6 +62,7 @@
     "@babel/core": "7.14.3",
     "@babel/plugin-transform-object-assign": "^7.12.13",
     "@babel/preset-env": "^7.14.2",
+    "accord": "^0.30.0",
     "archiver": "5.3.0",
     "autoprefixer": "10.2.5",
     "browser-sync": "2.26.14",
@@ -91,7 +92,6 @@
     "gulp-sass": "4.1.0",
     "gulp-sass-glob": "1.1.0",
     "gulp-sourcemaps": "3.0.0",
-    "gulp-stylus": "2.7.0",
     "gulp-svg-sprite": "1.5.0",
     "gulp-uglify": "3.0.2",
     "node-w3c-validator": "2.0.1",
@@ -111,9 +111,11 @@
     "readline-sync": "1.4.10",
     "replace-ext": "2.0.0",
     "replace-in-file": "^6.2.0",
+    "stylus": "^0.54.8",
     "tar": "6.1.0",
     "through2": "4.0.2",
-    "update-notifier": "^5.1.0"
+    "update-notifier": "^5.1.0",
+    "vinyl-sourcemaps-apply": "^0.2.1"
   },
   "devDependencies": {
     "eslint": "7.27.0",
