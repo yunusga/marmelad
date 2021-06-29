@@ -24,7 +24,7 @@ class Templater {
     this.env = new this.Nunjucks.Environment(this.templaterLoader, { autoescape: false });
 
     this.env.addFilter('translit', require('./filters/translit'));
-    this.env.addFilter('limitto', require('./filters/limitto'));
+    // this.env.addFilter('limitto', require('./filters/limitto'));
     this.env.addFilter('bodyClass', require('./filters/bodyclass'));
 
     this.env.addGlobal('_icon', settings.iconizer.icon);
