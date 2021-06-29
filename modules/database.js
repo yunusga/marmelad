@@ -4,7 +4,11 @@ const camelCase = require('camelcase');
 
 class Database {
   constructor() {
-    this.store = {};
+    this._store = {};
+  }
+
+  getStore() {
+    return this._store;
   }
 
   /**
@@ -14,7 +18,7 @@ class Database {
    * @param {any} data значение для ключа
    */
   set(name, data) {
-    this.store[camelCase(name)] = data;
+    this._store[camelCase(name)] = data;
   }
 
   /**
@@ -58,13 +62,13 @@ class Database {
 
   combine(data, key = false) {
     if (key) {
-      if (this.store[key]) {
-        Object.assign(this.store[key], data);
+      if (this._store[key]) {
+        Object.assign(this._store[key], data);
       } else {
         this.set(key, data);
       }
     } else {
-      Object.assign(this.store, data);
+      Object.assign(this._store, data);
     }
   }
 
@@ -74,7 +78,7 @@ class Database {
    * @param {string} block путь до json-файла данных блока
    */
   delete(block) {
-    delete this.store[camelCase(path.basename(block, '.json'))];
+    delete this._store[camelCase(path.basename(block, '.json'))];
   }
 }
 

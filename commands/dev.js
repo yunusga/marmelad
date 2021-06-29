@@ -79,7 +79,7 @@ module.exports = (opts) => {
   const Templater = require('../modules/nunjucks/templater');
   const templater = new Templater();
 
-  templater.init(settings, DB.store);
+  templater.init(settings, DB.getStore());
 
   const gulpNunjucks = require('../modules/nunjucks/gulp');
   const gulpPostHTML = require('../modules/posthtml/gulp');
@@ -111,7 +111,7 @@ module.exports = (opts) => {
         templateName = path.basename(file.path);
       }))
       .pipe(frontMatter())
-      .pipe(gulpNunjucks(templater, DB.store))
+      .pipe(gulpNunjucks(templater, DB.getStore()))
       .pipe(pipeErrorStop({
         errorCallback: (error) => {
           hasError = true;
@@ -619,7 +619,7 @@ module.exports = (opts) => {
       .on('add', (blockPath) => {
         LAGMAN.create(blockPath, 'blocks');
 
-        templater.init(settings, DB.store);
+        templater.init(settings, DB.getStore());
       })
       .on('change', (blockPath) => {
         const blockName = LAGMAN.getName(blockPath);
@@ -644,7 +644,7 @@ module.exports = (opts) => {
         LAGMAN.delete(blockName, 'blocks');
         watchBlocks.unwatch(blockPath);
 
-        templater.init(settings, DB.store);
+        templater.init(settings, DB.getStore());
       });
 
     /* NunJucks Datas */
@@ -658,6 +658,8 @@ module.exports = (opts) => {
         DB.update(blockPath);
 
         LAGMAN.store.onDemand = new Set([...LAGMAN.store.onDemand, ...LAGMAN.store.blocks[blockName]]);
+
+        console.log(LAGMAN.store.onDemand);
 
         LAGMAN.store.src = [];
 
