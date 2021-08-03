@@ -112,7 +112,7 @@
     "replace-ext": "2.0.0",
     "replace-in-file": "^6.2.0",
     "stylus": "^0.54.8",
-    "tar": "6.1.0",
+    "tar": "6.1.2",
     "through2": "4.0.2",
     "update-notifier": "^5.1.0",
     "vinyl-sourcemaps-apply": "^0.2.1"
