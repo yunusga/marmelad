@@ -1,44 +1,34 @@
 #!/usr/bin/env node
 
-const CLI = require('commander');
-const updateNotifier = require('update-notifier');
-const pkg = require('../package.json');
+const { program } = require('commander');
+const { name, version, description } = require('../package.json');
 
-updateNotifier({ pkg }).notify();
+const { log } = console;
 
-const LOG = console.log;
-
-/**
- * Установка флагов/параметров для командной строки
- */
-CLI
-  .version(pkg.version, '-v, --version')
-  .description(pkg.description)
+// Setup additional HELP information
+program
+  .version(version, '-v, --version')
+  .description(description)
   .on('--help', () => {
-    LOG(`\nCommands help:\n  ${pkg.name} [command] --help\n  mmd [command] --help`);
-    LOG(`\nSource files:\n  ${__filename}`);
-    LOG(`Version:\n  ${pkg.version}`);
+    log(`\nCommands help:\n  ${name} [command] --help\n  mmd [command] --help`);
+    log(`\nSource files:\n  ${__filename}`);
+    log(`Version:\n  ${version}`);
   });
 
-/**
- * инициализация нового проекта
- */
-CLI
-  .command('init [dir]')
-  .description('initialize new project')
+// Init new project
+program
+  .command('init [dirName]')
+  .description('Initialize new project')
   .option('-t, --test', 'required for testing')
   .option('-c, --css [styl,scss,sass]', 'set stylesheet <engine> support', 'styl')
-  .action((dir, opts) => {
-    require('../commands/init')(dir, opts);
+  .action((dirName, opts) => {
+    require('../commands/init')(dirName, opts);
   });
 
-/**
- * старт сервера разработки
- */
-//
-CLI
+// Start dev server
+program
   .command('dev')
-  .description('run development server')
+  .description('Start dev server')
   .option('-a, --auth [user@password]', 'set user@password for authorization')
   .option('--proxy-mod', 'proxy mode with copy files from build')
   .option('--build', 'build project once')
@@ -49,82 +39,65 @@ CLI
     // console.log();
   });
 
-/**
- * создание страницы
- */
-CLI
-  .command('cp <name>')
-  .description('create new page')
+// Create marmelad PAGE
+program
+  .command('cp <pageName>')
+  .description('Create new page')
   .action((pageName) => {
     require('../commands/cp')(pageName);
   });
 
-/**
- * создание блока
- */
-CLI
-  .command('cb <name>')
-  .description('create new block')
+// Create marmelad BLOCK
+program
+  .command('cb <blockName>')
+  .description('Create new block')
   .option('-t, --techs [html,js,css,json]', 'Files extensions for new block')
-  .action((pageName, opts) => {
-    require('../commands/cb')(pageName, opts.techs);
+  .action((blockName, opts) => {
+    require('../commands/cb')(blockName, opts.techs);
   });
 
-/**
- * переименование блока
- */
-CLI
+// Rename marmelad BLOCK
+program
   .command('mv <oldName> <newName>')
-  .description('rename block')
+  .description('Rename block')
   .option('-d, --dry', 'Dry run without actually making replacements, for testing purposes')
   .option('--hard', 'Enable replacements in files')
   .action((oldName, newName, opts) => {
     require('../commands/mv')(oldName, newName, opts);
   });
 
-/**
- * линтера сборки
- */
-CLI
+// Lint build
+program
   .command('lint')
-  .description('lint project')
+  .description('Lint project')
   .action((opts) => {
     require('../commands/lint')(opts.techs);
   });
 
-/**
- * Prettier
- */
-CLI
+// Prettify build
+program
   .command('dist')
   .description('Release tasks for project')
   .action((opts) => {
     require('../commands/dist')(opts);
   });
 
-/**
- * Archive
- */
-CLI
-  .command('pack [name]')
+// Archive build
+program
+  .command('pack [archiveName]')
   .description('Archive project source code (default:tar.gz)')
   .option('-z, --zip', 'ZIP archive')
   .option('--nodt', 'No Date and Time in name postfix')
   .option('-f, --folders [marmelad,static]', 'Folders to archive', 'marmelad,static')
-  .action((name, opts) => {
+  .action((archiveName, opts) => {
     require('../commands/pack')(name, opts);
   });
 
-/**
- * парсим аргументы командной строки
- */
-CLI.parse(process.argv);
+// Parse CLI arguments
+program.parse(process.argv);
 
-/**
- * В случае если не передан ни один аргумент,
- * показываем справку
- */
+// If no args SHUTDOWN and show HELP information
 if (!process.argv.slice(2).length) {
-  CLI.help();
+  program.help();
   process.exit(1);
 }

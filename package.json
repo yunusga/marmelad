@@ -115,7 +115,6 @@
     "stylus": "^0.54.8",
     "tar": "6.1.6",
     "through2": "4.0.2",
-    "update-notifier": "^5.1.0",
     "vinyl-sourcemaps-apply": "^0.2.1"
   },
   "devDependencies": {
