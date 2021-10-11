@@ -7,7 +7,7 @@ const path = require('path');
 
 const {
   bold, green, red, yellow, bgRed,
-} = require('colorette');
+} = require('picocolors');
 
 const gulp = require('gulp');
 const bsSP = require('browser-sync').create('Dev Server');
