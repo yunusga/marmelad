@@ -1,8 +1,8 @@
-const fse = require('fs-extra');
+const { ensureFileSync, readFileSync } = require('fs-extra');
 const chokidar = require('chokidar');
-const CMD = require('cmd-exec').init();
+const { exec } = require('child_process');
 
-const LOG = console.log;
+const { log } = console;
 
 function run(options) {
   const opts = {
@@ -12,25 +12,17 @@ function run(options) {
 
   const tciFilePath = 'marmelad/.tci';
 
-  fse.ensureFileSync(tciFilePath);
+  ensureFileSync(tciFilePath);
 
   const TCIWatcher = chokidar.watch(tciFilePath, opts);
 
   TCIWatcher.on('change', (file) => {
-    const text = fse.readFileSync(file, { encoding: 'utf8' }).replace(/\n+$/m, '');
+    const text = readFileSync(file, { encoding: 'utf8' }).replace(/\n+$/m, '');
     const commands = text.split('\n').map((item) => `mmd ${item}`);
 
-    CMD
-      .exec(commands.join(' && '))
-      .then((res) => {
-        LOG(res.message);
-      })
-      .fail((err) => {
-        LOG(err.message);
-      })
-      .done(() => {
-        // console.log();
-      });
+    exec(commands.join(' && '), (error, stdout) => {
+      log(stdout);
+    });
   });
 }
 

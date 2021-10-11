@@ -1,21 +1,22 @@
-const fs = require('fs');
+const { exec } = require('child_process');
+const { existsSync, readdirSync } = require('fs');
+
 const path = require('path');
 const gulp = require('gulp');
 const gif = require('gulp-if');
 const replace = require('gulp-replace');
 const readlineSync = require('readline-sync');
-const CMD = require('cmd-exec').init();
 
 const {
-  bold, bgRed, bgYellow, black, green, options,
-} = require('colorette');
+  bold, bgRed, bgYellow, black, green,
+} = require('picocolors');
 
-const LOG = console.log;
+const { log } = console;
 
 module.exports = (dir, opts) => {
   // отключаем цветную консоль во время теста
   if (opts.test) {
-    options.enabled = false;
+    process.env.NO_COLOR = 'yes';
   }
   // набор поддерживаемых css-препроцессоров marmelad
   const supportedCSS = new Set(['scss', 'sass', 'styl']);
@@ -36,7 +37,7 @@ module.exports = (dir, opts) => {
   ]);
 
   gulp.task('copy:boilerplate', (done) => {
-    LOG(`${bold(green('[marmelad]'))} copy:boilerplate`);
+    log(`${bold(green('[marmelad]'))} copy:boilerplate`);
 
     const stream = gulp.src(
       [...boilerplateFiles],
@@ -51,7 +52,7 @@ module.exports = (dir, opts) => {
   });
 
   gulp.task('copy:rootfiles', (done) => {
-    LOG(`${bold(green('[marmelad]'))} copy:rootfiles`);
+    log(`${bold(green('[marmelad]'))} copy:rootfiles`);
 
     const initInfo = require('../modules/init-info')();
 
@@ -68,7 +69,7 @@ module.exports = (dir, opts) => {
   });
 
   gulp.task('git:init', (done) => {
-    LOG(`${bold(green('[marmelad]'))} git:init`);
+    log(`${bold(green('[marmelad]'))} git:init`);
 
     const quietFlag = opts.test ? ' -q' : '';
 
@@ -82,41 +83,50 @@ module.exports = (dir, opts) => {
       gitInitCommands.unshift(`cd ${dir}`);
     }
 
-    CMD
-      .exec(gitInitCommands.join(' && '))
-      .then((res) => {
-        if (!opts.test) {
-          LOG(res.exitCode);
-        }
-      })
-      .fail((err) => {
-        LOG(err);
-      })
-      .done(() => {
-        LOG(`${bold(green('[marmelad]'))} initialized, type marmelad -h for CLI help`);
-        done();
-      });
+    exec(gitInitCommands.join(' && '), (error) => {
+      if (error) {
+        log(`exec error: ${error}`);
+        return;
+      }
+
+      log(`${bold(green('[marmelad]'))} initialized, type marmelad -h for CLI help`);
+      done();
+    });
+    // CMD
+    //   .exec()
+    //   .then((res) => {
+    //     if (!opts.test) {
+    //       log(res.exitCode);
+    //     }
+    //   })
+    //   .fail((err) => {
+    //     log(err);
+    //   })
+    //   .done(() => {
+    //     log(`${bold(green('[marmelad]'))} initialized, type marmelad -h for CLI help`);
+    //     done();
+    //   });
   });
 
   dir = dir || '';
 
-  const isDirExists = dir.length && fs.existsSync(dir);
-  const isNotEmpty = isDirExists || !dir.length ? fs.readdirSync(path.join(process.cwd(), dir)).length : false;
-  const hasMarmelad = fs.existsSync(path.join(dir, 'marmelad'));
+  const isDirExists = dir.length && existsSync(dir);
+  const isNotEmpty = isDirExists || !dir.length ? readdirSync(path.join(process.cwd(), dir)).length : false;
+  const hasMarmelad = existsSync(path.join(dir, 'marmelad'));
 
   if (hasMarmelad) {
-    LOG(`${bgRed(' ERROR ')} project is already initialized`);
+    log(`${bgRed(' ERROR ')} project is already initialized`);
     process.exit(0);
   }
 
   if (isNotEmpty) {
-    LOG(`${bgYellow(black(' WARN '))} Directory is not empty. Some files may be overwritten. Continue?`);
+    log(`${bgYellow(black(' WARN '))} Directory is not empty. Some files may be overwritten. Continue?`);
 
     if (!opts.test) {
       const agree = readlineSync.question('(yes|no):');
 
       if (agree !== 'yes') {
-        LOG(`${bgRed(' ERROR ')} initialization aborted`);
+        log(`${bgRed(' ERROR ')} initialization aborted`);
         process.exit(0);
       }
     }
