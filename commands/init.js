@@ -1,13 +1,13 @@
 const { exec } = require('child_process');
 const { existsSync, readdirSync } = require('fs');
+const { join } = require('path');
 
-const path = require('path');
 const gulp = require('gulp');
 const gif = require('gulp-if');
 const replace = require('gulp-replace');
 
 const {
-  bold, bgRed, bgYellow, black, green,
+  bold, bgRed, green,
 } = require('picocolors');
 
 const { log } = console;
@@ -23,16 +23,16 @@ module.exports = (dir, opts) => {
   // удаление необходимого препроцессора из набора исключений
   supportedCSS.delete(opts.css);
 
-  const boilerplatePath = path.join(__dirname.replace('commands', ''), 'boilerplate');
+  const boilerplatePath = join(__dirname.replace('commands', ''), 'boilerplate');
 
   // набор файлов для копирования заготовки нового проекта
   const boilerplateFiles = new Set([
-    path.join(boilerplatePath, 'base', '**', `*.!(${[...supportedCSS].join('|')})`),
+    join(boilerplatePath, 'base', '**', `*.!(${[...supportedCSS].join('|')})`),
   ]);
 
   // файлы для копирования в корень проекта
   const rootFiles = new Set([
-    path.join(boilerplatePath, 'rootfiles', '**', '*'),
+    join(boilerplatePath, 'rootfiles', '**', '*'),
   ]);
 
   gulp.task('copy:boilerplate', (done) => {
@@ -43,7 +43,7 @@ module.exports = (dir, opts) => {
       { dot: true },
     )
       .pipe(gif('settings.marmelad.js', replace('<%- css %>', opts.css)))
-      .pipe(gulp.dest(path.join(process.cwd(), dir, 'marmelad')));
+      .pipe(gulp.dest(join(process.cwd(), dir, 'marmelad')));
 
     stream.on('end', () => {
       done();
@@ -60,7 +60,7 @@ module.exports = (dir, opts) => {
       { dot: true },
     )
       .pipe(gif('.mmd', replace('#', JSON.stringify(initInfo, null, '  '))))
-      .pipe(gulp.dest(path.join(process.cwd(), dir)));
+      .pipe(gulp.dest(join(process.cwd(), dir)));
 
     stream.on('end', () => {
       done();
@@ -91,27 +91,13 @@ module.exports = (dir, opts) => {
       log(`${bold(green('[marmelad]'))} initialized, type marmelad -h for CLI help`);
       done();
     });
-    // CMD
-    //   .exec()
-    //   .then((res) => {
-    //     if (!opts.test) {
-    //       log(res.exitCode);
-    //     }
-    //   })
-    //   .fail((err) => {
-    //     log(err);
-    //   })
-    //   .done(() => {
-    //     log(`${bold(green('[marmelad]'))} initialized, type marmelad -h for CLI help`);
-    //     done();
-    //   });
   });
 
   dir = dir || '';
 
   const isDirExists = dir.length && existsSync(dir);
-  const isNotEmpty = isDirExists || !dir.length ? readdirSync(path.join(process.cwd(), dir)).length : false;
-  const hasMarmelad = existsSync(path.join(dir, 'marmelad'));
+  const isNotEmpty = isDirExists || !dir.length ? readdirSync(join(process.cwd(), dir)).length : false;
+  const hasMarmelad = existsSync(join(dir, 'marmelad'));
 
   if (hasMarmelad) {
     log(`${bgRed(' ERROR ')} project is already initialized`);
