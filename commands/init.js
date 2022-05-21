@@ -88,7 +88,7 @@ module.exports = (dir, opts) => {
         return;
       }
 
-      log(`${bold(green('[marmelad]'))} initialized, type marmelad -h for CLI help`);
+      log(`${bold(green('[marmelad]'))} Initialized, type marmelad -h for CLI help`);
       done();
     });
   });
@@ -100,7 +100,7 @@ module.exports = (dir, opts) => {
   const hasMarmelad = existsSync(join(dir, 'marmelad'));
 
   if (hasMarmelad) {
-    log(`${bgRed(' ERROR ')} project is already initialized`);
+    log(`${bgRed(' ERROR ')} Project is already initialized`);
     process.exit(0);
   }
 
