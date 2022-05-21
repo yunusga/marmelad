@@ -5,7 +5,6 @@ const path = require('path');
 const gulp = require('gulp');
 const gif = require('gulp-if');
 const replace = require('gulp-replace');
-const readlineSync = require('readline-sync');
 
 const {
   bold, bgRed, bgYellow, black, green,
@@ -120,20 +119,8 @@ module.exports = (dir, opts) => {
   }
 
   if (isNotEmpty) {
-    log(`${bgYellow(black(' WARN '))} Directory is not empty. Some files may be overwritten. Continue?`);
-
-    if (!opts.test) {
-      const agree = readlineSync.question('(yes|no):');
-
-      if (agree !== 'yes') {
-        log(`${bgRed(' ERROR ')} initialization aborted`);
-        process.exit(0);
-      }
-    }
-
-    if (opts.test) {
-      process.exit(0);
-    }
+    log(`${bgRed(' ERROR ')} Directory is not empty`);
+    process.exit(0);
   }
 
   gulp.series('copy:boilerplate', 'copy:rootfiles', 'git:init')();

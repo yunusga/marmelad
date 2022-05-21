@@ -107,7 +107,6 @@
     "posthtml": "^0.16.5",
     "posthtml-attrs-sorter": "1.1.0",
     "posthtml-load-config": "^2.0.0",
-    "readline-sync": "1.4.10",
     "replace-ext": "2.0.0",
     "replace-in-file": "^6.2.0",
     "sass": "^1.37.5",
