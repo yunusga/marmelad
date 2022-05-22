@@ -86,12 +86,6 @@ const iconizer = {
   },
 };
 
-const autoprefixer = {
-  overrideBrowserslist: [
-    'last 2 versions',
-  ],
-};
-
 const app = {
   css: '<%- css %>',
   watchOpts: {
@@ -111,7 +105,6 @@ const app = {
     modPrefix: '--',
     modDlmtr: '-',
   },
-  autoprefixer,
   postcss: {
     // sortMQ: {},
     // momentumScrolling: [],

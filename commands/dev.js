@@ -45,6 +45,8 @@ module.exports = (opts) => {
 
   let bsPS = null;
 
+  process.env.BROWSERSLIST_CONFIG = path.join(process.cwd(), '.browserslistrc');
+
   if (!opts.build) {
     TCI.run();
   }
@@ -449,7 +451,7 @@ module.exports = (opts) => {
         flexBugsFixes(),
         inlineSvg(postcssOpts.inlineSvg),
         easingGradients(postcssOpts.easingGradients),
-        autoprefixer(settings.app.autoprefixer),
+        autoprefixer(),
       ], { from: undefined }))
       .pipe(gulp.dest(`${settings.paths.storage}/css`))
       .pipe(bsSP.stream())
