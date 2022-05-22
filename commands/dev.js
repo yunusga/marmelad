@@ -85,8 +85,6 @@ module.exports = (opts) => {
   const gulpPostHTML = require('../modules/posthtml/gulp');
   const posthtmlBem = require('../modules/posthtml/bem');
   const getBlocksSet = require('../modules/lagman/getBlocksSet');
-
-  const frontMatter = require('gulp-front-matter');
   const tap = require('../modules/gulp/tap');
 
   /**
@@ -110,7 +108,6 @@ module.exports = (opts) => {
       .pipe(tap((file) => {
         templateName = path.basename(file.path);
       }))
-      .pipe(frontMatter())
       .pipe(gulpNunjucks(templater, DB.getStore()))
       .pipe(pipeErrorStop({
         errorCallback: (error) => {

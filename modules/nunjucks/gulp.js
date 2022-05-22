@@ -1,5 +1,6 @@
 const PluginError = require('plugin-error');
 const transform = require('through2').obj;
+const fm = require('../front-matter');
 
 const PLUGIN_NAME = 'gulp-nunjucks';
 
@@ -13,12 +14,25 @@ function gulpNunjucks(templater, templateData) {
       return cb(new PluginError(PLUGIN_NAME, 'Streams are not supported'));
     }
 
-    const string = file.contents.toString('utf8');
     const data = file.data ? file.data : {};
-    const fm = file.frontMatter ? file.frontMatter : {};
-    const context = { ...templateData, ...data, ...fm };
+    let content = file.contents.toString('utf8');
 
-    templater.env.renderString(string, context, (err, res) => {
+    let frontmatter = {
+      attributes: {},
+    };
+
+    try {
+      frontmatter = fm(content);
+      content = frontmatter.body;
+    } catch (err) {
+      err.message = err.stack.replace(/\n +at[\s\S]*/u, '');
+
+      return cb(new PluginError('Front matter (YAML) parse error', err));
+    }
+
+    const context = { ...templateData, ...data, ...frontmatter.attributes };
+
+    templater.env.renderString(content, context, (err, res) => {
       if (err) {
         return cb(new PluginError(PLUGIN_NAME, err));
       }
