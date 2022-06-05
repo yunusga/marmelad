@@ -1,0 +1,29 @@
+---
+# JS-YAML demo
+# https://nodeca.github.io/js-yaml/
+page:
+	title: Домашняя страница
+	# Массив хлебных крошек, от главной до текущей страницы
+	# Необходимо прописывать только имена файлов (шаблонов) страниц
+	# Названия и ссылки проставятся автоматически
+	crumbs: !!seq
+	- home
+
+pageTitle: Главная
+bodyClasses: home
+layout: !!map
+    header: false
+    footer: false
+    left: false
+    right: false
+---
+
+{% extends 'app.html' %}
+
+{% block inlineStyles %}
+{% endblock %}
+
+{% block main %}
+
+
+{% endblock %}
