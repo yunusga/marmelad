@@ -38,14 +38,27 @@ const Lagman = require('../modules/lagman');
 
 const LAGMAN = new Lagman();
 
-console.log(`Marmelad Warmed at ${Math.round(performance.now())}ms\n`);
+console.log(`Marmelad Warmed at ${Math.round(performance.now())}ms`);
 
 module.exports = (opts) => {
   const settings = getSettings();
 
   let bsPS = null;
 
-  process.env.BROWSERSLIST_CONFIG = path.join(process.cwd(), '.browserslistrc');
+  const browserslistrcPath = path.join(process.cwd(), '.browserslistrc');
+
+  if (!fs.existsSync(browserslistrcPath)) {
+    console.log(`${yellow('.browserslistrc')} not found`);
+
+    try {
+      fs.writeFileSync(browserslistrcPath, settings.app.autoprefixer.overrideBrowserslist.join('\n'));
+      console.log(`${green('.browserslistrc')} successful created`);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  process.env.BROWSERSLIST_CONFIG = browserslistrcPath;
 
   if (!opts.build) {
     TCI.run();
