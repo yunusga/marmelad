@@ -849,11 +849,13 @@ module.exports = (opts) => {
     done();
   });
 
-  gulp.task('finisher', () => {
+  gulp.task('finisher', (done) => {
     if (opts.build) {
       console.log(`Build task ${bold(green('finished'))}`);
       process.exit(0);
     }
+
+    done();
   });
 
   gulp.task(
