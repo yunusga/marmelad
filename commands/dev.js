@@ -849,6 +849,13 @@ module.exports = (opts) => {
     done();
   });
 
+  gulp.task('finisher', () => {
+    if (opts.build) {
+      console.log(`Build task ${bold(green('finished'))}`);
+      process.exit(0);
+    }
+  });
+
   gulp.task(
     'develop',
     gulp.series(
@@ -863,15 +870,15 @@ module.exports = (opts) => {
         'scripts:plugins',
         'scripts:others',
         'styles:plugins',
-        'styles'
+        'styles',
       ),
-      'proxy-mod',
+      'finisher',
     ),
   );
 
   if (opts.build) {
     gulp.series('develop')();
   } else {
-    gulp.series('develop', 'server:static', 'watch')();
+    gulp.series('develop', 'proxy-mod', 'server:static', 'watch')();
   }
 };
