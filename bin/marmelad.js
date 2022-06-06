@@ -11,8 +11,8 @@ program
   .description(description)
   .on('--help', () => {
     log(`\nCommands help:\n  ${name} [command] --help\n  mmd [command] --help`);
-    log(`\nSource files:\n  ${__filename}`);
-    log(`Version:\n  ${version}`);
+    log(`\nVersion:\n  ${version}`);
+    log(`Source files:\n  ${__filename}`);
   });
 
 // Init new project
