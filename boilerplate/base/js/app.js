@@ -22,8 +22,7 @@ if (window.NodeList && !NodeList.prototype.forEach) {
 }
 
 /* ^^^
- * JQUERY Actions
+ * Scripts
  * ========================================================================== */
-$(function() {
-  //=require ../_blocks/**/*.js
-});
+
+//=require ../_blocks/**/*.js
