@@ -52,8 +52,17 @@
 		{{ inlineSvgSprite() }}
 
 		<script>
-			var site_defers = {
-				smoothscroll: 'js/vendors/smoothscroll.polyfill-0.4.4.js',
+			const appSetup = {
+				base: '{{ app.pathData.base }}',
+			};
+
+			const appUri = location.hostname === 'localhost' ? 'http://localhost:{{ app.settings.app.bsSP.port }}' : `https://dev.solvers.group/${appSetup.base}-fr`;
+
+			const appData = {
+				uri: appUri,
+				defers: {
+					smoothscroll: `${appUri}/js/vendors/smoothscroll.polyfill-0.4.4.js`,
+				}
 			}
 		</script>
 

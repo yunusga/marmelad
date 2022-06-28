@@ -5,11 +5,11 @@
 
     window.removeEventListener('scroll', enableScrollBehaviorPolyfill);
 
-    if (! 'scrollBehavior' in document.documentElement.style) {
+    if (!'scrollBehavior' in document.documentElement.style) {
       let script = document.createElement('script');
 
       script.setAttribute('async', true);
-      script.setAttribute('src', site_defers.smoothscroll);
+      script.setAttribute('src', appData.defers.smoothscroll);
 
       document.body.appendChild(script);
     }

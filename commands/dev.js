@@ -185,6 +185,7 @@ module.exports = (opts) => {
     DB.combine(require(`${process.cwd()}/${settings.folders.marmelad}/data.marmelad.js`));
 
     DB.combine({
+      pathData: path.parse(process.cwd()),
       package: pkg,
       storage: settings.folders.storage,
       sprite: {
