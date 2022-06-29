@@ -1,65 +1,12 @@
----
-pageTitle: Главная
-bodyClasses: home
-layout: !!map
-    header: false
-    footer: false
-    left: false
-    right: false
----
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Сайтмап</title>
+</head>
+<body>
 
-{% extends 'app.html' %}
-
-{% block inlineStyles %}
-	<style>
-		.posthtml-postcss {
-			display: flex;
-			transform: translate3d(0, 0, 0);
-		}
-
-		.home-intro {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			height: 100%;
-		}
-
-		.home-intro__content {
-			max-width: 760px;
-		}
-
-		.home-intro-accent-text {
-			text-decoration: underline;
-		}
-
-		.home-intro-blockquote {
-			font-size: 18px;
-			line-height: 28px;
-		}
-
-		.home-intro-blockquote footer {
-			margin-top: 15px;
-			font-style: italic;
-			font-size: 16px;
-		}
-
-		.home-intro-blockquote cite {
-			font-weight: 700;
-		}
-	</style>
-{% endblock %}
-
-{% block main %}
-
-<div block="home-intro">
-    <div elem="content">
-        <blockquote block="home-intro-blockquote">
-            Все эти инновации, о которых сейчас трубят на каждом углу — чушь собачья. Кто угодно может заниматься инновациями. <strong class="home-intro-accent-text">«Думать иначе»</strong> и всё такое… к чёрту. Это бессмысленно. 99 процентов успеха — это проделанная работа.
-            <footer>
-                Конференция <a rel="noopener" target="_blank" href="https://www.theregister.co.uk/2017/02/14/the_government_is_coming_for_your_code/">Open Source Leadership Summit</a> <cite title="Линус Торвальдс">Линус Торвальдс</cite>
-            </footer>
-        </blockquote>
-    </div>
-</div><!-- b:demo-intro -->
-
-{% endblock %}
+</body>
+</html>

@@ -3,19 +3,18 @@
 # https://nodeca.github.io/js-yaml/
 page:
 	title: Домашняя страница
+	layout:
+		header: true
+		footer: true
+		left: false
+		right: false
 	# Массив хлебных крошек, от главной до текущей страницы
 	# Необходимо прописывать только имена файлов (шаблонов) страниц
 	# Названия и ссылки проставятся автоматически
 	crumbs: !!seq
 	- home
-
-pageTitle: Главная
-bodyClasses: home
-layout: !!map
-    header: false
-    footer: false
-    left: false
-    right: false
+body:
+	classes: home
 ---
 
 {% extends 'app.html' %}
