@@ -102,6 +102,7 @@
     "postcss-flexbugs-fixes": "5.0.2",
     "postcss-inline-svg": "5.0.0",
     "postcss-momentum-scrolling": "3.14.22",
+    "postcss-reporter": "^7.0.5",
     "postcss-sort-media-queries": "^4.2.1",
     "postcss-viewport-height-correction": "2.0.2",
     "posthtml": "^0.16.6",
@@ -111,6 +112,8 @@
     "replace-in-file": "^6.3.2",
     "sass": "^1.52.1",
     "stylus": "^0.57.0",
+    "stylelint": "^14.8.3",
+    "stylelint-config-standard": "^25.0.0",
     "tar": "6.1.11",
     "through2": "4.0.2",
     "vinyl-sourcemaps-apply": "^0.2.1"
