@@ -432,6 +432,29 @@ module.exports = (opts) => {
   });
 
   /**
+   * Copy plugins
+   */
+  gulp.task('copy:plugins', (done) => {
+    const stream = gulp.src([
+      `${settings.paths.js.plugins}/**/*.*`,
+      `!${settings.paths.static}/**/Thumbs.db`,
+      `!${settings.paths.static}/**/*tmp*`,
+    ], { dot: true })
+      .pipe(plumber())
+      .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}/plugins`));
+
+    stream.on('end', () => {
+      console.log(`Plugins files copy ${bold(green('Done'))}`);
+      bsSP.reload();
+      done();
+    });
+
+    stream.on('error', (err) => {
+      done(err);
+    });
+  });
+
+  /**
    * Styles blocks
    */
   gulp.task('styles', (done) => {
@@ -597,16 +620,22 @@ module.exports = (opts) => {
       gulp.parallel('scripts:plugins'),
     );
 
-    gulp.watch([
-      `${settings.paths.js.src}/*.js`,
-      `${settings.paths._blocks}/**/*.js`,
-    ], watchOpts, gulp.parallel('scripts:others'));
-
     gulp.watch(
       `${settings.paths.js.plugins}/**/*.css`,
       watchOpts,
       gulp.parallel('styles:plugins'),
     );
+
+    gulp.watch(
+      `${settings.paths.js.plugins}/**/*`,
+      watchOpts,
+      gulp.parallel('copy:plugins'),
+    );
+
+    gulp.watch([
+      `${settings.paths.js.src}/*.js`,
+      `${settings.paths._blocks}/**/*.js`,
+    ], watchOpts, gulp.parallel('scripts:others'));
 
     /* NunJucks Pages */
     const watchPages = chokidar.watch(`${settings.paths._pages}/**/*.html`, watchOpts);
@@ -864,6 +893,7 @@ module.exports = (opts) => {
     gulp.series(
       'clean',
       'static',
+      'copy:plugins',
       'iconizer:icons',
       'iconizer:colored',
       'database',
