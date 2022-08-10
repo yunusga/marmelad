@@ -4,7 +4,7 @@ const {
 
 const { exec } = require('child_process');
 
-const SUCCESS_STR = '[marmelad] copy:boilerplate\n[marmelad] copy:rootfiles\n[marmelad] git:init\n[marmelad] initialized, type marmelad -h for CLI help\n';
+const SUCCESS_STR = '[marmelad] copy:boilerplate\n[marmelad] copy:rootfiles\n[marmelad] git:init\n[marmelad] Initialized, type marmelad -h for CLI help\n';
 
 removeSync('test/init-test');
 ensureDirSync('test/init-test');
@@ -53,7 +53,7 @@ test('init in initialized directory', (done) => {
     },
     (error, stdout) => {
       expect(error).toBe(null);
-      expect(stdout).toBe(' ERROR  project is already initialized\n');
+      expect(stdout).toBe(' ERROR  Project is already initialized\n');
       done();
     },
   );
@@ -72,7 +72,7 @@ test('init in non empty directory', (done) => {
     },
     (error, stdout) => {
       expect(error).toBe(null);
-      expect(stdout).toBe(' WARN  Directory is not empty. Some files may be overwritten. Continue?\n');
+      expect(stdout).toBe(' ERROR  Directory is not empty\n');
       done();
     },
   );
