@@ -516,7 +516,7 @@ latencyRoutes: [
 
 ## A'zoning axloq kodeksi
 
-[A'zoning axloq kodeksi](CODE_OF_CONDUCT_UZ
+[A'zoning axloq kodeksi](CODE_OF_CONDUCT_UZ.md
 ) o'qib chiqing
 
 *Logotip muallifning piktogrammasidan olingan va o'zgartirilgan <a href="https://www.flaticon.com/authors/freepik" title="Jelly beans">Jelly beans</a> litsenziya asosida tarqatiladi <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a> с <a href="https://www.flaticon.com/"     title="Flaticon">www.flaticon.com</a>*
