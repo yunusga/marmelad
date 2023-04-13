@@ -8,7 +8,7 @@
 <img src="marmelad.svg?sanitize=true" align="right" title="Marmelad logo made by Jelly beans from www.flaticon.com is licensed by CC 3.0 BY" width="100" height="100">
 
 
-[RU](README), UZ 
+[RU](README.md), UZ 
 
 
 
