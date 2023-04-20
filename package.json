@@ -94,7 +94,7 @@
     "gulp-uglify": "3.0.2",
     "js-yaml": "^4.1.0",
     "node-w3c-validator": "2.0.2",
-    "nunjucks": "3.2.3",
+    "nunjucks": "3.2.4",
     "ora": "5.4.1",
     "picocolors": "^1.0.0",
     "plugin-error": "2.0.0",
