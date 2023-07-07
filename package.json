@@ -112,7 +112,7 @@
     "replace-ext": "2.0.0",
     "replace-in-file": "^6.3.5",
     "sass": "^1.54.4",
-    "stylelint": "^14.8.3",
+    "stylelint": "^15.10.1",
     "stylelint-config-standard": "^25.0.0",
     "stylus": "^0.58.1",
     "tar": "6.1.11",
