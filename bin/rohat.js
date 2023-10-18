@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-const { program } = require('commander');
-const { name, version, description } = require('../package.json');
+import { Command } from 'commander';
+import { name, version, description } from '../package.json' assert { type: 'json' };
 
+const program = new Command();
 const { log } = console;
 
 // Setup additional HELP information
@@ -15,14 +16,12 @@ program
     log(`Source files:\n  ${__filename}`);
   });
 
-// Init new project
+// Init new Rohat project
 program
-  .command('init [dirName]')
-  .description('Initialize new project')
-  .option('-t, --test', 'required for testing')
-  .option('-c, --css [styl,scss,sass]', 'set stylesheet <engine> support', 'styl')
-  .action((dirName, opts) => {
-    require('../commands/init')(dirName, opts);
+  .command('init [dirname]')
+  .description('Initialize new Rohat project')
+  .action((dirname) => {
+    require('../commands/init')(dirname);
   });
 
 // Start dev server
@@ -99,5 +98,4 @@ program.parse(process.argv);
 // If no args SHUTDOWN and show HELP information
 if (!process.argv.slice(2).length) {
   program.help();
-  process.exit(1);
 }

@@ -1,16 +1,28 @@
 {
-  "name": "marmelad",
-  "version": "7.18.24",
+  "name": "rohat",
+  "version": "0.0.0",
   "description": "Заготовка фронтенд проекта для продвинутых и начинающих 🤘",
   "preferGlobal": true,
+  "scarfSettings": {
+    "enabled": false
+  },
   "engines": {
-    "node": ">=14.17.0"
+    "node": ">=18.12.1"
   },
-  "author": "Yunus Gaziev <yunusga@yandex.ru> (https://github.com/yunusga)",
   "bin": {
-    "marmelad": "bin/marmelad.js",
-    "mmd": "bin/marmelad.js"
+    "rohat": "bin/rohat.js"
   },
+  "homepage": "https://github.com/yunusga/marmelad",
+  "author": "Yunus Gaziev <yunusga@yandex.ru> (https://github.com/yunusga)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yunusga/marmelad.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yunusga/marmelad/issues",
+    "email": "yunusga@yandex.ru"
+  },
+  "license": "MIT",
   "keywords": [
     "static-site-generator",
     "gulp",
@@ -22,49 +34,13 @@
     "bootstrap",
     "starter-kit"
   ],
-  "contributors": [
-    {
-      "name": "vitaliyryazanov",
-      "email": "vitaliy0332@gmail.com"
-    },
-    {
-      "name": "yeger",
-      "email": "rets.dima@gmail.com"
-    },
-    {
-      "name": "Askarov-Alex",
-      "email": "askarov.aleksandr@gmail.com"
-    },
-    {
-      "name": "nikki15",
-      "email": "nikki.solution@gmail.com"
-    },
-    {
-      "name": "ShamilEx",
-      "email": "shamil9227@gmail.com"
-    },
-    {
-      "name": "Amirkhanov",
-      "email": "nikelamigo@gmail.com"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yunusga/marmelad.git"
-  },
-  "homepage": "https://github.com/yunusga/marmelad",
-  "bugs": {
-    "url": "https://github.com/yunusga/marmelad/issues",
-    "email": "yunusga@yandex.ru"
-  },
-  "license": "MIT",
   "dependencies": {
     "@babel/core": "7.15.0",
     "@babel/plugin-transform-object-assign": "^7.14.5",
     "@babel/preset-env": "^7.15.0",
     "accord": "^0.30.0",
     "archiver": "5.3.1",
-    "autoprefixer": "10.4.8",
+    "autoprefixer": "10.4.14",
     "browser-sync": "2.27.10",
     "bs-auth": "1.2.7",
     "camelcase": "6.3.0",
@@ -94,17 +70,17 @@
     "gulp-uglify": "3.0.2",
     "js-yaml": "^4.1.0",
     "node-w3c-validator": "2.0.2",
-    "nunjucks": "3.2.3",
+    "nunjucks": "3.2.4",
     "ora": "5.4.1",
     "picocolors": "^1.0.0",
     "plugin-error": "2.0.0",
-    "postcss": "^8.4.16",
+    "postcss": "^8.4.25",
     "postcss-easing-gradients": "git+https://github.com/solversgroup/postcss-easing-gradients.git",
     "postcss-flexbugs-fixes": "5.0.2",
     "postcss-inline-svg": "5.0.0",
     "postcss-momentum-scrolling": "3.14.22",
     "postcss-reporter": "^7.0.5",
-    "postcss-sort-media-queries": "^4.2.1",
+    "postcss-sort-media-queries": "^5.2.0",
     "postcss-viewport-height-correction": "2.0.2",
     "posthtml": "^0.16.6",
     "posthtml-attrs-sorter": "1.1.0",
@@ -114,7 +90,7 @@
     "sass": "^1.54.4",
     "stylelint": "^14.8.3",
     "stylelint-config-standard": "^25.0.0",
-    "stylus": "^0.58.1",
+    "stylus": "^0.59.0",
     "tar": "6.1.11",
     "through2": "4.0.2",
     "vinyl-sourcemaps-apply": "^0.2.1"
@@ -124,9 +100,6 @@
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.24.0",
     "jest": "27.0.6"
-  },
-  "scarfSettings": {
-    "enabled": false
   },
   "scripts": {
     "refresh-deps": "rm -rf node_modules/ && rm -f package-lock.json && npm i",
