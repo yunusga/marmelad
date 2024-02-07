@@ -10,7 +10,7 @@ program
   .version(version, '-v, --version')
   .description(description)
   .on('--help', () => {
-    log(`\nCommands help:\n  ${name} [command] --help\n  mmd [command] --help`);
+    log(`\nCommands help:\n  ${name} [command] --help`);
     log(`\nVersion:\n  ${version}`);
     log(`Source files:\n  ${__filename}`);
   });
@@ -39,7 +39,7 @@ program
     // console.log();
   });
 
-// Create marmelad PAGE
+// Create rohat PAGE
 program
   .command('cp <pageName>')
   .description('Create new page')
@@ -47,7 +47,7 @@ program
     require('../commands/cp')(pageName);
   });
 
-// Create marmelad BLOCK
+// Create rohat BLOCK
 program
   .command('cb <blockName>')
   .description('Create new block')
@@ -56,7 +56,7 @@ program
     require('../commands/cb')(blockName, opts.techs);
   });
 
-// Rename marmelad BLOCK
+// Rename rohat BLOCK
 program
   .command('mv <oldName> <newName>')
   .description('Rename block')
@@ -88,7 +88,7 @@ program
   .description('Archive project source code (default:tar.gz)')
   .option('-z, --zip', 'ZIP archive')
   .option('--nodt', 'No Date and Time in name postfix')
-  .option('-f, --folders [marmelad,static]', 'Folders to archive', 'marmelad,static')
+  .option('-f, --folders [rohat,static]', 'Folders to archive', 'rohat,static')
   .action((archiveName, opts) => {
     require('../commands/pack')(name, opts);
   });

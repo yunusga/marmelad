@@ -1,15 +1,14 @@
 {
-  "name": "marmelad",
+  "name": "rohat",
   "version": "7.18.24",
   "description": "Заготовка фронтенд проекта для продвинутых и начинающих 🤘",
   "preferGlobal": true,
   "engines": {
-    "node": ">=14.17.0"
+    "node": ">= 18"
   },
-  "author": "Yunus Gaziev <yunusga@yandex.ru> (https://github.com/yunusga)",
+  "author": "Yunus Gaziyev <yunusga@yandex.ru> (https://github.com/yunusga)",
   "bin": {
-    "marmelad": "bin/marmelad.js",
-    "mmd": "bin/marmelad.js"
+    "rohat": "bin/rohat.js"
   },
   "keywords": [
     "static-site-generator",
@@ -52,7 +51,7 @@
     "type": "git",
     "url": "https://github.com/yunusga/marmelad.git"
   },
-  "homepage": "https://github.com/yunusga/marmelad",
+  "homepage": "https://github.com/yunusga/marmelad/tree/rohat",
   "bugs": {
     "url": "https://github.com/yunusga/marmelad/issues",
     "email": "yunusga@yandex.ru"
