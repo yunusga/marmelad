@@ -122,6 +122,8 @@ module.exports = (opts) => {
       }))
       .pipe(tap((file) => {
         templateName = path.basename(file.path);
+
+        DB.set('currentPage', templateName);
       }))
       .pipe(gulpNunjucks(templater, DB.getStore()))
       .pipe(pipeErrorStop({
