@@ -296,7 +296,6 @@ module.exports = (opts) => {
    * Scripts blocks
    */
   gulp.task('scripts:others', (done) => {
-    const babel = require('gulp-babel');
     const include = require('gulp-include');
 
     let hasError = false;
@@ -315,10 +314,6 @@ module.exports = (opts) => {
         extensions: 'js',
         hardFail: false,
       })).on('error', console.log)
-      .pipe(babel({
-        presets: ['@babel/preset-env'].map(require.resolve),
-        plugins: ['@babel/plugin-transform-object-assign'].map(require.resolve),
-      }))
       .pipe(gulp.dest(`${settings.paths.storage}/${settings.folders.js.src}`));
 
     stream.on('end', () => {
