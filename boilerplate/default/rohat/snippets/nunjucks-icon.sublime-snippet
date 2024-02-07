@@ -1,0 +1,7 @@
+<snippet>
+  <content><![CDATA[
+{{ _icon('${1}', { tag: '${2:span}' ${3:, class: ''}}) }}
+]]></content>
+  <description>NunJucks _icon function</description>
+  <tabTrigger>_icon</tabTrigger>
+</snippet>

@@ -1,0 +1,39 @@
+{
+	"Generate BEML block HTML code": {
+		"scope": "html,njk,nunjucks",
+		"prefix": "block",
+		"body": [
+			"<${1:div} block=\"${2}\" mods=\"${3}\">${0}</${1:div}><!-- ${2} -->"
+		],
+		"description": "Generate BEML block HTML code"
+  },
+  "Generate BEML element HTML code": {
+		"scope": "html,njk,nunjucks",
+		"prefix": "elem",
+		"body": [
+			"<${1:div} elem=\"${2}\" mods=\"${3}\">${0}</${1:div}>"
+		],
+		"description": "Generate BEML element HTML code"
+  },
+  "Include NunJucks template": {
+    "prefix": "include",
+    "body": [
+      "{% include '${1}.${2:html}' %}"
+    ],
+    "description": "Include NunJucks template"
+  },
+  "Include NunJucks template with parameters": {
+    "prefix": "incw",
+    "body": [
+      "{% incw '${1}', ${2:object} %}"
+    ],
+    "description": "Include NunJucks template with parameters"
+  },
+  "NunJucks _icon function": {
+    "prefix": "_icon",
+    "body": [
+      "{{ _icon('${$1}', { tag: '${2:span}' }) }}"
+    ],
+    "description": "NunJucks _icon function"
+  }
+}

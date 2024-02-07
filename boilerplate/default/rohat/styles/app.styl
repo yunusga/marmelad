@@ -1,0 +1,94 @@
+@require 'components/_variables';
+@require 'components/_mixins';
+@require 'components/normalize';
+@require 'components/iconizer';
+// @require 'components/wordpress';
+
+*
+  min-width 0
+  min-height 0
+  box-sizing: border-box
+  -webkit-tap-highlight-color rgba(0,0,0, 0)
+
+  &::before,
+  &::after
+    box-sizing: border-box
+
+html
+  scroll-behavior smooth
+
+  font-family sans-serif
+  -webkit-tap-highlight-color rgba(0, 0, 0, 0)
+  // -webkit-font-smoothing antialiased
+  // -ms-text-size-adjust 100%
+
+body
+  font-family: $body.fontFamily
+  font-size: $body.fontSize
+  font-weight: $body.fontWeight
+  line-height: $body.lineHeight
+  color: $body.color
+  background-color: $body.bgc
+
+svg:not(:root)
+  overflow hidden
+
+blockquote
+  padding: 15px
+  padding-left: 20px
+  border-left: 5px solid $colors.theme
+  background-color: rgba($colors.theme, .03)
+
+img
+  max-width 100%
+  height auto
+
+/**
+ * Add the correct display in IE 10.
+ */
+.hidden,
+template,
+[hidden]
+  display: none !important
+
+.theme-color
+  color: $colors.theme
+
+/**
+ * The CSS class screen-reader-text
+ *
+ * @link https://make.wordpress.org/accessibility/handbook/markup/the-css-class-screen-reader-text/
+ */
+.visuallyhidden,
+.screen-reader-text,
+.sr-only
+  border: 0
+  clip: rect(1px, 1px, 1px, 1px)
+  clip-path: inset(50%)
+  height: 1px
+  margin: -1px
+  overflow: hidden
+  padding: 0
+  position: absolute
+  width: 1px
+  word-wrap: normal !important
+
+  &:active,
+  &:focus
+    background-color: #eee
+    clip: auto !important
+    clip-path: none
+    color: #444
+    display: block
+    font-size: 1em
+    height: auto
+    left: 5px
+    line-height: normal
+    padding: 15px 23px 14px
+    text-decoration: none
+    top: 5px
+    width: auto
+    z-index: 100000 /* Above WP toolbar. */
+
+@require '../_blocks/**/*.styl';
+@require 'components/_keyframes';

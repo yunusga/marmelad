@@ -1,0 +1,28 @@
+---
+# JS-YAML demo
+# https://nodeca.github.io/js-yaml/
+page:
+	title: Ошибка 404 - Здесь ничего нет
+	layout:
+		header: true
+		footer: true
+		left: false
+		right: false
+	# Массив хлебных крошек, от главной до текущей страницы
+	# Необходимо прописывать только имена файлов (шаблонов) страниц
+	# Названия и ссылки проставятся автоматически
+	crumbs: !!seq
+	- home
+body:
+	classes: error404
+---
+
+{% extends 'app.html' %}
+
+{% block inlineStyles %}{% endblock %}
+
+{% block main %}
+
+	{% include "error-404.html" %}
+
+{% endblock %}

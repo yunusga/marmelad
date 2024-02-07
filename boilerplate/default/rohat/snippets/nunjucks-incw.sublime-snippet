@@ -1,0 +1,7 @@
+<snippet>
+  <content><![CDATA[
+{% incw '${1}', ${2:object} %}
+]]></content>
+  <description>Include NunJucks Template with parameters</description>
+  <tabTrigger>incw</tabTrigger>
+</snippet>

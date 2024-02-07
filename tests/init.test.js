@@ -1,100 +1,73 @@
 const {
-  removeSync, ensureDirSync, pathExistsSync, ensureFileSync,
-} = require('fs-extra');
+  existsSync, mkdirSync, rmSync
+} = require('fs');
 
-const { exec } = require('child_process');
+const  {
+  join
+} = require('path');
 
-const SUCCESS_STR = '[marmelad] copy:boilerplate\n[marmelad] copy:rootfiles\n[marmelad] git:init\n[marmelad] Initialized, type marmelad -h for CLI help\n';
+const {
+  exec
+} = require('child_process');
 
-removeSync('test/init-test');
-ensureDirSync('test/init-test');
+const testsTargetPath = join('test', 'init-test');
 
-test('init in new directory', (done) => {
-  exec(
-    'node bin/marmelad.js init test/init-test --test',
-    {
-      env: {
-        NO_COLOR: true,
-      },
-    },
-    (error, stdout) => {
-      expect(error).toBe(null);
-      expect(stdout).toBe(SUCCESS_STR);
-      expect(pathExistsSync('test/init-test/marmelad/styles/app.scss')).toBe(false);
-      expect(pathExistsSync('test/init-test/marmelad/styles/app.styl')).toBe(true);
-      done();
-    },
-  );
+if (existsSync(testsTargetPath)) {
+  rmSync(testsTargetPath, {
+    force: true,
+    recursive: true,
+  });
+}
+
+mkdirSync(testsTargetPath, {
+  recursive: true,
 });
 
-test('init with create new directory', (done) => {
-  exec(
-    'node bin/marmelad.js init test/init-test/create --test',
-    {
-      env: {
-        NO_COLOR: true,
+const SUCCESS_STR = '[rohat] initialized, type rohat -h for help\n';
+
+describe('rohat initialization tests', () => {
+  test('init in new directory', (done) => {
+    exec(
+      'node bin/rohat.js init test/init-test',
+      (error, stdout) => {
+        expect(error).toBe(null);
+        expect(stdout).toBe(SUCCESS_STR);
+        expect(existsSync(join('test', 'init-test', 'rohat', 'rohat.config.js'))).toBe(true);
+        done();
       },
-    },
-    (error, stdout) => {
-      expect(error).toBe(null);
-      expect(stdout).toBe(SUCCESS_STR);
-      done();
-    },
-  );
-});
+    );
+  });
 
-test('init in initialized directory', (done) => {
-  exec(
-    'node bin/marmelad.js init test/init-test --test',
-    {
-      env: {
-        NO_COLOR: true,
+  test('init with create new directory', (done) => {
+    exec(
+      'node bin/rohat.js init test/init-test/create',
+      (error, stdout) => {
+        expect(error).toBe(null);
+        expect(stdout).toBe(SUCCESS_STR);
+        done();
       },
-    },
-    (error, stdout) => {
-      expect(error).toBe(null);
-      expect(stdout).toBe(' ERROR  Project is already initialized\n');
-      done();
-    },
-  );
-});
+    );
+  });
 
-test('init in non empty directory', (done) => {
-  ensureDirSync('test/init-test/nonempty');
-  ensureFileSync('test/init-test/nonempty/nonempty.txt');
-
-  exec(
-    'node bin/marmelad.js init test/init-test/nonempty --test',
-    {
-      env: {
-        NO_COLOR: true,
+  test('init in initialized directory', (done) => {
+    exec(
+      'node bin/rohat.js init test/init-test',
+      (error, stdout) => {
+        expect(error).toBe(null);
+        expect(stdout).toBe(' ERROR  rohat project is already initialized\n');
+        done();
       },
-    },
-    (error, stdout) => {
-      expect(error).toBe(null);
-      expect(stdout).toBe(' ERROR  Directory is not empty\n');
-      done();
-    },
-  );
-});
+    );
+  });
 
-test('init with SCSS in new directory', (done) => {
-  exec(
-    'node bin/marmelad.js init test/init-test/create-scss -c scss --test',
-    {
-      env: {
-        NO_COLOR: true,
+  test('init in non empty directory', (done) => {
+    exec(
+      'node bin/rohat.js init test/init-test/rohat',
+      (error, stdout) => {
+        expect(error).toBe(null);
+        expect(stdout).toBe(' ERROR  directory is not empty\n');
+        done();
       },
-    },
-    (error, stdout) => {
-      const settings = require('../test/init-test/create-scss/marmelad/settings.marmelad');
-
-      expect(error).toBe(null);
-      expect(stdout).toBe(SUCCESS_STR);
-      expect(pathExistsSync('test/init-test/create-scss/marmelad/styles/app.scss')).toBe(true);
-      expect(pathExistsSync('test/init-test/create-scss/marmelad/styles/app.styl')).toBe(false);
-      expect(settings.app.css).toBe('scss');
-      done();
-    },
-  );
+    );
+  });
 });

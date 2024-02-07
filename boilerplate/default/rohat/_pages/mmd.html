@@ -1,0 +1,173 @@
+---
+pageTitle: Документация
+bodyClasses: page
+layout: !!map
+    header: false
+    footer: false
+    left: false
+    right: false
+---
+
+{% extends 'app.html' %}
+
+{% block inlineStyles %}
+	<style>
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			margin: 0 0 10px;
+		}
+
+		p {
+			margin: 0 0 20px;
+		}
+		.container {
+			padding: 20px;
+		}
+
+		.icon-marmelad-logo {
+			width: 120px;
+			height: 120px;
+		}
+
+		.mmd-head {
+			display: flex;
+			align-items: center;
+		}
+
+		.mmd-head__logo {
+			flex: 0 0 120px;
+			max-width: 120px;
+			margin-left: 30px;
+		}
+
+		.mmd-head__meta {
+			flex: 1;
+		}
+
+		.mmd-head__title {
+			font-size: 30px;
+			margin: 0 0 10px;
+		}
+
+		.mmd-head__description {
+			font-size: 16px;
+		}
+
+		.info-section {
+			margin: 40px 0;
+			padding: 30px 30px 10px 30px;
+			border: 2px dashed #cdcdcd;
+		}
+
+		@media (min-width: 960px) {
+			.container {
+				width: 100%;
+				max-width: 960px;
+				margin: 0 auto;
+			}
+		}
+	</style>
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+	<header class="mmd-head d-flex">
+		<div class="mmd-head__meta flex-fill">
+			<h1 class="mmd-head__title">{{ app.package.name | capitalize }} v{{ app.package.version }} / <code>{{ git.branch }}</code></h1>
+			<p>
+				<img src="https://img.shields.io/npm/v/marmelad.svg" alt="npm" data-canonical-src="https://img.shields.io/npm/v/marmelad.svg" style="max-width:100%;">
+			</p>
+			<p class="mmd-head__description">{{ app.package.description }}</p>
+		</div>
+		<div class="mmd-head__logo">
+			{{ _icon('marmelad', { class:'icon-marmelad-logo icon-colored', type: 'colored' }) }}
+		</div>
+	</header>
+
+	<nav>
+		<a href="{{ app.package.homepage }}" rel="noopener" target="_blank">github</a> / <a href="{{ app.package.bugs.url }}" rel="noopener" target="_blank">issues</a> / <a href="https://www.npmjs.com/package/marmelad" rel="noopener" target="_blank">npm</a>
+	</nav>
+
+	<hr>
+
+	<section class="editor-styles-section">
+
+		<h2>H1 Заголовок</h2>
+		<h2>h2 Заголовок</h2>
+		<h3>h3 Заголовок</h3>
+		<h4>h4 Заголовок</h4>
+
+		<p>Все эти инновации, о которых сейчас трубят на каждом углу — чушь собачья. Кто угодно может заниматься инновациями. <strong>«Думать иначе»</strong> и всё такое… к чёрту. Это бессмысленно. 99 процентов успеха — это проделанная работа.</p>
+		<p><em>Конференция </em><a rel="noreferrer noopener" target="_blank" href="https://www.theregister.co.uk/2017/02/14/the_government_is_coming_for_your_code/"><em>Open Source Leadership Summit</em></a><em> Линус Торвальдс</em></p>
+
+		<blockquote class="wp-block-quote"><p>Все эти инновации, о которых сейчас трубят на каждом углу — чушь собачья. Кто угодно может заниматься инновациями. <strong>«Думать иначе»</strong> и всё такое… к чёрту. Это бессмысленно. 99 процентов успеха — это проделанная работа.</p><cite>Конференция <a rel="noreferrer noopener" target="_blank" href="https://www.theregister.co.uk/2017/02/14/the_government_is_coming_for_your_code/">Open Source Leadership Summit</a> Линус Торвальдс</cite></blockquote>
+
+		<ul>
+			<li>Все эти инновации, о которых сейчас трубят</li>
+			<li>на каждом углу  —</li>
+			<li>чушь собачья.</li>
+		</ul>
+
+		<ol>
+			<li>Кто угодно может заниматься инновациями.</li>
+			<li><strong>«Думать иначе»</strong> и всё такое… к чёрту. Это бессмысленно.</li>
+			<li>99 процентов успеха —  это проделанная работа.</li>
+		</ol>
+
+	</section>
+
+	<hr>
+
+	<section class="info-section">
+		<h2>SVG-спрайт</h2>
+		<p>Список всех иконок добавленных в SVG-спрайт.</p>
+		<hr>
+		<h3>Цветные иконки</h3>
+		<p>
+			{% for icon in app.sprite.colored -%}
+				{{ _icon(icon, { class: 'colored', tag: 'span', type: 'colored' }) }}
+			{%- endfor %}
+		</p>
+		<hr>
+		<h3>ЧБ иконки</h3>
+		<p>
+			{% for icon in app.sprite.icons -%}
+				{{ _icon(icon, { tag: 'span' }) }}
+			{%- endfor %}
+		</p>
+	</section>
+
+	<section class="info-section">
+		<h2>Полезные ссылки</h2>
+		<hr>
+
+		<h3>Разное</h3>
+		<h4><a href="https://ru.bem.info/methodology/" target="_blank" rel="noopener">БЭМ методология</a></h4>
+		<p>Методология БЭМ создана в Яндексе для разработки сайтов, которые надо делать быстро, а поддерживать долгие годы. Она позволяет создавать расширяемые и повторно используемые компоненты интерфейса.</p>
+		<hr>
+		<h4><a href="http://nicothin.github.io/idiomatic-pre-CSS/" target="_blank" rel="noopener">Как работать с CSS-препроцессорами и БЭМ</a></h4>
+		<p>Список рекомендаций по неусложнению жизни себе и другим участникам проекта по вёрстке.</p>
+		<hr>
+		<h4><a href="https://github.com/yoksel/common-words" target="_blank" rel="noopener">Слова, часто используемые в CSS-классах</a></h4>
+		<p>Подборка часто используемых названий CSS-классов с примерами.</p>
+		<hr>
+
+		<h3>Доступность</h3>
+		<h4><a href="https://guide.so-edinenie.org" target="_blank" rel="noopener">Проблемы восприятия</a></h4>
+		<p>Почувствуйте, как люди с потерей зрения работают с сайтами.</p>
+		<hr>
+		<h4><a href="https://weblind.ru/" target="_blank" rel="noopener">Как помочь слепым на вашем сайте</a></h4>
+		<p>Рекомендации помогут разработчикам делать сайты для людей с нарушениями зрения.</p>
+		<hr>
+		<h4><a href="https://a11yproject.com/" target="_blank" rel="noopener">The A11Y Project</a></h4>
+		<p>Рекомендации для улучшения доступности ваших интерфейсов.</p>
+	</section>
+
+</div>
+
+{% endblock %}
