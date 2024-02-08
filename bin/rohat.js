@@ -17,12 +17,12 @@ program
 
 // Init new project
 program
-  .command('init [dirName]')
+  .command('init [directory]')
   .description('Initialize new project')
+  .option('-c, --css [styl,scss]', 'set stylesheet <engine> support', 'styl')
   .option('-t, --test', 'required for testing')
-  .option('-c, --css [styl,scss,sass]', 'set stylesheet <engine> support', 'styl')
-  .action((dirName, opts) => {
-    require('../commands/init')(dirName, opts);
+  .action((directory, opts) => {
+    require('../commands/init')(directory, opts);
   });
 
 // Start dev server

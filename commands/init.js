@@ -1,5 +1,8 @@
 const { existsSync, readdirSync, cpSync } = require('fs');
-const { join } = require('path');
+const {
+  join,
+  extname,
+} = require('path');
 
 const {
   bold, green, yellow, bgRed,
@@ -7,7 +10,7 @@ const {
 
 const { log } = console;
 
-module.exports = (directory) => {
+module.exports = (directory, opts) => {
   directory = directory || '';
 
   const isDirExists = directory.length && existsSync(directory);
@@ -29,6 +32,15 @@ module.exports = (directory) => {
     join(process.cwd(), directory),
     {
       recursive: true,
+      filter: (src) => {
+        let ext = extname(src);
+
+        if (ext.includes('scss') || ext.includes('styl')) {
+          return ext === `.${opts.css}`;
+        }
+
+        return true;
+      }
     }
   );
 
